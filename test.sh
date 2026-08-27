@@ -2,6 +2,7 @@
 set -eu
 
 WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+. "$WORKFLOW_ROOT/dependencies.env"
 TEST_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/personal-coding-workflow.XXXXXX")
 trap 'rm -rf "$TEST_ROOT"' EXIT HUP INT TERM
 
@@ -19,6 +20,8 @@ fi
 grep -q '^schema: personal-coding$' "$PROJECT/openspec/config.yaml"
 test -f "$PROJECT/.agents/skills/coding-workflow-propose/SKILL.md"
 test -f "$PROJECT/.agents/skills/domain-modeling/CONTEXT-FORMAT.md"
+test -n "$MATTPOCOCK_SKILLS_REF"
+test -n "$OPENSPEC_VERSION"
 
 (
   cd "$PROJECT"

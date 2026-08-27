@@ -2,6 +2,7 @@
 set -eu
 
 WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+. "$WORKFLOW_ROOT/dependencies.env"
 TARGET=${1:-.}
 
 if [ ! -d "$TARGET" ]; then
@@ -14,6 +15,11 @@ TARGET_ROOT=$(CDPATH= cd -- "$TARGET" && pwd)
 if ! command -v openspec >/dev/null 2>&1; then
   echo "OpenSpec is required. Install it, then rerun this script." >&2
   exit 1
+fi
+
+INSTALLED_OPENSPEC_VERSION=$(openspec --version)
+if [ "$INSTALLED_OPENSPEC_VERSION" != "$OPENSPEC_VERSION" ]; then
+  echo "Warning: workflow was tested with OpenSpec $OPENSPEC_VERSION; installed version is $INSTALLED_OPENSPEC_VERSION." >&2
 fi
 
 check_directory() {

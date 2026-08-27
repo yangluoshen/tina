@@ -31,3 +31,11 @@ _Avoid_: Target instructions, installed policy
 **Target Instructions**:
 Portable agent guidance installed into a repository that consumes the Workflow Bundle.
 _Avoid_: Repository instructions, maintainer policy
+
+**Upstream Snapshot**:
+Byte-for-byte copies of selected dependency files from one exact upstream revision.
+_Avoid_: Fork, local variant
+
+**Dependency Pin**:
+An exact upstream revision or release against which the Workflow Bundle has passed compatibility checks.
+_Avoid_: Global installation, floating version
