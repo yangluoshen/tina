@@ -47,7 +47,7 @@ copy_directory() {
   fi
 }
 
-for skill in tina-research tina-propose tina-verify; do
+for skill in tina-research tina-propose tina-change-visual tina-verify; do
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -120,7 +120,7 @@ fi
   openspec init --tools codex
 )
 
-for skill in tina-research tina-propose tina-verify; do
+for skill in tina-research tina-propose tina-change-visual tina-verify; do
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 

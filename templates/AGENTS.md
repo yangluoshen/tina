@@ -11,6 +11,9 @@ OpenSpec is the planning system. The project default schema is `tina`.
   domain alignment, and the size gate.
 - During proposal planning, write generated narrative in Chinese by default.
   Preserve required headings, identifiers, paths, code, and established terms.
+- Use `$tina-change-visual` to generate or refresh `change.html` after
+  `proposal.md` or `design.md` changes. Treat it as a review projection; the
+  Markdown sources remain authoritative.
 - Use `$openspec-apply-change` only after the user explicitly authorizes
   implementation.
 - Use `$tina-verify` before archive.

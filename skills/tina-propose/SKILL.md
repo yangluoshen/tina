@@ -24,8 +24,11 @@ This workflow authorizes planning only. Never implement or apply the Change.
 5. Invoke `$openspec-propose`. The project default must resolve to the
    `tina` schema. Follow its dynamic instructions and preserve Domain
    Model vocabulary and ADR decisions.
-6. Recheck the completed artifacts against the size gate. If they reveal excess
+6. After the planning artifacts are complete, invoke `$tina-change-visual` to
+   generate `change.html` in the Change directory from `proposal.md` and
+   `design.md` when present.
+7. Recheck the completed artifacts against the size gate. If they reveal excess
    scope, stop and recommend a split; never hide scope in oversized tasks.
 
-End with the Change path, artifacts created, domain references used, and the
-next explicit action (`$openspec-apply-change`).
+End with the Change path, artifacts and `change.html` created, domain references
+used, and the next explicit action (`$openspec-apply-change`).

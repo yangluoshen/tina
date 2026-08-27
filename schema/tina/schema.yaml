@@ -83,6 +83,8 @@ artifacts:
       decide faster, add a concise text diagram before Decisions; otherwise omit
       it. Cite relevant ADRs instead of restating them. Resolve any question that
       would change behavior, approach, or task breakdown before continuing.
+      Keep any text diagram semantic and concise so the post-proposal Change
+      View can redraw it without inventing information.
     requires:
       - proposal
 

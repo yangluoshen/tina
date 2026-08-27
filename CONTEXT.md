@@ -16,6 +16,10 @@ _Avoid_: Epic, project
 The OpenSpec artifact that establishes the motivation, scope, capability impact, and domain alignment of a Change.
 _Avoid_: Plan, change
 
+**Change View**:
+A non-normative, diagram-led `change.html` derived from a Change's Proposal and optional design for faster human review.
+_Avoid_: Proposal, specification, source of truth
+
 **Domain Model**:
 The canonical project vocabulary recorded in `CONTEXT.md` files, distinct from behavioral specifications and implementation design.
 _Avoid_: Spec, architecture
