@@ -1,9 +1,9 @@
 ---
-name: coding-workflow-research
+name: tina-research
 description: Investigate external or unstable facts for planning, or inspect local code read-only, without using OpenSpec explore. Use for exploration, research, feasibility, and unfamiliar APIs or versions.
 ---
 
-# Workflow Research
+# Tina Research
 
 Never invoke `openspec-explore`.
 

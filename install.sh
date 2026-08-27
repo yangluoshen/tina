@@ -47,7 +47,7 @@ copy_directory() {
   fi
 }
 
-for skill in coding-workflow-research coding-workflow-propose coding-workflow-verify; do
+for skill in tina-research tina-propose tina-verify; do
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -55,10 +55,10 @@ for skill in research grill-with-docs grilling domain-modeling; do
   check_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
-check_directory "$WORKFLOW_ROOT/schema/personal-coding" "$TARGET_ROOT/openspec/schemas/personal-coding"
+check_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
-START_MARKER='<!-- personal-coding-workflow:start -->'
-END_MARKER='<!-- personal-coding-workflow:end -->'
+START_MARKER='<!-- tina-workflow:start -->'
+END_MARKER='<!-- tina-workflow:end -->'
 AGENTS_FILE="$TARGET_ROOT/AGENTS.md"
 
 if [ -L "$AGENTS_FILE" ]; then
@@ -74,7 +74,7 @@ if [ -f "$AGENTS_FILE" ]; then
     exit 1
   fi
   if [ "$start_count" -eq 1 ]; then
-    managed_block=$(mktemp "${TMPDIR:-/tmp}/personal-coding-agents.XXXXXX")
+    managed_block=$(mktemp "${TMPDIR:-/tmp}/tina-agents.XXXXXX")
     trap 'rm -f "$managed_block"' EXIT HUP INT TERM
     awk -v start="$START_MARKER" -v end="$END_MARKER" '
       $0 == start { inside = 1; next }
@@ -103,7 +103,7 @@ for config in "$TARGET_ROOT/openspec/config.yaml" "$TARGET_ROOT/openspec/config.
       exit 1
     fi
     current_schema=$(sed -n 's/^schema[[:space:]]*:[[:space:]]*//p' "$config")
-    if [ -n "$current_schema" ] && [ "$current_schema" != spec-driven ] && [ "$current_schema" != personal-coding ]; then
+    if [ -n "$current_schema" ] && [ "$current_schema" != spec-driven ] && [ "$current_schema" != tina ]; then
       echo "Refusing to replace existing default schema '$current_schema' in $config" >&2
       exit 1
     fi
@@ -120,7 +120,7 @@ fi
   openspec init --tools codex
 )
 
-for skill in coding-workflow-research coding-workflow-propose coding-workflow-verify; do
+for skill in tina-research tina-propose tina-verify; do
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -128,20 +128,20 @@ for skill in research grill-with-docs grilling domain-modeling; do
   copy_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
-copy_directory "$WORKFLOW_ROOT/schema/personal-coding" "$TARGET_ROOT/openspec/schemas/personal-coding"
+copy_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
 CONFIG_FILE="$TARGET_ROOT/openspec/config.yaml"
 if [ -f "$TARGET_ROOT/openspec/config.yml" ]; then
   CONFIG_FILE="$TARGET_ROOT/openspec/config.yml"
 fi
 
-config_tmp=$(mktemp "${TMPDIR:-/tmp}/personal-coding-config.XXXXXX")
+config_tmp=$(mktemp "${TMPDIR:-/tmp}/tina-config.XXXXXX")
 trap 'rm -f "$config_tmp"' EXIT HUP INT TERM
 if grep -q '^schema[[:space:]]*:' "$CONFIG_FILE"; then
-  awk '/^schema[[:space:]]*:/ { print "schema: personal-coding"; next } { print }' "$CONFIG_FILE" > "$config_tmp"
+  awk '/^schema[[:space:]]*:/ { print "schema: tina"; next } { print }' "$CONFIG_FILE" > "$config_tmp"
 else
   cp "$CONFIG_FILE" "$config_tmp"
-  printf '\nschema: personal-coding\n' >> "$config_tmp"
+  printf '\nschema: tina\n' >> "$config_tmp"
 fi
 mv "$config_tmp" "$CONFIG_FILE"
 trap - EXIT HUP INT TERM
@@ -160,8 +160,8 @@ fi
 
 (
   cd "$TARGET_ROOT"
-  openspec schema validate personal-coding --verbose
-  openspec schema which personal-coding
+  openspec schema validate tina --verbose
+  openspec schema which tina
 )
 
-echo "Personal coding workflow installed in $TARGET_ROOT"
+echo "Tina workflow installed in $TARGET_ROOT"

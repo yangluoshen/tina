@@ -1,4 +1,4 @@
-name: personal-coding
+name: tina
 version: 1
 description: Small, domain-aligned OpenSpec changes for a personal Codex workflow
 
@@ -15,7 +15,7 @@ artifacts:
       - Use their canonical vocabulary and respect their decisions.
       - Inspect existing OpenSpec specs before declaring capabilities.
       - If an external or version-sensitive fact is unresolved, stop and use
-        the coding-workflow-research skill before continuing.
+        the tina-research skill before continuing.
 
       Enforce the size gate before creating the file:
       - one intent;

@@ -1,9 +1,9 @@
 ---
-name: coding-workflow-verify
+name: tina-verify
 description: Verify an implemented OpenSpec change against its tasks, behavioral specs, design, and domain model before archive. Use when implementation is complete or the user asks whether a change is ready to archive.
 ---
 
-# Workflow Verify
+# Tina Verify
 
 Verification is read-only except for running safe checks. Never archive or alter
 the implementation during this workflow.

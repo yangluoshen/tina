@@ -1,17 +1,17 @@
-# Personal Coding Workflow
+# Tina Workflow
 
-OpenSpec is the planning system. The project default schema is `personal-coding`.
+OpenSpec is the planning system. The project default schema is `tina`.
 
 ## Routing
 
-- Never use `$openspec-explore`. Use `$coding-workflow-research` for exploration,
+- Never use `$openspec-explore`. Use `$tina-research` for exploration,
   feasibility work, unfamiliar APIs, and version-sensitive facts.
-- Use `$coding-workflow-propose` for every new proposal. Do not call
+- Use `$tina-propose` for every new proposal. Do not call
   `$openspec-propose` directly; the private wrapper owns research, grilling,
   domain alignment, and the size gate.
 - Use `$openspec-apply-change` only after the user explicitly authorizes
   implementation.
-- Use `$coding-workflow-verify` before archive.
+- Use `$tina-verify` before archive.
 - Use `$openspec-archive-change` only when the user explicitly requests archive.
 
 ## Domain Model
@@ -33,4 +33,4 @@ without confirmation and never hide excess scope inside oversized tasks.
 
 Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock
 skills are unchanged snapshots. Put personal behavior only in
-`coding-workflow-*` skills and the `personal-coding` schema.
+`tina-*` skills and the `tina` schema.

@@ -1,4 +1,4 @@
-# Personal Coding Workflow
+# Tina Workflow
 
 A portable planning and coding workflow built around OpenSpec for use across personal projects.
 

@@ -26,7 +26,7 @@ case "$NEXT_OPENSPEC_VERSION" in
   ''|*[!0-9A-Za-z.+-]*) echo "Invalid OpenSpec version: $NEXT_OPENSPEC_VERSION" >&2; exit 1 ;;
 esac
 
-UPDATE_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/personal-coding-update.XXXXXX")
+UPDATE_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/tina-update.XXXXXX")
 trap 'rm -rf "$UPDATE_ROOT"' EXIT HUP INT TERM
 
 MATT_CHECKOUT="$UPDATE_ROOT/mattpocock-skills"
@@ -57,14 +57,14 @@ done
 
 OPENSPEC_CHECK="$UPDATE_ROOT/openspec-check"
 mkdir -p "$OPENSPEC_CHECK/openspec/schemas"
-cp -R "$WORKFLOW_ROOT/schema/personal-coding" "$OPENSPEC_CHECK/openspec/schemas/personal-coding"
-printf 'schema: personal-coding\n' > "$OPENSPEC_CHECK/openspec/config.yaml"
+cp -R "$WORKFLOW_ROOT/schema/tina" "$OPENSPEC_CHECK/openspec/schemas/tina"
+printf 'schema: tina\n' > "$OPENSPEC_CHECK/openspec/config.yaml"
 
 (
   cd "$OPENSPEC_CHECK"
-  npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" schema validate personal-coding --verbose >/dev/null
-  npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" new change dependency-smoke --schema personal-coding >/dev/null
-  npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" status --change dependency-smoke --json | grep -q '"schemaName": "personal-coding"'
+  npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" schema validate tina --verbose >/dev/null
+  npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" new change dependency-smoke --schema tina >/dev/null
+  npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" status --change dependency-smoke --json | grep -q '"schemaName": "tina"'
   npx --yes "$OPENSPEC_PACKAGE@$NEXT_OPENSPEC_VERSION" instructions proposal --change dependency-smoke --json | grep -q 'Domain Alignment'
 )
 
@@ -76,7 +76,7 @@ for file in SKILL.md CONTEXT-FORMAT.md ADR-FORMAT.md; do
   cp "$STAGED_VENDOR/skills/domain-modeling/$file" "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/domain-modeling/$file"
 done
 
-PINS_TMP=$(mktemp "${TMPDIR:-/tmp}/personal-coding-dependencies.XXXXXX")
+PINS_TMP=$(mktemp "${TMPDIR:-/tmp}/tina-dependencies.XXXXXX")
 trap 'rm -rf "$UPDATE_ROOT"; rm -f "$PINS_TMP"' EXIT HUP INT TERM
 printf '%s\n' \
   "MATTPOCOCK_SKILLS_REPOSITORY=$MATTPOCOCK_SKILLS_REPOSITORY" \
