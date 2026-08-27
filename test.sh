@@ -11,6 +11,11 @@ mkdir "$TEST_ROOT/project"
 
 PROJECT="$TEST_ROOT/project"
 test "$(grep -Fc '<!-- personal-coding-workflow:start -->' "$PROJECT/AGENTS.md")" -eq 1
+grep -q '^# Personal Coding Workflow$' "$PROJECT/AGENTS.md"
+if grep -q '^# Repository Instructions$' "$PROJECT/AGENTS.md"; then
+  echo "Repository Instructions leaked into the target project" >&2
+  exit 1
+fi
 grep -q '^schema: personal-coding$' "$PROJECT/openspec/config.yaml"
 test -f "$PROJECT/.agents/skills/coding-workflow-propose/SKILL.md"
 test -f "$PROJECT/.agents/skills/domain-modeling/CONTEXT-FORMAT.md"

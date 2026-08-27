@@ -75,9 +75,9 @@ if [ -f "$AGENTS_FILE" ]; then
       $0 == end { inside = 0; next }
       inside { print }
     ' "$AGENTS_FILE" > "$managed_block"
-    if ! cmp -s "$WORKFLOW_ROOT/AGENTS.md" "$managed_block"; then
+    if ! cmp -s "$WORKFLOW_ROOT/templates/AGENTS.md" "$managed_block"; then
       echo "Refusing to overwrite a modified workflow block in $AGENTS_FILE" >&2
-      diff -u "$managed_block" "$WORKFLOW_ROOT/AGENTS.md" >&2 || true
+      diff -u "$managed_block" "$WORKFLOW_ROOT/templates/AGENTS.md" >&2 || true
       exit 1
     fi
     rm -f "$managed_block"
@@ -148,7 +148,7 @@ if ! grep -Fq "$START_MARKER" "$AGENTS_FILE"; then
     printf '\n' >> "$AGENTS_FILE"
   fi
   printf '%s\n' "$START_MARKER" >> "$AGENTS_FILE"
-  cat "$WORKFLOW_ROOT/AGENTS.md" >> "$AGENTS_FILE"
+  cat "$WORKFLOW_ROOT/templates/AGENTS.md" >> "$AGENTS_FILE"
   printf '%s\n' "$END_MARKER" >> "$AGENTS_FILE"
 fi
 

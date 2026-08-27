@@ -1,36 +1,25 @@
-# Personal Coding Workflow
+# Repository Instructions
 
-OpenSpec is the planning system. The project default schema is `personal-coding`.
+This repository builds the Personal Coding Workflow bundle. Its root
+`AGENTS.md` governs maintenance here and must never be copied into target
+projects; `templates/AGENTS.md` is the Target Instructions source.
 
-## Routing
+## Source Layout
 
-- Never use `$openspec-explore`. Use `$coding-workflow-research` for exploration,
-  feasibility work, unfamiliar APIs, and version-sensitive facts.
-- Use `$coding-workflow-propose` for every new proposal. Do not call
-  `$openspec-propose` directly; the private wrapper owns research, grilling,
-  domain alignment, and the size gate.
-- Use `$openspec-apply-change` only after the user explicitly authorizes
-  implementation.
-- Use `$coding-workflow-verify` before archive.
-- Use `$openspec-archive-change` only when the user explicitly requests archive.
+- `schema/personal-coding/`: the project-level OpenSpec schema and templates.
+- `skills/coding-workflow-*/`: private orchestration skills.
+- `vendor/mattpocock-skills/`: pinned, unmodified upstream skill files.
+- `templates/AGENTS.md`: the managed block installed into target projects.
+- `install.sh`: non-destructive installer; `test.sh`: its smoke test.
+- `tmp/`: ignored research clones, never commit them.
 
-## Domain Model
+## Maintenance Rules
 
-Read the applicable `CONTEXT-MAP.md` or `CONTEXT.md` and related ADRs before
-planning, implementation, and verification. Keep CONTEXT files as pure
-glossaries. Update a term immediately when it is settled; create an ADR only
-when a decision is hard to reverse, surprising without context, and a real
-trade-off. Proposals and designs must cite and respect these files.
-
-## Change Size
-
-One Change has one intent, at most two capabilities, about eight coarse tasks,
-and fits one focused implementation session. When any limit is exceeded, stop
-and propose an ordered set of smaller Changes. Never create all split Changes
-without confirmation and never hide excess scope inside oversized tasks.
-
-## Ownership
-
-Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock
-skills are unchanged snapshots. Put personal behavior only in
-`coding-workflow-*` skills and the `personal-coding` schema.
+- Never edit vendored skill content. Replace a snapshot as a unit and update
+  `vendor/mattpocock-skills/UPSTREAM` when upgrading.
+- Keep private policy out of `openspec-*` and vendored skills; change only the
+  `coding-workflow-*` wrappers, custom schema, or Target Instructions.
+- Keep the schema limited to proposal, specs, conditional design, and tasks.
+- Preserve installer conflict checks and existing target-project content.
+- Run `./test.sh` after changing the schema, skills, Target Instructions, or
+  installer.

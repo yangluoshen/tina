@@ -23,3 +23,11 @@ _Avoid_: Spec, architecture
 **Research Note**:
 A dated, cited account of external or unstable facts used as planning input rather than permanent project truth.
 _Avoid_: ADR, specification
+
+**Repository Instructions**:
+Agent guidance that applies only while maintaining the Workflow Bundle's own repository.
+_Avoid_: Target instructions, installed policy
+
+**Target Instructions**:
+Portable agent guidance installed into a repository that consumes the Workflow Bundle.
+_Avoid_: Repository instructions, maintainer policy
