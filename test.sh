@@ -6,6 +6,14 @@ WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 TEST_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/tina-workflow.XXXXXX")
 trap 'rm -rf "$TEST_ROOT"' EXIT HUP INT TERM
 
+mkdir "$TEST_ROOT/bin" "$TEST_ROOT/cli-project"
+ln -s "$WORKFLOW_ROOT/install.sh" "$TEST_ROOT/bin/tina-init"
+(
+  cd "$TEST_ROOT/cli-project"
+  PATH="$TEST_ROOT/bin:$PATH" tina-init . >/dev/null
+)
+test -f "$TEST_ROOT/cli-project/openspec/config.yaml"
+
 PROJECT="$TEST_ROOT/missing/project"
 "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null
 "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null

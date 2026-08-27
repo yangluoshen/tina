@@ -51,10 +51,24 @@ npm install -g "$OPENSPEC_PACKAGE@$OPENSPEC_VERSION"
 
 ## 安装到目标仓库
 
-在本仓库根目录执行；目标目录不存在时，安装器会连同缺失的父目录一起创建：
+先在本仓库根目录把安装器链接到已位于 `PATH` 的用户命令目录：
 
 ```sh
-./install.sh /absolute/path/to/target-repository
+mkdir -p "$HOME/.local/bin"
+ln -s "$PWD/install.sh" "$HOME/.local/bin/tina-init"
+```
+
+之后可以在任意目录初始化当前项目：
+
+```sh
+cd /path/to/target-repository
+tina-init .
+```
+
+也可以传入其他目标目录；目标目录不存在时，安装器会连同缺失的父目录一起创建：
+
+```sh
+tina-init /absolute/path/to/target-repository
 ```
 
 安装器会：

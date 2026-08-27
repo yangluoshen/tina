@@ -1,7 +1,15 @@
 #!/bin/sh
 set -eu
 
-WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+WORKFLOW_ENTRY=$0
+while [ -L "$WORKFLOW_ENTRY" ]; do
+  link=$(readlink "$WORKFLOW_ENTRY")
+  case $link in
+    /*) WORKFLOW_ENTRY=$link ;;
+    *) WORKFLOW_ENTRY=$(dirname -- "$WORKFLOW_ENTRY")/$link ;;
+  esac
+done
+WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$WORKFLOW_ENTRY")" && pwd)
 . "$WORKFLOW_ROOT/dependencies.env"
 TARGET=${1:-.}
 
