@@ -79,9 +79,10 @@ artifacts:
 
       Explain context, goals and non-goals, decisions with alternatives, risks
       and mitigations, migration when applicable, and only genuinely deferrable
-      open questions. Cite relevant ADRs instead of restating them. Resolve any
-      question that would change behavior, approach, or task breakdown before
-      continuing.
+      open questions. When a diagram would help humans understand the design or
+      decide faster, add a concise text diagram before Decisions; otherwise omit
+      it. Cite relevant ADRs instead of restating them. Resolve any question that
+      would change behavior, approach, or task breakdown before continuing.
     requires:
       - proposal
 

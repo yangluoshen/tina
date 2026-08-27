@@ -12,6 +12,10 @@
 
 <!-- Design-level exclusions -->
 
+## Diagram design (Optional)
+
+<!-- Add a text diagram only when it helps humans understand the design or make a decision faster. -->
+
 ## Decisions
 
 <!-- Technical choices, rationale, and alternatives considered -->
