@@ -51,7 +51,7 @@ npm install -g "$OPENSPEC_PACKAGE@$OPENSPEC_VERSION"
 
 ## 安装到目标仓库
 
-目标目录必须已经存在。在本仓库根目录执行：
+在本仓库根目录执行；目标目录不存在时，安装器会连同缺失的父目录一起创建：
 
 ```sh
 ./install.sh /absolute/path/to/target-repository

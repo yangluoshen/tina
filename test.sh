@@ -6,11 +6,9 @@ WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 TEST_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/tina-workflow.XXXXXX")
 trap 'rm -rf "$TEST_ROOT"' EXIT HUP INT TERM
 
-mkdir "$TEST_ROOT/project"
-"$WORKFLOW_ROOT/install.sh" "$TEST_ROOT/project" >/dev/null
-"$WORKFLOW_ROOT/install.sh" "$TEST_ROOT/project" >/dev/null
-
-PROJECT="$TEST_ROOT/project"
+PROJECT="$TEST_ROOT/missing/project"
+"$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null
+"$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null
 test "$(grep -Fc '<!-- tina-workflow:start -->' "$PROJECT/AGENTS.md")" -eq 1
 grep -q '^# Tina Workflow$' "$PROJECT/AGENTS.md"
 if grep -q '^# Repository Instructions$' "$PROJECT/AGENTS.md"; then

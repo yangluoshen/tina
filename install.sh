@@ -5,9 +5,13 @@ WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 . "$WORKFLOW_ROOT/dependencies.env"
 TARGET=${1:-.}
 
-if [ ! -d "$TARGET" ]; then
-  echo "Target directory does not exist: $TARGET" >&2
-  exit 1
+if [ -e "$TARGET" ] || [ -L "$TARGET" ]; then
+  if [ ! -d "$TARGET" ]; then
+    echo "Target path is not a directory: $TARGET" >&2
+    exit 1
+  fi
+else
+  mkdir -p -- "$TARGET"
 fi
 
 TARGET_ROOT=$(CDPATH= cd -- "$TARGET" && pwd)
