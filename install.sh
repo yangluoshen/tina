@@ -59,7 +59,30 @@ copy_directory() {
   fi
 }
 
-for skill in tina-research tina-propose tina-change-visual tina-verify; do
+check_file() {
+  source_file=$1
+  destination_file=$2
+
+  if [ -e "$destination_file" ] || [ -L "$destination_file" ]; then
+    if ! cmp -s "$source_file" "$destination_file"; then
+      echo "Refusing to overwrite existing file: $destination_file" >&2
+      diff -u "$destination_file" "$source_file" >&2 || true
+      exit 1
+    fi
+  fi
+}
+
+copy_file() {
+  source_file=$1
+  destination_file=$2
+
+  if [ ! -e "$destination_file" ]; then
+    mkdir -p "$(dirname -- "$destination_file")"
+    cp "$source_file" "$destination_file"
+  fi
+}
+
+for skill in tina-research tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply; do
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -68,6 +91,10 @@ for skill in research grill-with-docs grilling domain-modeling; do
 done
 
 check_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
+
+for agent in tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+  check_file "$WORKFLOW_ROOT/agents/$agent.toml" "$TARGET_ROOT/.codex/agents/$agent.toml"
+done
 
 START_MARKER='<!-- tina-workflow:start -->'
 END_MARKER='<!-- tina-workflow:end -->'
@@ -132,7 +159,7 @@ fi
   openspec init --tools codex
 )
 
-for skill in tina-research tina-propose tina-change-visual tina-verify; do
+for skill in tina-research tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply; do
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -141,6 +168,10 @@ for skill in research grill-with-docs grilling domain-modeling; do
 done
 
 copy_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
+
+for agent in tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+  copy_file "$WORKFLOW_ROOT/agents/$agent.toml" "$TARGET_ROOT/.codex/agents/$agent.toml"
+done
 
 CONFIG_FILE="$TARGET_ROOT/openspec/config.yaml"
 if [ -f "$TARGET_ROOT/openspec/config.yml" ]; then

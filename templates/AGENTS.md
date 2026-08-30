@@ -6,9 +6,13 @@ OpenSpec is the planning system. The project default schema is `tina`.
 
 - Never use `$openspec-explore`. Use `$tina-research` for exploration,
   feasibility work, unfamiliar APIs, and version-sensitive facts.
-- Use `$tina-propose` for every new proposal. Do not call
-  `$openspec-propose` directly; the private wrapper owns research, grilling,
-  domain alignment, and the size gate.
+- Use `$tina-propose-plan` for research, grilling, domain alignment, size gate,
+  and confirming an ordered Change list. Do not call `$openspec-propose`
+  directly; the private wrapper owns those steps.
+- After the split is confirmed, start the long propose/review loop with
+  `/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
+  Follow the success criteria and stopping condition in that file.` The
+  proposal-plan file is the only source of truth for completion.
 - During proposal planning, write generated narrative in Chinese by default.
   Preserve required headings, identifiers, paths, code, and established terms.
 - Use `$tina-change-visual` to generate or refresh `change.html` after
@@ -16,8 +20,21 @@ OpenSpec is the planning system. The project default schema is `tina`.
   Markdown sources remain authoritative.
 - Use `$openspec-apply-change` only after the user explicitly authorizes
   implementation.
+- Use `$tina-apply <scope>` after explicit authorization to run the
+  implement/QA/review loop and commit each Change before moving on.
 - Use `$tina-verify` before archive.
 - Use `$openspec-archive-change` only when the user explicitly requests archive.
+
+## Tina Subagent Models
+
+| role | deepseek profile | openai profile |
+|---|---|---|
+| `tina-implementer` | `deepseek-v4-flash` / `max` | `gpt-5.6-terra` / `max` |
+| `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5.6-sol` / `medium` |
+| `tina-proposer`, `tina-proposal-reviewer`, `tina-code-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-sol` / `high` |
+
+Spawn each role with the pair for the active profile. Do not hardcode these
+models in the agent TOML files.
 
 ## Domain Model
 
@@ -39,4 +56,3 @@ without confirmation and never hide excess scope inside oversized tasks.
 Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock
 skills are unchanged snapshots. Put personal behavior only in
 `tina-*` skills and the `tina` schema.
-
