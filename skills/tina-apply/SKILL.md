@@ -15,15 +15,20 @@ explicit authorizing request. Do not archive.
    `Tina Subagent Models` table in this repository's `AGENTS.md` based on the
    active profile.
 3. For each Change in dependency order:
-   a. Spawn `tina_implementer`.
-   b. Spawn `tina_qa`; if QA failed, return its `docs/qa/<change>.md` to the
-      implementer and repeat until passed.
-   c. Spawn `tina_code_reviewer`; if `Needs changes`, return the review to the
-      implementer and repeat until `Approved`.
-   d. Verify the worktree contains only this Change's expected files, then
+   a. Derive a stable slug from the Change name: lowercase it and replace every
+      character outside `[a-z0-9_]` with `_`. Use these agents only for this
+      Change: `<slug>_implementer`, `<slug>_qa`, and `<slug>_reviewer`.
+   b. Spawn `tina_implementer` as `<slug>_implementer` and send it the Change.
+   c. Spawn `tina_qa` as `<slug>_qa`. If QA fails, send its
+      `docs/qa/<change>.md` back to `<slug>_implementer`, then ask the same
+      `<slug>_qa` to re-test. Repeat until passed. Do not spawn replacements.
+   d. Spawn `tina_code_reviewer` as `<slug>_reviewer`. If `Needs changes`,
+      send the review to `<slug>_implementer`, then have the same `<slug>_qa`
+      re-test and the same `<slug>_reviewer` re-review. Repeat until
+      `Approved`. Do not spawn replacements.
+   e. Verify the worktree contains only this Change's expected files, then
       `git add` and commit with `tina(change): <change-name>`.
 4. Write unresolved concerns and leftover questions to
    `docs/run/<change>-concerns.md` and summarize them for the user when the goal
    ends.
 5. Leave archive and verify as separate user actions.
-
