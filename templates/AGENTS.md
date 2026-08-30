@@ -20,8 +20,8 @@ OpenSpec is the planning system. The project default schema is `tina`.
   Markdown sources remain authoritative.
 - Use `$openspec-apply-change` only after the user explicitly authorizes
   implementation.
-- Use `$tina-apply <scope>` after explicit authorization to run the
-  implement/QA/review loop and commit each Change before moving on.
+- Use `$tina-apply <scope>` after explicit authorization to implement and QA
+  each Change, commit it, then run one final code review over the whole run.
 - Use `$tina-verify` before archive.
 - Use `$openspec-archive-change` only when the user explicitly requests archive.
 
