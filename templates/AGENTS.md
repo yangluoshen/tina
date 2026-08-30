@@ -9,10 +9,11 @@ OpenSpec is the planning system. The project default schema is `tina`.
 - Use `$tina-propose-plan` for research, grilling, domain alignment, size gate,
   and confirming an ordered Change list. Do not call `$openspec-propose`
   directly; the private wrapper owns those steps.
-- After the split is confirmed, start the long propose/review loop with
+- After the split is confirmed, start the propose run with
   `/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
-  Follow the success criteria and stopping condition in that file.` The
-  proposal-plan file is the only source of truth for completion.
+  Follow the success criteria and stopping condition in that file.` Propose
+  every Change, then run one final review over the full set. The proposal-plan
+  file is the only source of truth for completion.
 - During proposal planning, write generated narrative in Chinese by default.
   Preserve required headings, identifiers, paths, code, and established terms.
 - Use `$tina-change-visual` to generate or refresh `change.html` after
