@@ -16,6 +16,18 @@ _Avoid_: Epic, project
 The OpenSpec artifact that establishes the motivation, scope, capability impact, and domain alignment of a Change.
 _Avoid_: Plan, change
 
+**Proposal Plan**:
+A confirmed split strategy written to `docs/proposal-plan/<date>-<scenarios>.md` before the propose/review loop starts.
+_Avoid_: Implementation, proposal artifacts
+
+**Propose Run**:
+The long-running goal that executes a confirmed Proposal Plan through proposer and proposal-reviewer subagents.
+_Avoid_: Planning, grilling, confirmation
+
+**Apply Run**:
+The long-running goal that implements approved Changes through implementer, QA, and code-reviewer subagents, committing each Change before moving on.
+_Avoid_: Archive, proposal planning
+
 **Change View**:
 A non-normative, diagram-led `change.html` derived from a Change's Proposal and optional design for faster human review.
 _Avoid_: Proposal, specification, source of truth

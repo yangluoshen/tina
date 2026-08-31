@@ -24,10 +24,19 @@ if grep -q '^# Repository Instructions$' "$PROJECT/AGENTS.md"; then
   exit 1
 fi
 grep -q '^schema: tina$' "$PROJECT/openspec/config.yaml"
-test -f "$PROJECT/.agents/skills/tina-propose/SKILL.md"
+test -f "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
+test -f "$PROJECT/.agents/skills/tina-propose-run/SKILL.md"
+test -f "$PROJECT/.agents/skills/tina-apply/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-change-visual/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-change-visual/assets/change.html"
 test -f "$PROJECT/.agents/skills/domain-modeling/CONTEXT-FORMAT.md"
+for agent in tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+  agent_file="$PROJECT/.codex/agents/$agent.toml"
+  test -f "$agent_file"
+  grep -q '^name = ' "$agent_file"
+  grep -q '^description = ' "$agent_file"
+  grep -q '^developer_instructions = ' "$agent_file"
+done
 test -n "$MATTPOCOCK_SKILLS_REF"
 test -n "$OPENSPEC_VERSION"
 
@@ -48,11 +57,19 @@ fi
   openspec status --change smoke --json | grep -q '"schemaName": "tina"'
   openspec instructions proposal --change smoke --json | grep -q 'Domain Alignment'
 )
-grep -q 'tina-change-visual' "$PROJECT/.agents/skills/tina-propose/SKILL.md"
+grep -q 'tina-change-visual' "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 
-printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/tina-propose/SKILL.md"
+printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
   echo "Installer overwrote a conflicting skill" >&2
+  exit 1
+fi
+
+AGENT_PROJECT="$TEST_ROOT/agent-project"
+"$WORKFLOW_ROOT/install.sh" "$AGENT_PROJECT" >/dev/null
+printf '\n# local edit\n' >> "$AGENT_PROJECT/.codex/agents/tina-qa.toml"
+if "$WORKFLOW_ROOT/install.sh" "$AGENT_PROJECT" >/dev/null 2>&1; then
+  echo "Installer overwrote a conflicting agent" >&2
   exit 1
 fi
 

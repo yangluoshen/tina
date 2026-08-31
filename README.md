@@ -9,16 +9,19 @@ OpenSpec，把领域模型、提案、行为规格、条件设计、任务拆解
 ```text
 $tina-research（按需）
         ↓
-$tina-propose
-        ├── proposal.md
-        ├── specs/**/*.md（有行为变化时）
-        ├── design.md（按需）
-        ├── tasks.md
-        └── change.html（面向人类的图示摘要）
+$tina-propose-plan
+        ↓
+docs/proposal-plan/<date>-<scenarios>.md
+        ↓
+/goal Execute $tina-propose-run <proposal-plan>.md
+        ├── 每个 Change 生成并 review proposal.md、specs/、design.md、tasks.md、change.html
+        └── docs/run/<change>-plan.md
         ↓
 人工审阅
         ↓
-$openspec-apply-change
+$tina-apply <scope>
+        ├── implement / QA / review loop
+        └── 每个 Change 独立 commit
         ↓
 $tina-verify
         ↓
@@ -33,6 +36,9 @@ $openspec-archive-change
 - 规划前读取适用的 `CONTEXT.md`、`CONTEXT-MAP.md` 和 ADR，保持领域语言一致。
 - `change.html` 从 `proposal.md` 和可选的 `design.md` 派生，以 software diagram
   为主帮助人类快速决策；Markdown 始终是权威来源。
+- 单个 Change 仍可用 `$tina-propose-plan` 生成完整 OpenSpec 产物，再用
+  `$openspec-apply-change`；多 Change 场景使用 `$tina-propose-run` 和
+  `$tina-apply` 的 subagent loop。
 - 实现、验证和归档是三个独立动作，不自动越过人工授权。
 
 ## 前置条件
@@ -95,16 +101,29 @@ $tina-research <问题>
 
 调研只使用高可信的一手来源，并把结论保存为带引用的 Research Note。
 
-### 2. 创建 Change
+### 2. 确认拆分计划
 
 ```text
-$tina-propose <要实现的变化>
+$tina-propose-plan <要实现的变化或目标>
 ```
 
-该流程会完成必要的调研、grilling、领域对齐和规模检查，再调用 OpenSpec 生成规划
-产物，最后生成同目录的 `change.html`。小改动可以跳过 `design.md`，但不能跳过
-Proposal 的范围和能力影响说明；没有行为级 capability delta 时会设置
-`skip_specs: true`，而不是虚构 requirements。
+该流程完成调研、grilling、领域对齐和规模检查，并确认按依赖排序的 Change
+列表。确认后把拆分策略写入
+`docs/proposal-plan/<date>-<scenarios>.md`，并在输出末尾给出下一步 `/goal`
+提示。成功标准和停止条件根据本次拆分设计，不写死。
+
+### 2.1 执行 propose/review loop
+
+复制 `$tina-propose-plan` 输出的下一步提示：
+
+```text
+/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
+Follow the success criteria and stopping condition in that file.
+Do not grill, ask for individual confirmation, or archive.
+```
+
+该 goal 会为每个 Change spawn `tina_proposer` 和 `tina_proposal_reviewer`，
+review 不通过则回传 proposer 修改，直到所有 Change 满足 plan 文件的停止条件。
 
 ### 3. 人工审阅
 
@@ -118,12 +137,14 @@ Proposal 的范围和能力影响说明；没有行为级 capability delta 时�
 ### 4. 实现、验证与归档
 
 ```text
-$openspec-apply-change <change-name>
+$tina-apply <scope>
 $tina-verify <change-name>
 $openspec-archive-change <change-name>
 ```
 
-只有用户明确授权后才进入实现；归档同样需要单独请求。
+`$tina-apply` 按依赖顺序对每个 Change 执行 implement、真实 QA、code review
+loop，并在每个 Change 通过后立即 commit。只有用户明确授权后才进入实现；归档
+同样需要单独请求。单 Change 仍可直接用 `$openspec-apply-change`。
 
 ## 安装后的主要文件
 
@@ -133,10 +154,18 @@ target-repository/
 ├── .agents/skills/
 │   ├── openspec-*/
 │   ├── tina-research/
-│   ├── tina-propose/
+│   ├── tina-propose-plan/
+│   ├── tina-propose-run/
+│   ├── tina-apply/
 │   ├── tina-change-visual/
 │   ├── tina-verify/
 │   └── research、grilling、domain-modeling 等固定上游 skill
+├── .codex/agents/
+│   ├── tina-proposer.toml
+│   ├── tina-proposal-reviewer.toml
+│   ├── tina-implementer.toml
+│   ├── tina-qa.toml
+│   └── tina-code-reviewer.toml
 └── openspec/
     ├── config.yaml
     └── schemas/tina/

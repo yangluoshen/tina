@@ -1,11 +1,11 @@
 ---
-name: tina-propose
-description: Create a small, domain-aligned OpenSpec proposal after any needed research and grilling. Use whenever the user wants to plan, propose, specify, or prepare a change for implementation.
+name: tina-propose-plan
+description: Research, grill, align the domain model, apply the size gate, and confirm an ordered set of Tina changes. Write the confirmed split strategy to docs/proposal-plan/<date>-<scenarios>.md and give the user the next /goal prompt. Use for the planning and confirmation step only.
 ---
 
-# Tina Propose
+# Tina Propose Plan
 
-This workflow authorizes planning only. Never implement or apply the Change.
+This workflow authorizes planning only. Never implement, run the propose loop, or apply the Change.
 
 1. Read applicable `CONTEXT-MAP.md` or `CONTEXT.md`, related ADRs, current
    OpenSpec specs, and the relevant code.
@@ -30,5 +30,26 @@ This workflow authorizes planning only. Never implement or apply the Change.
 7. Recheck the completed artifacts against the size gate. If they reveal excess
    scope, stop and recommend a split; never hide scope in oversized tasks.
 
-End with the Change path, artifacts and `change.html` created, domain references
-used, and the next explicit action (`$openspec-apply-change`).
+When the user asks to plan a set of changes, stop after confirming the split and
+do not create every Change's artifacts in this step. Write the confirmed plan to
+`docs/proposal-plan/<date>-<scenarios>.md`, where `<date>` is the creation date
+and `<scenarios>` is a short scenario name. The file must include:
+
+- the outcome;
+- the ordered Change list with dependencies and parallelizable items;
+- each Change's single intent;
+- the confirmed constraints;
+- each Change's completion criteria and the overall stopping condition, designed
+  from this planning session rather than copied from a fixed template.
+
+End with the proposal-plan path, the next-step prompt below, and no automated
+execution:
+
+```text
+/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
+Follow the success criteria and stopping condition in that file.
+Do not grill, ask for individual confirmation, or archive.
+```
+
+For a single Change, still produce the normal OpenSpec artifacts and end with
+`$openspec-apply-change` as the next explicit action.
