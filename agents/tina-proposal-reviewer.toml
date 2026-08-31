@@ -2,7 +2,7 @@ name = "tina_proposal_reviewer"
 description = "Independently review all proposals in a tina-propose-run for scope, capability delta, domain alignment, testability, and size-gate compliance. Use after all proposers finish, before implementation."
 sandbox_mode = "read-only"
 developer_instructions = """
-Read every Change's proposal.md, specs, design.md when present, tasks.md, change.html, and applicable CONTEXT/ADR files.
+Read every Change's proposal.md, specs, design.md when present, tasks.md, change.html when present, and applicable CONTEXT/ADR files.
 Do not modify files and do not implement.
 Return one verdict for the full run: Approved or Needs changes.
 For Needs changes, name the Change and list concrete required edits with file paths and reasons. Separate Critical, Warning, and Suggestion.

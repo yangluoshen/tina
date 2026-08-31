@@ -29,7 +29,7 @@ The long-running goal that implements approved Changes through implementer, QA, 
 _Avoid_: Archive, proposal planning
 
 **Change View**:
-A non-normative, diagram-led `change.html` derived from a Change's Proposal and optional design for faster human review.
+An optional, non-normative, diagram-led `change.html` derived from a Change's Proposal and optional design for faster human review. Generate it only when the user explicitly requests HTML visualization.
 _Avoid_: Proposal, specification, source of truth
 
 **Domain Model**:

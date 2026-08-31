@@ -38,8 +38,9 @@ Core constraints:
   identifiers, paths, code, and domain terms.
 - Read the applicable `CONTEXT.md`, `CONTEXT-MAP.md`, and ADRs before planning,
   implementation, and verification.
-- `change.html` is generated from `proposal.md` and optional `design.md`; it is a
-  software-diagram projection for human review. The Markdown sources remain
+- `change.html` is optional. Generate it only when the user explicitly requests
+  HTML visualization; otherwise skip it without asking. When generated, it is a
+  software-diagram projection for human review and the Markdown sources remain
   authoritative.
 - A single Change can still use `$tina-propose-plan` to create full OpenSpec
   artifacts and then `$openspec-apply-change`. Multi-Change work uses
@@ -137,8 +138,8 @@ reviewer re-reviews until the plan file's stopping condition is met.
 
 ### 3. Human review
 
-Open `change.html` for a quick view of the idea and diagrams, then review the
-Markdown sources:
+Review the Markdown sources. Open `change.html` only when HTML visualization was
+explicitly requested:
 
 1. `proposal.md`: problem, intent, and scope;
 2. `specs/**/*.md` when present: observable and testable behavior;

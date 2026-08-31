@@ -24,9 +24,10 @@ This workflow authorizes planning only. Never implement, run the propose loop, o
 5. Invoke `$openspec-propose`. The project default must resolve to the
    `tina` schema. Follow its dynamic instructions and preserve Domain
    Model vocabulary and ADR decisions.
-6. After the planning artifacts are complete, invoke `$tina-change-visual` to
-   generate `change.html` in the Change directory from `proposal.md` and
-   `design.md` when present.
+6. Only if the user explicitly requested HTML visualization, invoke
+   `$tina-change-visual` to generate `change.html` in the Change directory from
+   `proposal.md` and `design.md` when present. Otherwise skip this step
+   silently; do not ask.
 7. Recheck the completed artifacts against the size gate. If they reveal excess
    scope, stop and recommend a split; never hide scope in oversized tasks.
 

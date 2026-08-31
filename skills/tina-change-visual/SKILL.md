@@ -1,6 +1,6 @@
 ---
 name: tina-change-visual
-description: Generate or refresh a Tina Change's change.html as a diagram-led Chinese decision brief derived only from proposal.md and optional design.md. Use after Tina proposal planning or when those sources change, not for general diagrams or non-HTML export.
+description: Generate or refresh a Tina Change's change.html as a diagram-led Chinese decision brief derived only from proposal.md and optional design.md. Use only when the user explicitly requests HTML visualization, not for general diagrams or non-HTML export.
 license: MIT
 ---
 
