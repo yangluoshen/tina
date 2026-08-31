@@ -1,120 +1,128 @@
 # Tina Workflow
 
-Tina Workflow 是一套面向 Codex 的个人规划与编码工作流 bundle。它基于
-OpenSpec，把领域模型、提案、行为规格、条件设计、任务拆解和验证组织成一条
-可安装、可审阅、可重复执行的流程。
+Tina Workflow is a personal planning and coding workflow bundle for Codex. It
+uses OpenSpec to organize domain modeling, proposals, behavior specs,
+conditional design, task breakdown, and verification into an installable,
+reviewable, repeatable process.
 
-## 核心流程
+## Core flow
 
 ```text
-$tina-research（按需）
+$tina-research (optional)
         ↓
 $tina-propose-plan
         ↓
 docs/proposal-plan/<date>-<scenarios>.md
         ↓
 /goal Execute $tina-propose-run <proposal-plan>.md
-        ├── 每个 Change 生成并 review proposal.md、specs/、design.md、tasks.md、change.html
-        └── docs/run/<change>-plan.md
+        ├── one tina_proposer per Change
+        └── one global tina_proposal_reviewer after all proposals
         ↓
-人工审阅
+human review
         ↓
 $tina-apply <scope>
-        ├── implement / QA / review loop
-        └── 每个 Change 独立 commit
+        ├── one implementer per Change, then commit that Change
+        ├── one global QA pass after all Changes
+        └── one global code review after QA
         ↓
 $tina-verify
         ↓
 $openspec-archive-change
 ```
 
-主要约束：
+Core constraints:
 
-- 一个 Change 只承载一个独立意图，最多两个 capability，约八个粗粒度任务，
-  并能在一次专注实现会话中完成。
-- 提案阶段默认采用中文叙事，同时保留既有标题、标识符、路径、代码和领域术语。
-- 规划前读取适用的 `CONTEXT.md`、`CONTEXT-MAP.md` 和 ADR，保持领域语言一致。
-- `change.html` 从 `proposal.md` 和可选的 `design.md` 派生，以 software diagram
-  为主帮助人类快速决策；Markdown 始终是权威来源。
-- 单个 Change 仍可用 `$tina-propose-plan` 生成完整 OpenSpec 产物，再用
-  `$openspec-apply-change`；多 Change 场景使用 `$tina-propose-run` 和
-  `$tina-apply` 的 subagent loop。
-- 实现、验证和归档是三个独立动作，不自动越过人工授权。
+- One Change carries one intent, at most two capabilities, about eight coarse
+  tasks, and fits a single focused implementation session.
+- Proposal narrative defaults to Chinese while preserving existing headings,
+  identifiers, paths, code, and domain terms.
+- Read the applicable `CONTEXT.md`, `CONTEXT-MAP.md`, and ADRs before planning,
+  implementation, and verification.
+- `change.html` is generated from `proposal.md` and optional `design.md`; it is a
+  software-diagram projection for human review. The Markdown sources remain
+  authoritative.
+- A single Change can still use `$tina-propose-plan` to create full OpenSpec
+  artifacts and then `$openspec-apply-change`. Multi-Change work uses
+  `$tina-propose-run` and `$tina-apply`.
+- Implementation, verification, and archive are separate user-authorized steps.
 
-## 前置条件
+## Prerequisites
 
 - Git
-- Node.js 与 npm
+- Node.js and npm
 - Codex
-- 与本 bundle pin 一致的 OpenSpec CLI
+- An OpenSpec CLI matching the version pinned by this bundle
 
-在 bundle 根目录安装对应版本的 OpenSpec：
+Install the matching OpenSpec version from the bundle root:
 
 ```sh
 . ./dependencies.env
 npm install -g "$OPENSPEC_PACKAGE@$OPENSPEC_VERSION"
 ```
 
-## 安装到目标仓库
+## Install into a target repository
 
-先在本仓库根目录把安装器链接到已位于 `PATH` 的用户命令目录：
+Link the installer to a user command directory already on `PATH`:
 
 ```sh
 mkdir -p "$HOME/.local/bin"
 ln -s "$PWD/install.sh" "$HOME/.local/bin/tina-init"
 ```
 
-之后可以在任意目录初始化当前项目：
+Then initialize a target repository:
 
 ```sh
 cd /path/to/target-repository
 tina-init .
 ```
 
-也可以传入其他目标目录；目标目录不存在时，安装器会连同缺失的父目录一起创建：
+You can also pass another target directory. Missing parent directories are
+created as needed:
 
 ```sh
 tina-init /absolute/path/to/target-repository
 ```
 
-安装器会：
+The installer:
 
-- 运行 `openspec init --tools codex`；
-- 安装 `tina-*` 私有 skill 和固定版本的 Matt Pocock skills；
-- 安装项目级 `tina` schema，并将其设为默认 schema；
-- 把 Target Instructions 作为受管理区块追加到目标仓库的 `AGENTS.md`；
-- 验证实际解析到的 schema。
+- runs `openspec init --tools codex`;
+- installs the private `tina-*` skills and pinned Matt Pocock skills;
+- installs the project-level `tina` schema and sets it as the default;
+- appends the Target Instructions as a managed block in the target `AGENTS.md`;
+- validates the resolved schema.
 
-安装是非破坏性的。相同内容可以重复安装；如果目标 skill、schema 或受管理的
-`AGENTS.md` 区块已被修改，安装器会拒绝覆盖并显示差异。目标仓库原有内容不会被
-静默替换。
+Installation is non-destructive. Reinstalling identical content is safe. If a
+target skill, schema, or managed `AGENTS.md` block has been modified, the
+installer refuses to overwrite it and shows the diff. Existing project files are
+never silently replaced.
 
-## 日常使用
+## Daily use
 
-### 1. 调研（按需）
+### 1. Research (optional)
 
-遇到陌生 API、版本敏感事实或可行性问题时：
-
-```text
-$tina-research <问题>
-```
-
-调研只使用高可信的一手来源，并把结论保存为带引用的 Research Note。
-
-### 2. 确认拆分计划
+Use for unfamiliar APIs, version-sensitive facts, or feasibility questions:
 
 ```text
-$tina-propose-plan <要实现的变化或目标>
+$tina-research <question>
 ```
 
-该流程完成调研、grilling、领域对齐和规模检查，并确认按依赖排序的 Change
-列表。确认后把拆分策略写入
-`docs/proposal-plan/<date>-<scenarios>.md`，并在输出末尾给出下一步 `/goal`
-提示。成功标准和停止条件根据本次拆分设计，不写死。
+Research uses high-trust primary sources and saves a cited Research Note.
 
-### 2.1 执行 propose/review loop
+### 2. Confirm the Change split
 
-复制 `$tina-propose-plan` 输出的下一步提示：
+```text
+$tina-propose-plan <change or goal to implement>
+```
+
+This step runs research, grilling, domain alignment, and the size gate, then
+confirms an ordered list of Changes. It writes the confirmed strategy to
+`docs/proposal-plan/<date>-<scenarios>.md` and ends with the next `/goal`
+prompt. Success criteria and the stopping condition come from this planning
+session rather than a fixed template.
+
+### 2.1 Run the proposal workflow
+
+Copy the next-step prompt from `$tina-propose-plan`:
 
 ```text
 /goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
@@ -122,19 +130,22 @@ Follow the success criteria and stopping condition in that file.
 Do not grill, ask for individual confirmation, or archive.
 ```
 
-该 goal 会为每个 Change spawn `tina_proposer` 和 `tina_proposal_reviewer`，
-review 不通过则回传 proposer 修改，直到所有 Change 满足 plan 文件的停止条件。
+The goal spawns one `tina_proposer` per Change. After all Changes are proposed,
+it spawns one `tina_proposal_reviewer` for the whole run. If the verdict is
+`Needs changes`, the review returns to the relevant proposer; the same global
+reviewer re-reviews until the plan file's stopping condition is met.
 
-### 3. 人工审阅
+### 3. Human review
 
-先打开 `change.html` 快速理解核心思想和图示，再以 Markdown 源文件完成正式审阅：
+Open `change.html` for a quick view of the idea and diagrams, then review the
+Markdown sources:
 
-1. `proposal.md`：问题、意图和范围是否正确；
-2. `specs/**/*.md`（存在时）：行为与边界是否可观察、可测试；
-3. `design.md`：技术选择、替代方案和风险是否合理；
-4. `tasks.md`：任务是否有依赖顺序和明确验证方式。
+1. `proposal.md`: problem, intent, and scope;
+2. `specs/**/*.md` when present: observable and testable behavior;
+3. `design.md`: technical choices, alternatives, and risks;
+4. `tasks.md`: task dependencies and explicit verification.
 
-### 4. 实现、验证与归档
+### 4. Implement, verify, and archive
 
 ```text
 $tina-apply <scope>
@@ -142,11 +153,13 @@ $tina-verify <change-name>
 $openspec-archive-change <change-name>
 ```
 
-`$tina-apply` 按依赖顺序对每个 Change 执行 implement、真实 QA、code review
-loop，并在每个 Change 通过后立即 commit。只有用户明确授权后才进入实现；归档
-同样需要单独请求。单 Change 仍可直接用 `$openspec-apply-change`。
+`$tina-apply` implements each Change in dependency order and commits it. After
+all Changes are committed, it runs one global QA pass and then one global code
+review over the full run. It only starts after explicit user authorization.
+Archive also requires a separate user request. A single Change can still use
+`$openspec-apply-change` directly.
 
-## 安装后的主要文件
+## Files installed in a target repository
 
 ```text
 target-repository/
@@ -159,7 +172,7 @@ target-repository/
 │   ├── tina-apply/
 │   ├── tina-change-visual/
 │   ├── tina-verify/
-│   └── research、grilling、domain-modeling 等固定上游 skill
+│   └── pinned upstream skills such as research, grilling, and domain-modeling
 ├── .codex/agents/
 │   ├── tina-proposer.toml
 │   ├── tina-proposal-reviewer.toml
@@ -173,46 +186,49 @@ target-repository/
         └── templates/
 ```
 
-## 仓库结构
+## Repository layout
 
 ```text
-schema/tina/               Tina OpenSpec schema 与模板
-skills/tina-*/             本仓库维护的私有编排 skill
-vendor/mattpocock-skills/  固定 revision 的未修改上游快照
-templates/AGENTS.md        安装到目标仓库的 Target Instructions
-dependencies.env          已验证的唯一依赖 pin 来源
-install.sh                 非破坏性安装器
-test.sh                    安装与 schema smoke test
-update-dependencies.sh     唯一支持的依赖更新入口
+schema/tina/               Tina OpenSpec schema and templates
+skills/tina-*/             Private orchestration skills maintained here
+vendor/mattpocock-skills/  Pinned, unmodified upstream skill snapshots
+templates/AGENTS.md        Target Instructions installed into target repos
+dependencies.env           The single source of dependency pins
+install.sh                 Non-destructive installer
+test.sh                    Installer and schema smoke test
+update-dependencies.sh     The only supported dependency refresh path
 ```
 
-根目录的 `AGENTS.md` 只约束本 bundle 的维护，不能复制到目标项目；目标项目使用
-`templates/AGENTS.md`。
+The root `AGENTS.md` governs this bundle only and must not be copied into target
+projects. Target projects receive `templates/AGENTS.md`.
 
-## 验证
+## Verification
 
-修改 schema、skill、Target Instructions 或安装器后运行：
+After changing the schema, skills, agents, Target Instructions, or installer:
 
 ```sh
 ./test.sh
 ```
 
-测试会在系统临时目录安装两次 workflow，验证幂等性、冲突保护、schema、动态指令
-和 `change.html` 模板。
+The test installs the workflow twice in a temporary directory and verifies
+idempotency, conflict protection, schema resolution, dynamic instructions, and
+the `change.html` template.
 
-## 更新依赖
+## Updating dependencies
 
-只能通过更新脚本刷新固定上游快照和依赖 pin：
+Refresh pinned upstream snapshots and dependency pins only through the update
+script:
 
 ```sh
 ./update-dependencies.sh <matt-ref> <openspec-version>
 ```
 
-只有在明确测试最新上游时才使用：
+Use the latest upstream releases only when intentionally testing them:
 
 ```sh
 ./update-dependencies.sh main latest
 ```
 
-更新完成后运行 `./test.sh`，并在提交前审阅完整 dependency diff。脚本使用隔离的
-`npx` 验证 OpenSpec，不会修改全局 OpenSpec 安装。
+Run `./test.sh` afterward and review the full dependency diff before committing.
+The script validates OpenSpec in an isolated `npx` run and never modifies a
+global OpenSpec installation.
