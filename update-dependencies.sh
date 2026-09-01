@@ -41,17 +41,19 @@ mkdir -p \
   "$STAGED_VENDOR/skills/research" \
   "$STAGED_VENDOR/skills/grill-with-docs" \
   "$STAGED_VENDOR/skills/grilling" \
-  "$STAGED_VENDOR/skills/domain-modeling"
+  "$STAGED_VENDOR/skills/domain-modeling" \
+  "$STAGED_VENDOR/skills/handoff"
 
 cp "$MATT_CHECKOUT/LICENSE" "$STAGED_VENDOR/LICENSE"
 cp "$MATT_CHECKOUT/skills/engineering/research/SKILL.md" "$STAGED_VENDOR/skills/research/SKILL.md"
 cp "$MATT_CHECKOUT/skills/engineering/grill-with-docs/SKILL.md" "$STAGED_VENDOR/skills/grill-with-docs/SKILL.md"
 cp "$MATT_CHECKOUT/skills/productivity/grilling/SKILL.md" "$STAGED_VENDOR/skills/grilling/SKILL.md"
+cp "$MATT_CHECKOUT/skills/productivity/handoff/SKILL.md" "$STAGED_VENDOR/skills/handoff/SKILL.md"
 cp "$MATT_CHECKOUT/skills/engineering/domain-modeling/SKILL.md" "$STAGED_VENDOR/skills/domain-modeling/SKILL.md"
 cp "$MATT_CHECKOUT/skills/engineering/domain-modeling/CONTEXT-FORMAT.md" "$STAGED_VENDOR/skills/domain-modeling/CONTEXT-FORMAT.md"
 cp "$MATT_CHECKOUT/skills/engineering/domain-modeling/ADR-FORMAT.md" "$STAGED_VENDOR/skills/domain-modeling/ADR-FORMAT.md"
 
-for skill in research grill-with-docs grilling domain-modeling; do
+for skill in research grill-with-docs grilling domain-modeling handoff; do
   grep -q "^name: $skill$" "$STAGED_VENDOR/skills/$skill/SKILL.md"
 done
 
@@ -69,7 +71,7 @@ printf 'schema: tina\n' > "$OPENSPEC_CHECK/openspec/config.yaml"
 )
 
 cp "$STAGED_VENDOR/LICENSE" "$WORKFLOW_ROOT/vendor/mattpocock-skills/LICENSE"
-for skill in research grill-with-docs grilling; do
+for skill in research grill-with-docs grilling handoff; do
   cp "$STAGED_VENDOR/skills/$skill/SKILL.md" "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill/SKILL.md"
 done
 for file in SKILL.md CONTEXT-FORMAT.md ADR-FORMAT.md; do

@@ -86,7 +86,7 @@ for skill in tina-research tina-propose-plan tina-propose-run tina-change-visual
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
-for skill in research grill-with-docs grilling domain-modeling; do
+for skill in research grill-with-docs grilling domain-modeling handoff; do
   check_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -163,7 +163,7 @@ for skill in tina-research tina-propose-plan tina-propose-run tina-change-visual
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
-for skill in research grill-with-docs grilling domain-modeling; do
+for skill in research grill-with-docs grilling domain-modeling handoff; do
   copy_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 

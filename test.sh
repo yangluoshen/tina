@@ -29,6 +29,7 @@ test -f "$PROJECT/.agents/skills/tina-propose-run/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-apply/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-change-visual/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-change-visual/assets/change.html"
+test -f "$PROJECT/.agents/skills/handoff/SKILL.md"
 test -f "$PROJECT/.agents/skills/domain-modeling/CONTEXT-FORMAT.md"
 for agent in tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   agent_file="$PROJECT/.codex/agents/$agent.toml"
