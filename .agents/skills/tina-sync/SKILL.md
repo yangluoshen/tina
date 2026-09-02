@@ -10,7 +10,7 @@ Tina-managed content in that target, not overwriting target-owned changes.
 
 ## Resolve source, target, and mode
 
-1. Resolve the bundle root containing this skill, `install.sh`,
+1. Resolve the bundle root containing this skill, `install.sh`, `agents/`,
    `dependencies.env`, `skills/`, `vendor/`, `schema/tina`, and
    `templates/AGENTS.md`.
 2. Require an explicit target path. It must be a Git worktree root and must not
@@ -42,9 +42,10 @@ installer directly in the target: an older valid installation intentionally
 differs from the current bundle and would trigger overwrite protection.
 
 The managed payload consists of staged skill files,
-`.agents/skills/.openspec-target`, `openspec/schemas/tina`, and the Tina block
-from `templates/AGENTS.md`. Preserve OpenSpec changes, specs, CONTEXT files,
-ADRs, change artifacts, and unrelated target files.
+`.agents/skills/.openspec-target`, staged `.codex/agents/*.toml` files,
+`openspec/schemas/tina`, and the Tina block from `templates/AGENTS.md`.
+Preserve OpenSpec changes, specs, CONTEXT files, ADRs, change artifacts, and
+unrelated target files.
 
 Treat the OpenSpec config semantically. If it is absent, use the staged config.
 If it exists, preserve every unrelated line and require exactly one active
@@ -109,8 +110,11 @@ Stop and roll back only this sync's changes on the first failure.
 
 In incognito mode, update the marked local-exclude block before adding new
 paths, verify every untracked path with `git check-ignore -v --no-index`, and
-remove obsolete patterns only after their files are gone. The target's status
-and staged and unstaged diffs must match the recorded baseline after sync.
+remove obsolete patterns only after their files are gone. Resolve the exclude
+file with `git rev-parse --git-path info/exclude`; if linked worktrees share it,
+preserve entries still used by any worktree and verify every worktree's status
+against its baseline. The target's status and staged and unstaged diffs must
+match the recorded baseline after sync.
 
 In normal mode, preserve the recorded baseline changes and report only the new
 focused sync diff. Do not stage or commit it.

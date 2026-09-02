@@ -28,7 +28,7 @@ exists, preserve it and append the Tina block instead; do not also duplicate
 
 ## Preconditions
 
-1. Resolve the bundle root containing this skill, `install.sh`,
+1. Resolve the bundle root containing this skill, `install.sh`, `agents/`,
    `dependencies.env`, and `templates/AGENTS.md`.
 2. Require an explicit target path. It must resolve to a Git worktree root and
    must not equal the bundle root. Ask when either identity is ambiguous.
@@ -36,6 +36,12 @@ exists, preserve it and append the Tina block instead; do not also duplicate
    anything. Existing dirty or untracked files belong to the user.
 4. Check that `openspec` exists. Do not install global software without
    separate authorization.
+
+A linked worktree's `.git` is normally a file. Never construct paths beneath
+it. Resolve the worktree Git directory and exclude file with `git rev-parse`.
+When the exclude file belongs to the common Git directory, its patterns apply
+to every linked worktree. Record each worktree's status before changing that
+file and tell the user that the exact Tina exclusions are repository-wide.
 
 The incognito contract cannot hide changes to tracked files. Stop and ask the
 user to choose a normal installation, a separate worktree, or no installation
@@ -51,6 +57,7 @@ installer or `openspec init` directly in the target.
 From the staged result, select only:
 
 - `.agents/skills/.openspec-target` and each staged skill directory;
+- each staged `.codex/agents/*.toml` file;
 - `openspec/config.yaml` or `openspec/config.yml`;
 - `openspec/schemas/tina`.
 
@@ -87,9 +94,13 @@ root `AGENTS.md`, regenerate the override before the next Codex session.
 
 Append one marked block to the repository-local exclude file. Include only the
 exact untracked destinations selected from the staged payload plus
-`/AGENTS.override.md`; do not ignore all of `.agents/` or `openspec/`, because
-that would hide future project work. Reuse a valid existing block and stop on
-modified or repeated markers.
+`/AGENTS.override.md`; do not ignore all of `.agents/`, `.codex/`, or
+`openspec/`, because that would hide future project work. Back up the exclude
+file before editing it. When one valid block already exists, preserve its
+entries and append only missing current payload paths; this may be an older
+installation or an installation in another linked worktree. Stop on malformed
+or repeated markers, or on unfamiliar entries that are not exact Tina payload
+destinations.
 
 Use these markers:
 
@@ -102,15 +113,16 @@ Verify each untracked destination with `git check-ignore -v --no-index` before
 copying or editing it. Then copy the selected staged paths and write the
 override. Track every path created during this run. On any failure, remove only
 those newly created paths, restore any pre-existing untracked override from a
-temporary backup, and remove the exclude block added by this run. Never roll
-back with a broad Git command.
+temporary backup, and restore the exclude file backup. Remove the marked block
+only when this run created it. Never roll back with a broad Git command.
 
 ## Verify and report
 
 Run the Tina schema validation and confirm that the target resolves `tina` as
 its default. Compare post-install status and staged and unstaged diffs with the
 recorded baseline; they must be unchanged. Confirm the installed local paths
-are ignored and no tracked file was rewritten.
+are ignored and no tracked file was rewritten. When the exclude file is shared,
+also confirm every linked worktree's status still matches its baseline.
 
 Report the local exclude file, ignored paths, any content reused, and the
 `AGENTS.override.md` snapshot warning. Do not commit, modify `.gitignore`, or

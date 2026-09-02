@@ -11,8 +11,9 @@ deleting project artifacts created while using the workflow.
 
 ## Resolve and inspect
 
-1. Resolve the bundle root containing this skill, `install.sh`, `skills/`,
-   `vendor/mattpocock-skills/`, `schema/tina`, and `templates/AGENTS.md`.
+1. Resolve the bundle root containing this skill, `install.sh`, `agents/`,
+   `skills/`, `vendor/mattpocock-skills/`, `schema/tina`, and
+   `templates/AGENTS.md`.
 2. Require an explicit target path and resolve it to an absolute path. If it is
    missing, ambiguous, or equals the bundle root, stop and ask the user.
 3. Inspect the target read-only. Record `git status --short` when it is a Git
@@ -20,14 +21,21 @@ deleting project artifacts created while using the workflow.
 4. Reject symlinked managed paths. Do not follow a symlink to inspect, edit, or
    remove its target.
 
+When the target is a Git worktree, detect incognito mode from the marked block
+in `git rev-parse --git-path info/exclude` and `AGENTS.override.md`; otherwise
+use the managed block in `AGENTS.md`. A linked worktree's exclude file may be
+shared. Record every linked worktree's status before changing it.
+
 Build a removal plan from `install.sh`, not from a duplicated hard-coded file
-list. Classify each installed directory with `diff -qr` against its bundle
-source as absent, canonical, or modified.
+list. Classify each installed directory with `diff -qr` and each installed
+file, including `.codex/agents/*.toml`, with `cmp` against its bundle source as
+absent, canonical, or modified.
 
 Also inspect:
 
 - the Tina block between `<!-- tina-workflow:start -->` and
-  `<!-- tina-workflow:end -->` in the target `AGENTS.md`;
+  `<!-- tina-workflow:end -->` in `AGENTS.md`, or in `AGENTS.override.md` for
+  incognito mode;
 - the active `openspec/config.yaml` or `openspec/config.yml` and its top-level
   `schema` value;
 - whether both config filenames exist;
@@ -66,14 +74,21 @@ Apply the approved plan in this order:
 
 1. Update the active config's top-level `schema` value while preserving every
    unrelated line, comment, and setting.
-2. Remove exactly one canonical Tina block from `AGENTS.md`, preserving all
-   text outside the markers. Leave an empty `AGENTS.md` in place unless its
-   provenance proves Tina created it and the user approved deleting it.
-3. Remove canonical Tina skill directories and `openspec/schemas/tina` using
-   explicit resolved paths. Do not use globs or broad recursive targets.
+2. Remove exactly one canonical Tina block from the active instruction file,
+   preserving all text outside the markers. In normal mode, leave an empty
+   `AGENTS.md` unless its provenance proves Tina created it and the user
+   approved deleting it. In incognito mode, remove `AGENTS.override.md` only
+   when the remaining content exactly matches the current root `AGENTS.md` or
+   installation metadata proves Tina created it; otherwise preserve it.
+3. Remove canonical Tina skill directories, canonical `.codex/agents/*.toml`
+   files, and `openspec/schemas/tina` using explicit resolved paths. Do not use
+   globs or broad recursive targets.
 4. Remove approved canonical generic skill directories. Preserve OpenSpec's
    generated skills and CLI installation.
-5. Remove parent directories only with `rmdir`, so non-empty project
+5. In incognito mode, remove exact exclude entries only after their target
+   paths are gone. If the exclude file is shared, preserve entries still used
+   by another linked worktree; remove the marked block only when it is empty.
+6. Remove parent directories only with `rmdir`, so non-empty project
    directories survive.
 
 Canonical content is reproducible from the bundle. For approved removal of any
@@ -86,7 +101,9 @@ edit, or removal and report the remaining plan without continuing.
 Confirm that the config no longer selects `tina`, the managed block is absent,
 and every approved directory is absent. If OpenSpec remains configured, run a
 read-only schema resolution command for its selected schema when available.
-Review the focused Git diff without altering pre-existing changes.
+Review the focused Git diff without altering pre-existing changes. In
+incognito mode, require the target and every worktree sharing the exclude file
+to match their recorded Git status baselines.
 
 Report removed paths, preserved project and OpenSpec content, backup paths,
 the resulting default schema, and anything the user chose to keep. Do not
