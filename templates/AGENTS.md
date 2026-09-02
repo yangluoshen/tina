@@ -31,9 +31,10 @@ OpenSpec is the planning system. The project default schema is `tina`.
 
 | role | deepseek profile | openai profile |
 |---|---|---|
-| `tina-implementer` | `deepseek-v4-flash` / `max` | `gpt-5.6-terra` / `max` |
-| `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5.6-sol` / `medium` |
-| `tina-proposer`, `tina-proposal-reviewer`, `tina-code-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-sol` / `high` |
+| `tina-implementer` | `deepseek-v4-flash` / `max` | `gpt-5.6-sol` / `medium` |
+| `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5.6-luna` / `max` |
+| `tina-proposer`, `tina-proposal-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-sol` / `xhigh` |
+| `tina-code-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-terra` / `max` |
 
 Spawn each role with the pair for the active profile. Do not hardcode these
 models in the agent TOML files.
