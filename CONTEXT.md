@@ -32,6 +32,10 @@ _Avoid_: Archive, proposal planning
 An optional, non-normative, diagram-led `change.html` derived from a Change's Proposal and optional design for faster human review. Generate it only when the user explicitly requests HTML visualization.
 _Avoid_: Proposal, specification, source of truth
 
+**Architecture Model**:
+A confirmed Archify JSON source in `docs/architecture/` that records the bounded components, connections, and boundaries used to split and design Changes. Generated HTML and Delta files are review projections.
+_Avoid_: ADR, behavioral specification, Change View
+
 **Domain Model**:
 The canonical project vocabulary recorded in `CONTEXT.md` files, distinct from behavioral specifications and implementation design.
 _Avoid_: Spec, architecture

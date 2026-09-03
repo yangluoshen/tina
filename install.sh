@@ -82,7 +82,7 @@ copy_file() {
   fi
 }
 
-for skill in tina-research tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply; do
+for skill in tina-research tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply; do
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -90,9 +90,11 @@ for skill in research grill-with-docs grilling domain-modeling handoff; do
   check_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
+check_directory "$WORKFLOW_ROOT/vendor/archify" "$TARGET_ROOT/.agents/skills/archify"
+
 check_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
-for agent in tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   check_file "$WORKFLOW_ROOT/agents/$agent.toml" "$TARGET_ROOT/.codex/agents/$agent.toml"
 done
 
@@ -159,7 +161,7 @@ fi
   openspec init --tools codex
 )
 
-for skill in tina-research tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply; do
+for skill in tina-research tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply; do
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -167,9 +169,11 @@ for skill in research grill-with-docs grilling domain-modeling handoff; do
   copy_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
+copy_directory "$WORKFLOW_ROOT/vendor/archify" "$TARGET_ROOT/.agents/skills/archify"
+
 copy_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
-for agent in tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   copy_file "$WORKFLOW_ROOT/agents/$agent.toml" "$TARGET_ROOT/.codex/agents/$agent.toml"
 done
 

@@ -6,12 +6,17 @@ WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 MATT_REF=${1:-$MATTPOCOCK_SKILLS_REF}
 NEXT_OPENSPEC_VERSION=${2:-$OPENSPEC_VERSION}
+NEXT_ARCHIFY_REF=${3:-$ARCHIFY_REF}
 
 case "$MATT_REF" in
   ''|-*) echo "Invalid Matt Pocock skills ref: $MATT_REF" >&2; exit 1 ;;
 esac
 
-for command in git npm npx; do
+case "$NEXT_ARCHIFY_REF" in
+  ''|-*) echo "Invalid Archify ref: $NEXT_ARCHIFY_REF" >&2; exit 1 ;;
+esac
+
+for command in git node npm npx unzip; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command not found: $command" >&2
     exit 1
@@ -57,6 +62,28 @@ for skill in research grill-with-docs grilling domain-modeling handoff; do
   grep -q "^name: $skill$" "$STAGED_VENDOR/skills/$skill/SKILL.md"
 done
 
+ARCHIFY_CHECKOUT="$UPDATE_ROOT/archify"
+git init -q "$ARCHIFY_CHECKOUT"
+git -C "$ARCHIFY_CHECKOUT" remote add origin "$ARCHIFY_REPOSITORY"
+git -C "$ARCHIFY_CHECKOUT" fetch -q --depth 1 origin "$NEXT_ARCHIFY_REF"
+git -C "$ARCHIFY_CHECKOUT" checkout -q --detach FETCH_HEAD
+RESOLVED_ARCHIFY_REF=$(git -C "$ARCHIFY_CHECKOUT" rev-parse HEAD)
+
+ARCHIFY_RELEASE="$UPDATE_ROOT/archify-release"
+mkdir -p "$ARCHIFY_RELEASE"
+unzip -q "$ARCHIFY_CHECKOUT/archify.zip" -d "$ARCHIFY_RELEASE"
+STAGED_ARCHIFY="$ARCHIFY_RELEASE/archify"
+grep -q '^name: archify$' "$STAGED_ARCHIFY/SKILL.md"
+test -f "$STAGED_ARCHIFY/LICENSE"
+test -f "$STAGED_ARCHIFY/THIRD_PARTY_NOTICES.md"
+node "$STAGED_ARCHIFY/bin/archify.mjs" doctor >/dev/null
+node "$STAGED_ARCHIFY/bin/archify.mjs" validate architecture \
+  "$STAGED_ARCHIFY/examples/web-app.architecture.json" \
+  --quality showcase --json | grep -q '"ok": true'
+node "$STAGED_ARCHIFY/bin/archify.mjs" deliver architecture \
+  "$STAGED_ARCHIFY/examples/web-app.architecture.json" \
+  "$UPDATE_ROOT/archify-smoke.html" --quality showcase --json | grep -q '"ok": true'
+
 OPENSPEC_CHECK="$UPDATE_ROOT/openspec-check"
 mkdir -p "$OPENSPEC_CHECK/openspec/schemas"
 cp -R "$WORKFLOW_ROOT/schema/tina" "$OPENSPEC_CHECK/openspec/schemas/tina"
@@ -78,15 +105,21 @@ for file in SKILL.md CONTEXT-FORMAT.md ADR-FORMAT.md; do
   cp "$STAGED_VENDOR/skills/domain-modeling/$file" "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/domain-modeling/$file"
 done
 
+rm -rf "$WORKFLOW_ROOT/vendor/archify"
+cp -R "$STAGED_ARCHIFY" "$WORKFLOW_ROOT/vendor/archify"
+
 PINS_TMP=$(mktemp "${TMPDIR:-/tmp}/tina-dependencies.XXXXXX")
 trap 'rm -rf "$UPDATE_ROOT"; rm -f "$PINS_TMP"' EXIT HUP INT TERM
 printf '%s\n' \
   "MATTPOCOCK_SKILLS_REPOSITORY=$MATTPOCOCK_SKILLS_REPOSITORY" \
   "MATTPOCOCK_SKILLS_REF=$RESOLVED_MATT_REF" \
+  "ARCHIFY_REPOSITORY=$ARCHIFY_REPOSITORY" \
+  "ARCHIFY_REF=$RESOLVED_ARCHIFY_REF" \
   "OPENSPEC_PACKAGE=$OPENSPEC_PACKAGE" \
   "OPENSPEC_VERSION=$NEXT_OPENSPEC_VERSION" > "$PINS_TMP"
 mv "$PINS_TMP" "$WORKFLOW_ROOT/dependencies.env"
 
 echo "Dependencies updated:"
 echo "  mattpocock-skills $RESOLVED_MATT_REF"
+echo "  archify $RESOLVED_ARCHIFY_REF"
 echo "  OpenSpec $NEXT_OPENSPEC_VERSION (validated; global installation unchanged)"

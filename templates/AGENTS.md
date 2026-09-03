@@ -6,9 +6,12 @@ OpenSpec is the planning system. The project default schema is `tina`.
 
 - Never use `$openspec-explore`. Use `$tina-research` for exploration,
   feasibility work, unfamiliar APIs, and version-sensitive facts.
-- Use `$tina-propose-plan` for research, grilling, domain alignment, size gate,
-  and confirming an ordered Change list. Do not call `$openspec-propose`
-  directly; the private wrapper owns those steps.
+- Use `$tina-propose-plan` for research, grilling, domain and architecture
+  alignment, size gate, and confirming an ordered Change list. It invokes
+  `$tina-architecture` before the size gate when boundaries or topology affect
+  the split; that wrapper assigns drawing and revision to one independent
+  `tina_architect`. Do not call `$openspec-propose` directly; the private wrapper
+  owns those steps.
 - After the split is confirmed, start the propose run with
   `/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
   Follow the success criteria and stopping condition in that file.` Propose
@@ -16,6 +19,8 @@ OpenSpec is the planning system. The project default schema is `tina`.
   file is the only source of truth for completion.
 - During proposal planning, write generated narrative in Chinese by default.
   Preserve required headings, identifiers, paths, code, and established terms.
+- Treat `docs/architecture/*.architecture.json` as confirmed Architecture Models.
+  Archify HTML and Delta files are review projections, not architecture truth.
 - Use `$tina-change-visual` only when the user explicitly requests HTML
   visualization. Otherwise leave `change.html` out of the main path. When
   generated, treat it as a review projection; the Markdown sources remain
@@ -33,7 +38,7 @@ OpenSpec is the planning system. The project default schema is `tina`.
 |---|---|---|
 | `tina-implementer` | `deepseek-v4-flash` / `max` | `gpt-5.6-sol` / `medium` |
 | `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5.6-luna` / `max` |
-| `tina-proposer`, `tina-proposal-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-sol` / `xhigh` |
+| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-sol` / `xhigh` |
 | `tina-code-reviewer` | `deepseek-v4-pro` / `high` | `gpt-5.6-terra` / `max` |
 
 Spawn each role with the pair for the active profile. Do not hardcode these
@@ -57,5 +62,5 @@ without confirmation and never hide excess scope inside oversized tasks.
 ## Ownership
 
 Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock
-skills are unchanged snapshots. Put personal behavior only in
+and Archify skills are unchanged snapshots. Put personal behavior only in
 `tina-*` skills and the `tina` schema.

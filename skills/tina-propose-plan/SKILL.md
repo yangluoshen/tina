@@ -1,6 +1,6 @@
 ---
 name: tina-propose-plan
-description: Research, grill, align the domain model, apply the size gate, and confirm an ordered set of Tina changes. Write the confirmed split strategy to docs/proposal-plan/<date>-<scenarios>.md and give the user the next /goal prompt. Use for the planning and confirmation step only.
+description: Research, grill, align the domain and system architecture, apply the size gate, and confirm an ordered set of Tina changes. Write the confirmed split strategy to docs/proposal-plan/<date>-<scenarios>.md and give the user the next /goal prompt. Use for the planning and confirmation step only.
 ---
 
 # Tina Propose Plan
@@ -16,19 +16,27 @@ This workflow authorizes planning only. Never implement, run the propose loop, o
    Codex, explicitly load and follow `$grilling` and `$domain-modeling` together:
    update glossary terms as they settle, create only qualifying ADRs, and wait
    until the user confirms shared understanding.
-4. Apply the size gate before creating artifacts. One Change has one intent, no
+4. Invoke `$tina-architecture`, which uses one independent `tina_architect`,
+   before the size gate when the work crosses
+   modules, services, processes, data stores, trust boundaries, ownership, or
+   deployment topology; when the Change split depends on shared components or
+   interfaces; or when the user requests target architecture. Wait until the user
+   confirms the Architecture Model. Skip this step for a local behavior change
+   that preserves existing boundaries.
+5. Apply the size gate before creating artifacts. One Change has one intent, no
    more than two capabilities, no more than about eight coarse tasks, and fits
    one focused implementation session. If it fails, return an ordered set of
    smaller Changes with dependencies and wait for confirmation. Do not create
    several Changes automatically.
-5. Invoke `$openspec-propose`. The project default must resolve to the
+6. Invoke `$openspec-propose`. The project default must resolve to the
    `tina` schema. Follow its dynamic instructions and preserve Domain
-   Model vocabulary and ADR decisions.
-6. Only if the user explicitly requested HTML visualization, invoke
+   Model vocabulary, ADR decisions, and confirmed Architecture Model when one
+   exists.
+7. Only if the user explicitly requested HTML visualization, invoke
    `$tina-change-visual` to generate `change.html` in the Change directory from
    `proposal.md` and `design.md` when present. Otherwise skip this step
    silently; do not ask.
-7. Recheck the completed artifacts against the size gate. If they reveal excess
+8. Recheck the completed artifacts against the size gate. If they reveal excess
    scope, stop and recommend a split; never hide scope in oversized tasks.
 
 When the user asks to plan a set of changes, stop after confirming the split and
@@ -40,6 +48,9 @@ and `<scenarios>` is a short scenario name. The file must include:
 - the ordered Change list with dependencies and parallelizable items;
 - each Change's single intent;
 - the confirmed constraints;
+- when architecture alignment ran, an `Architecture Alignment` section with the
+  canonical JSON path, Archify `specification_sha256`, human confirmation, and
+  each Change's component/connection stable IDs;
 - each Change's completion criteria and the overall stopping condition, designed
   from this planning session rather than copied from a fixed template.
 

@@ -41,7 +41,7 @@ repositories. Use the validated result as the desired payload. Do not run the
 installer directly in the target: an older valid installation intentionally
 differs from the current bundle and would trigger overwrite protection.
 
-The managed payload consists of staged skill files,
+The managed payload consists of staged skill files, including vendored dependencies,
 `.agents/skills/.openspec-target`, staged `.codex/agents/*.toml` files,
 `openspec/schemas/tina`, and the Tina block from `templates/AGENTS.md`.
 Preserve OpenSpec changes, specs, CONTEXT files, ADRs, change artifacts, and

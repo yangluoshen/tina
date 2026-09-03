@@ -12,7 +12,7 @@ deleting project artifacts created while using the workflow.
 ## Resolve and inspect
 
 1. Resolve the bundle root containing this skill, `install.sh`, `agents/`,
-   `skills/`, `vendor/mattpocock-skills/`, `schema/tina`, and
+   `skills/`, `vendor/`, `schema/tina`, and
    `templates/AGENTS.md`.
 2. Require an explicit target path and resolve it to an absolute path. If it is
    missing, ambiguous, or equals the bundle root, stop and ask the user.

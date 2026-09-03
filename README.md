@@ -11,6 +11,9 @@ reviewable, repeatable process.
 $tina-research (optional)
         ↓
 $tina-propose-plan
+        ├── $tina-architecture when topology affects the Change split
+        │     └── one tina_architect creates and revises the model
+        └── human confirms the Architecture Model
         ↓
 docs/proposal-plan/<date>-<scenarios>.md
         ↓
@@ -38,6 +41,9 @@ Core constraints:
   identifiers, paths, code, and domain terms.
 - Read the applicable `CONTEXT.md`, `CONTEXT-MAP.md`, and ADRs before planning,
   implementation, and verification.
+- Architecture alignment stores its confirmed typed source in
+  `docs/architecture/<scope>.architecture.json`. Generated Archify HTML and
+  Delta files are non-normative review projections.
 - `change.html` is optional. Generate it only when the user explicitly requests
   HTML visualization; otherwise skip it without asking. When generated, it is a
   software-diagram projection for human review and the Markdown sources remain
@@ -50,7 +56,7 @@ Core constraints:
 ## Prerequisites
 
 - Git
-- Node.js and npm
+- Node.js 18 or newer and npm
 - Codex
 - An OpenSpec CLI matching the version pinned by this bundle
 
@@ -87,7 +93,8 @@ tina-init /absolute/path/to/target-repository
 The installer:
 
 - runs `openspec init --tools codex`;
-- installs the private `tina-*` skills and pinned Matt Pocock skills;
+- installs the private `tina-*` skills plus pinned Matt Pocock and Archify
+  skills;
 - installs the project-level `tina` schema and sets it as the default;
 - appends the Target Instructions as a managed block in the target `AGENTS.md`;
 - validates the resolved schema.
@@ -115,8 +122,12 @@ Research uses high-trust primary sources and saves a cited Research Note.
 $tina-propose-plan <change or goal to implement>
 ```
 
-This step runs research, grilling, domain alignment, and the size gate, then
-confirms an ordered list of Changes. It writes the confirmed strategy to
+This step runs research, grilling, domain alignment, conditional architecture
+alignment, and the size gate, then confirms an ordered list of Changes. When
+components, connections, or boundaries affect the split, `$tina-architecture`
+spawns one `tina_architect` to create or update an Architecture Model. Human
+feedback returns to the same architect until the model is confirmed before the
+size gate. The step writes the confirmed strategy to
 `docs/proposal-plan/<date>-<scenarios>.md` and ends with the next `/goal`
 prompt. Success criteria and the stopping condition come from this planning
 session rather than a fixed template.
@@ -168,13 +179,16 @@ target-repository/
 ├── .agents/skills/
 │   ├── openspec-*/
 │   ├── tina-research/
+│   ├── tina-architecture/
 │   ├── tina-propose-plan/
 │   ├── tina-propose-run/
 │   ├── tina-apply/
 │   ├── tina-change-visual/
 │   ├── tina-verify/
+│   ├── archify/
 │   └── pinned upstream skills such as research, grilling, and domain-modeling
 ├── .codex/agents/
+│   ├── tina-architect.toml
 │   ├── tina-proposer.toml
 │   ├── tina-proposal-reviewer.toml
 │   ├── tina-implementer.toml
@@ -193,6 +207,7 @@ target-repository/
 schema/tina/               Tina OpenSpec schema and templates
 skills/tina-*/             Private orchestration skills maintained here
 vendor/mattpocock-skills/  Pinned, unmodified upstream skill snapshots
+vendor/archify/             Pinned, unmodified Archify Skill package
 templates/AGENTS.md        Target Instructions installed into target repos
 dependencies.env           The single source of dependency pins
 install.sh                 Non-destructive installer
@@ -212,8 +227,8 @@ After changing the schema, skills, agents, Target Instructions, or installer:
 ```
 
 The test installs the workflow twice in a temporary directory and verifies
-idempotency, conflict protection, schema resolution, dynamic instructions, and
-the `change.html` template.
+idempotency, conflict protection, schema resolution, dynamic instructions,
+Archify validation, and the `change.html` template.
 
 ## Updating dependencies
 
@@ -221,13 +236,13 @@ Refresh pinned upstream snapshots and dependency pins only through the update
 script:
 
 ```sh
-./update-dependencies.sh <matt-ref> <openspec-version>
+./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref]
 ```
 
 Use the latest upstream releases only when intentionally testing them:
 
 ```sh
-./update-dependencies.sh main latest
+./update-dependencies.sh main latest main
 ```
 
 Run `./test.sh` afterward and review the full dependency diff before committing.
