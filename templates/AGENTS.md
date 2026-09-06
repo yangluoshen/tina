@@ -61,6 +61,6 @@ without confirmation and never hide excess scope inside oversized tasks.
 
 ## Ownership
 
-Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock
-and Archify skills are unchanged snapshots. Put personal behavior only in
-`tina-*` skills and the `tina` schema.
+Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock,
+Archify, and HumanLayer show-me skills are unchanged snapshots. Put personal
+behavior only in `tina-*` skills and the `tina` schema.

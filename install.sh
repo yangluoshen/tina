@@ -91,6 +91,7 @@ for skill in research grill-with-docs grilling domain-modeling handoff; do
 done
 
 check_directory "$WORKFLOW_ROOT/vendor/archify" "$TARGET_ROOT/.agents/skills/archify"
+check_directory "$WORKFLOW_ROOT/vendor/show-me" "$TARGET_ROOT/.agents/skills/show-me"
 
 check_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
@@ -170,6 +171,7 @@ for skill in research grill-with-docs grilling domain-modeling handoff; do
 done
 
 copy_directory "$WORKFLOW_ROOT/vendor/archify" "$TARGET_ROOT/.agents/skills/archify"
+copy_directory "$WORKFLOW_ROOT/vendor/show-me" "$TARGET_ROOT/.agents/skills/show-me"
 
 copy_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 

@@ -93,7 +93,7 @@ tina-init /absolute/path/to/target-repository
 The installer:
 
 - runs `openspec init --tools codex`;
-- installs the private `tina-*` skills plus pinned Matt Pocock and Archify
+- installs the private `tina-*` skills plus pinned Matt Pocock, Archify, and show-me
   skills;
 - installs the project-level `tina` schema and sets it as the default;
 - appends the Target Instructions as a managed block in the target `AGENTS.md`;
@@ -105,6 +105,10 @@ installer refuses to overwrite it and shows the diff. Existing project files are
 never silently replaced.
 
 ## Daily use
+
+Use `$show-me <topic>` for a concise visual explanation with diagrams, code
+sketches, or a focused HTML artifact. The skill comes from
+[HumanLayer](https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md).
 
 ### 1. Research (optional)
 
@@ -186,6 +190,7 @@ target-repository/
 │   ├── tina-change-visual/
 │   ├── tina-verify/
 │   ├── archify/
+│   ├── show-me/
 │   └── pinned upstream skills such as research, grilling, and domain-modeling
 ├── .codex/agents/
 │   ├── tina-architect.toml
@@ -208,6 +213,7 @@ schema/tina/               Tina OpenSpec schema and templates
 skills/tina-*/             Private orchestration skills maintained here
 vendor/mattpocock-skills/  Pinned, unmodified upstream skill snapshots
 vendor/archify/             Pinned, unmodified Archify Skill package
+vendor/show-me/             Pinned, unmodified HumanLayer skill and license
 templates/AGENTS.md        Target Instructions installed into target repos
 dependencies.env           The single source of dependency pins
 install.sh                 Non-destructive installer
@@ -236,13 +242,13 @@ Refresh pinned upstream snapshots and dependency pins only through the update
 script:
 
 ```sh
-./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref]
+./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref] [show-me-ref]
 ```
 
 Use the latest upstream releases only when intentionally testing them:
 
 ```sh
-./update-dependencies.sh main latest main
+./update-dependencies.sh main latest main main
 ```
 
 Run `./test.sh` afterward and review the full dependency diff before committing.

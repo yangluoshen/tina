@@ -7,6 +7,7 @@ WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 MATT_REF=${1:-$MATTPOCOCK_SKILLS_REF}
 NEXT_OPENSPEC_VERSION=${2:-$OPENSPEC_VERSION}
 NEXT_ARCHIFY_REF=${3:-$ARCHIFY_REF}
+NEXT_SHOW_ME_REF=${4:-$SHOW_ME_REF}
 
 case "$MATT_REF" in
   ''|-*) echo "Invalid Matt Pocock skills ref: $MATT_REF" >&2; exit 1 ;;
@@ -14,6 +15,10 @@ esac
 
 case "$NEXT_ARCHIFY_REF" in
   ''|-*) echo "Invalid Archify ref: $NEXT_ARCHIFY_REF" >&2; exit 1 ;;
+esac
+
+case "$NEXT_SHOW_ME_REF" in
+  ''|-*) echo "Invalid show-me ref: $NEXT_SHOW_ME_REF" >&2; exit 1 ;;
 esac
 
 for command in git node npm npx unzip; do
@@ -84,6 +89,18 @@ node "$STAGED_ARCHIFY/bin/archify.mjs" deliver architecture \
   "$STAGED_ARCHIFY/examples/web-app.architecture.json" \
   "$UPDATE_ROOT/archify-smoke.html" --quality showcase --json | grep -q '"ok": true'
 
+SHOW_ME_CHECKOUT="$UPDATE_ROOT/show-me"
+git init -q "$SHOW_ME_CHECKOUT"
+git -C "$SHOW_ME_CHECKOUT" remote add origin "$SHOW_ME_REPOSITORY"
+git -C "$SHOW_ME_CHECKOUT" fetch -q --depth 1 origin "$NEXT_SHOW_ME_REF"
+git -C "$SHOW_ME_CHECKOUT" checkout -q --detach FETCH_HEAD
+RESOLVED_SHOW_ME_REF=$(git -C "$SHOW_ME_CHECKOUT" rev-parse HEAD)
+
+STAGED_SHOW_ME="$UPDATE_ROOT/vendor/show-me"
+cp -R "$SHOW_ME_CHECKOUT/plugins/show-me/skills/show-me" "$STAGED_SHOW_ME"
+cp "$SHOW_ME_CHECKOUT/LICENSE" "$STAGED_SHOW_ME/LICENSE"
+grep -q '^name: show-me$' "$STAGED_SHOW_ME/SKILL.md"
+
 OPENSPEC_CHECK="$UPDATE_ROOT/openspec-check"
 mkdir -p "$OPENSPEC_CHECK/openspec/schemas"
 cp -R "$WORKFLOW_ROOT/schema/tina" "$OPENSPEC_CHECK/openspec/schemas/tina"
@@ -108,6 +125,9 @@ done
 rm -rf "$WORKFLOW_ROOT/vendor/archify"
 cp -R "$STAGED_ARCHIFY" "$WORKFLOW_ROOT/vendor/archify"
 
+rm -rf "$WORKFLOW_ROOT/vendor/show-me"
+cp -R "$STAGED_SHOW_ME" "$WORKFLOW_ROOT/vendor/show-me"
+
 PINS_TMP=$(mktemp "${TMPDIR:-/tmp}/tina-dependencies.XXXXXX")
 trap 'rm -rf "$UPDATE_ROOT"; rm -f "$PINS_TMP"' EXIT HUP INT TERM
 printf '%s\n' \
@@ -115,6 +135,8 @@ printf '%s\n' \
   "MATTPOCOCK_SKILLS_REF=$RESOLVED_MATT_REF" \
   "ARCHIFY_REPOSITORY=$ARCHIFY_REPOSITORY" \
   "ARCHIFY_REF=$RESOLVED_ARCHIFY_REF" \
+  "SHOW_ME_REPOSITORY=$SHOW_ME_REPOSITORY" \
+  "SHOW_ME_REF=$RESOLVED_SHOW_ME_REF" \
   "OPENSPEC_PACKAGE=$OPENSPEC_PACKAGE" \
   "OPENSPEC_VERSION=$NEXT_OPENSPEC_VERSION" > "$PINS_TMP"
 mv "$PINS_TMP" "$WORKFLOW_ROOT/dependencies.env"
@@ -122,4 +144,5 @@ mv "$PINS_TMP" "$WORKFLOW_ROOT/dependencies.env"
 echo "Dependencies updated:"
 echo "  mattpocock-skills $RESOLVED_MATT_REF"
 echo "  archify $RESOLVED_ARCHIFY_REF"
+echo "  show-me $RESOLVED_SHOW_ME_REF"
 echo "  OpenSpec $NEXT_OPENSPEC_VERSION (validated; global installation unchanged)"

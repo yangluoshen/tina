@@ -11,6 +11,7 @@ projects; `templates/AGENTS.md` is the Target Instructions source.
 - `agents/tina-*.toml`: project-scoped Codex subagent presets installed into target `.codex/agents/`.
 - `vendor/mattpocock-skills/`: pinned, unmodified upstream skill files.
 - `vendor/archify/`: pinned, unmodified Archify Skill package.
+- `vendor/show-me/`: pinned, unmodified HumanLayer show-me skill and license.
 - `dependencies.env`: exact upstream revisions tested with this bundle.
 - `update-dependencies.sh`: the only supported dependency refresh path.
 - `templates/AGENTS.md`: the managed block installed into target projects.
@@ -20,8 +21,8 @@ projects; `templates/AGENTS.md` is the Target Instructions source.
 ## Maintenance Rules
 
 - Never edit vendored skill content or OpenSpec-generated `openspec-*` skills.
-- Update dependencies only with `./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref]`.
-  Use `main latest main` only when intentionally testing the
+- Update dependencies only with `./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref] [show-me-ref]`.
+  Use `main latest main main` only when intentionally testing the
   newest upstream releases.
 - Keep dependency pins in `dependencies.env`; do not duplicate versions in
   private skills, schemas, templates, or Target Instructions.

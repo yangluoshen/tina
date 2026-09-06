@@ -34,6 +34,9 @@ test -f "$PROJECT/.agents/skills/handoff/SKILL.md"
 test -f "$PROJECT/.agents/skills/domain-modeling/CONTEXT-FORMAT.md"
 test -f "$PROJECT/.agents/skills/archify/SKILL.md"
 test -f "$PROJECT/.agents/skills/archify/THIRD_PARTY_NOTICES.md"
+grep -q '^name: show-me$' "$PROJECT/.agents/skills/show-me/SKILL.md"
+test -f "$PROJECT/.agents/skills/show-me/LICENSE"
+diff -qr "$WORKFLOW_ROOT/vendor/show-me" "$PROJECT/.agents/skills/show-me"
 node "$PROJECT/.agents/skills/archify/bin/archify.mjs" doctor >/dev/null
 node "$PROJECT/.agents/skills/archify/bin/archify.mjs" validate architecture \
   "$PROJECT/.agents/skills/archify/examples/web-app.architecture.json" \
@@ -47,6 +50,7 @@ for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implemente
 done
 test -n "$MATTPOCOCK_SKILLS_REF"
 test -n "$ARCHIFY_REF"
+test -n "$SHOW_ME_REF"
 test -n "$OPENSPEC_VERSION"
 grep -q 'tina_architect' "$PROJECT/.agents/skills/tina-architecture/SKILL.md"
 
@@ -76,6 +80,15 @@ if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
   exit 1
 fi
 cp "$WORKFLOW_ROOT/vendor/archify/SKILL.md" "$PROJECT/.agents/skills/archify/SKILL.md"
+
+printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/show-me/SKILL.md"
+cp "$PROJECT/.agents/skills/show-me/SKILL.md" "$TEST_ROOT/show-me-local.md"
+if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
+  echo "Installer overwrote a conflicting show-me skill" >&2
+  exit 1
+fi
+cmp "$TEST_ROOT/show-me-local.md" "$PROJECT/.agents/skills/show-me/SKILL.md"
+cp "$WORKFLOW_ROOT/vendor/show-me/SKILL.md" "$PROJECT/.agents/skills/show-me/SKILL.md"
 
 printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
