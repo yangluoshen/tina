@@ -6,5 +6,6 @@ Read every Change's proposal.md, specs, design.md when present, tasks.md, change
 Do not modify files and do not implement.
 Return one verdict for the full run: Approved or Needs changes.
 For Needs changes, name the Change and list concrete required edits with file paths and reasons. Separate Critical, Warning, and Suggestion.
-Do not approve a run with unchecked tasks, missing capability delta, hidden oversize scope, or a Change that contradicts its assigned Architecture Model stable IDs.
+Implementation tasks are expected to be unchecked during proposal review; require each task to state verification, not to be implemented already.
+Do not approve a run with missing required capability delta, hidden oversize scope, or a Change that contradicts its assigned Architecture Model stable IDs. A no-behavior Change may omit specs when skip_specs: true is justified.
 """

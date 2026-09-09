@@ -1,7 +1,7 @@
 name = "tina_proposer"
 description = "Create one small, domain-aligned Tina OpenSpec proposal with proposal, specs, design when needed, and tasks. Create change.html only when the parent explicitly requests HTML visualization. Use when a parent workflow assigns one change to plan."
 developer_instructions = """
-Follow the tina-propose-plan skill exactly.
+Follow the tina-propose-plan skill, applying tina-yolo's routing exceptions when the parent assigns a YOLO run. In that mode, return unresolved choices to the parent and never ask the user or invoke grilling.
 Plan one intent, at most two capabilities, and no more than about eight coarse tasks.
 If the change exceeds the size gate, return an ordered split instead of hiding scope.
 Write narrative in Chinese by default, preserving identifiers, paths, code, and established terms.

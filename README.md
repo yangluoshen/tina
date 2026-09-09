@@ -51,7 +51,9 @@ Core constraints:
 - A single Change can still use `$tina-propose-plan` to create full OpenSpec
   artifacts and then `$openspec-apply-change`. Multi-Change work uses
   `$tina-propose-run` and `$tina-apply`.
-- Implementation, verification, and archive are separate user-authorized steps.
+- Normal routing separates implementation, verification, and archive. A
+  `$tina-yolo` request authorizes the workflow through verification; archive
+  still requires a separate request.
 
 ## Prerequisites
 
@@ -105,6 +107,22 @@ installer refuses to overwrite it and shows the diff. Existing project files are
 never silently replaced.
 
 ## Daily use
+
+Use `$tina-yolo <task>` to delegate the complete workflow:
+
+```text
+$tina-yolo <task>
+  → tina-research → tina-propose-plan → tina-propose-run → tina-apply → tina-verify
+```
+
+YOLO skips grilling and intermediate questions. The orchestrator decides scope,
+architecture, and UX choices, records assumptions and trade-offs in
+`docs/proposal-plan/<date>-<scenarios>.md`, and writes qualifying ADRs. It keeps
+the size gate, independent reviews, QA, and local commits, returning verification
+failures to implementation until the task passes. The plan records progress for
+continuation after interruption. Unavailable prerequisites or permissions are
+reported as blockers, never as completion. YOLO does not automatically push,
+deploy, or archive, and applies only to the requested task.
 
 Use `$show-me <topic>` for a concise visual explanation with diagrams, code
 sketches, or a focused HTML artifact. The skill comes from
@@ -183,6 +201,7 @@ target-repository/
 ├── .agents/skills/
 │   ├── openspec-*/
 │   ├── tina-research/
+│   ├── tina-yolo/
 │   ├── tina-architecture/
 │   ├── tina-propose-plan/
 │   ├── tina-propose-run/

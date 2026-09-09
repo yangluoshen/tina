@@ -24,6 +24,13 @@ _Avoid_: Implementation, proposal artifacts
 The long-running goal that executes a confirmed Proposal Plan through proposer and proposal-reviewer subagents.
 _Avoid_: Planning, grilling, confirmation
 
+**YOLO Run**:
+A user-delegated execution of research, proposal planning, proposal review,
+implementation, and verification in which the orchestrator decides and records
+trade-offs without intermediate user questions. Its Proposal Plan records
+model acceptance and progress; completion requires verified implementation.
+_Avoid_: Unreviewed implementation, automatic archive, project default
+
 **Apply Run**:
 The long-running goal that implements approved Changes through implementer, QA, and code-reviewer subagents, committing each Change before moving on.
 _Avoid_: Archive, proposal planning

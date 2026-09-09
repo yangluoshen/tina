@@ -4,6 +4,9 @@ OpenSpec is the planning system. The project default schema is `tina`.
 
 ## Routing
 
+- Use `$tina-yolo <task>` when the user requests autonomous completion of the
+  full workflow. That request authorizes planning, implementation, local Change
+  commits, and verification within the task's scope.
 - Never use `$openspec-explore`. Use `$tina-research` for exploration,
   feasibility work, unfamiliar APIs, and version-sensitive facts.
 - Use `$tina-propose-plan` for research, grilling, domain and architecture
@@ -32,13 +35,27 @@ OpenSpec is the planning system. The project default schema is `tina`.
 - Use `$tina-verify` before archive.
 - Use `$openspec-archive-change` only when the user explicitly requests archive.
 
+### YOLO routing exceptions
+
+For a user-requested `tina-yolo` run and its assigned agents, follow
+`$tina-yolo`'s dispatch rules in place of interactive handoffs in the Tina
+skills and schema: skip grilling, let the orchestrator decide and record
+assumptions, architecture acceptance, and Change splits, and proceed through
+verification without asking the user to confirm or invoke the next stage.
+Model acceptance satisfies the workflow's confirmation gates; label it
+`model-decided (tina-yolo)` rather than human confirmation. Pass the plan and
+Change names between stages directly. Use an existing goal when supplied;
+only the orchestrator may complete it after whole-run verification.
+Keep size limits, architecture integrity checks, independent reviews, tests,
+and the separate archive boundary. Outside this run, use normal routing.
+
 ## Tina Subagent Models
 
 | role | deepseek profile | openai profile |
 |---|---|---|
 | `tina-implementer` | `deepseek-v4-flash` / `max` | `gpt-6-astra` / `medium` |
-| `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5-luna` / `max` |
-| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-v4-pro` / `high` | `gpt-6-astra` / `xhigh` |
+| `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5.6-luna` / `max` |
+| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-v4-pro` / `high` | `gpt-6-astra` / `high` |
 | `tina-code-reviewer` | `deepseek-v4-pro` / `high` | `gpt-6-astra` / `high` |
 
 Spawn each role with the pair for the active profile. Do not hardcode these
