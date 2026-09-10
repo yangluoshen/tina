@@ -1,6 +1,6 @@
 ---
 name: tina-yolo
-description: Autonomously carry a task through tina-research, tina-propose-plan, tina-propose-run, tina-apply, and tina-verify. Use when the user requests Tina YOLO mode or delegates the complete workflow without intermediate questions; skip grilling, decide trade-offs, and keep working until verified completion.
+description: Autonomously carry a task through tina-research, tina-propose-plan, tina-propose-run, tina-apply, tina-qa, tina-code-review, and tina-verify. Use when the user requests Tina YOLO mode or delegates the complete workflow without intermediate questions; skip grilling, decide trade-offs, and keep working until verified completion.
 ---
 
 # Tina YOLO
@@ -68,17 +68,24 @@ completion must not complete it.
    changed, return to planning, reconcile the model and split, then re-review
    the affected proposals. Continue to apply only after global approval.
 4. **`$tina-apply`**: pass the explicit ordered Change scope. Use the existing
-   implementer, global QA, and code-reviewer loops and commit each Change.
+   independent implementers and commit each Change, then continue to QA.
    Record the baseline and preserve unrelated work; stage only files belonging
-   to this run. Commit QA/review fixes as well, and assess the resulting full
-   diff before moving to verification. Planning artifacts and run reports belong
-   to this run, but unrelated dirty files must never be swept into its commits.
-5. **`$tina-verify`**: pass each exact Change name from the plan, with no
+   to this run. Planning artifacts and run reports belong to this run, but
+   unrelated dirty files must never be swept into its commits.
+5. **`$tina-qa`**: pass every Change and commit in the run. Use its independent
+   QA and implementer repair loop. Commit fixes before retesting and record the
+   verdict; continue to code review after full QA passes.
+6. **`$tina-code-review`**: pass the same full scope, commits, and final QA report.
+   Use its independent reviewer and implementer/QA repair loop. Commit fixes
+   before retesting and re-review, and assess the resulting full diff before
+   verification. Continue after `Approved`.
+7. **`$tina-verify`**: pass each exact Change name from the plan, with no
    interactive selection. Keep verification read-only. Persist its evidence and
    verdict in the run record as the orchestrator. For missing behavior, unchecked
    tasks, divergence, or missing scenario evidence, route fixes back to apply
-   (or planning if scope/design must change), commit fixes, rerun QA and code
-   review, then verify again. Recheck every Change affected by a shared fix.
+   (or planning if scope/design must change), commit fixes, rerun `$tina-qa` and
+   `$tina-code-review`, then verify again. Recheck every Change affected by a
+   shared fix.
 
 Use the installed Tina roles and the active profile's model table. Pass the
 YOLO mode, plan path, bounded assignment, relevant decisions, and original scope

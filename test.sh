@@ -28,6 +28,9 @@ test -f "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-propose-run/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-architecture/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-apply/SKILL.md"
+for skill in tina-qa tina-code-review; do
+  diff -qr "$WORKFLOW_ROOT/skills/$skill" "$PROJECT/.agents/skills/$skill"
+done
 diff -qr "$WORKFLOW_ROOT/skills/tina-yolo" "$PROJECT/.agents/skills/tina-yolo"
 test -f "$PROJECT/.agents/skills/tina-change-visual/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-change-visual/assets/change.html"
@@ -91,13 +94,16 @@ fi
 cmp "$TEST_ROOT/show-me-local.md" "$PROJECT/.agents/skills/show-me/SKILL.md"
 cp "$WORKFLOW_ROOT/vendor/show-me/SKILL.md" "$PROJECT/.agents/skills/show-me/SKILL.md"
 
-printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/tina-yolo/SKILL.md"
-cp "$PROJECT/.agents/skills/tina-yolo/SKILL.md" "$TEST_ROOT/tina-yolo-local.md"
-if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
-  echo "Installer overwrote a conflicting tina-yolo skill" >&2
-  exit 1
-fi
-cmp "$TEST_ROOT/tina-yolo-local.md" "$PROJECT/.agents/skills/tina-yolo/SKILL.md"
+for skill in tina-yolo tina-qa tina-code-review; do
+  printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/$skill/SKILL.md"
+  cp "$PROJECT/.agents/skills/$skill/SKILL.md" "$TEST_ROOT/$skill-local.md"
+  if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
+    echo "Installer overwrote a conflicting $skill skill" >&2
+    exit 1
+  fi
+  cmp "$TEST_ROOT/$skill-local.md" "$PROJECT/.agents/skills/$skill/SKILL.md"
+  cp "$WORKFLOW_ROOT/skills/$skill/SKILL.md" "$PROJECT/.agents/skills/$skill/SKILL.md"
+done
 
 AGENT_PROJECT="$TEST_ROOT/agent-project"
 "$WORKFLOW_ROOT/install.sh" "$AGENT_PROJECT" >/dev/null

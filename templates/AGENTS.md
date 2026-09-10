@@ -31,7 +31,11 @@ OpenSpec is the planning system. The project default schema is `tina`.
 - Use `$openspec-apply-change` only after the user explicitly authorizes
   implementation.
 - Use `$tina-apply <scope>` after explicit authorization to implement and
-  commit each Change, then run one final full QA and code review over the run.
+  commit each Change, then return control.
+- Use `$tina-qa <scope>` for full QA and `$tina-code-review <scope>` for code
+  review after QA passes. Each uses an independent subagent; the main agent
+  routes required fixes to the relevant implementers and repeats checks until
+  passed. Review fixes rerun QA before re-review.
 - Use `$tina-verify` before archive.
 - Use `$openspec-archive-change` only when the user explicitly requests archive.
 

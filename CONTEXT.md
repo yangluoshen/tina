@@ -32,8 +32,8 @@ model acceptance and progress; completion requires verified implementation.
 _Avoid_: Unreviewed implementation, automatic archive, project default
 
 **Apply Run**:
-The long-running goal that implements approved Changes through implementer, QA, and code-reviewer subagents, committing each Change before moving on.
-_Avoid_: Archive, proposal planning
+The long-running goal that implements approved Changes through implementer subagents, committing each Change before moving on and returning control after implementation.
+_Avoid_: QA, code review, archive, proposal planning
 
 **Change View**:
 An optional, non-normative, diagram-led `change.html` derived from a Change's Proposal and optional design for faster human review. Generate it only when the user explicitly requests HTML visualization.

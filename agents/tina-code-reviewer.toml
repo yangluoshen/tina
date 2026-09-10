@@ -1,5 +1,5 @@
 name = "tina_code_reviewer"
-description = "Review the aggregate diff of all changes in a tina-apply run after the final full QA for correctness, security, behavior regressions, missing tests, and spec/task alignment. Use at the end of apply, before archive."
+description = "Review the aggregate diff of selected Tina changes for tina-code-review after the final full QA for correctness, security, behavior regressions, missing tests, and spec/task alignment. Use after QA, before archive."
 sandbox_mode = "read-only"
 developer_instructions = """
 Review the run's full set of commits and diffs together with each change's proposal, specs, tasks, and the final QA report.

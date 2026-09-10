@@ -24,9 +24,13 @@ docs/proposal-plan/<date>-<scenarios>.md
 human review
         ↓
 $tina-apply <scope>
-        ├── one implementer per Change, then commit that Change
-        ├── one global QA pass after all Changes
-        └── one global code review after QA
+        └── one implementer per Change, then commit that Change
+        ↓ returns control
+$tina-qa <scope>
+        └── one global QA agent; main agent routes fixes to implementers
+        ↓ returns control
+$tina-code-review <scope>
+        └── one global reviewer; fixes rerun QA before re-review
         ↓
 $tina-verify
         ↓
@@ -51,8 +55,8 @@ Core constraints:
 - A single Change can still use `$tina-propose-plan` to create full OpenSpec
   artifacts and then `$openspec-apply-change`. Multi-Change work uses
   `$tina-propose-run` and `$tina-apply`.
-- Normal routing separates implementation, verification, and archive. A
-  `$tina-yolo` request authorizes the workflow through verification; archive
+- Normal routing separates implementation, QA, code review, verification, and
+  archive. A `$tina-yolo` request authorizes the workflow through verification; archive
   still requires a separate request.
 
 ## Prerequisites
@@ -112,7 +116,8 @@ Use `$tina-yolo <task>` to delegate the complete workflow:
 
 ```text
 $tina-yolo <task>
-  → tina-research → tina-propose-plan → tina-propose-run → tina-apply → tina-verify
+  → tina-research → tina-propose-plan → tina-propose-run
+  → tina-apply → tina-qa → tina-code-review → tina-verify
 ```
 
 YOLO skips grilling and intermediate questions. The orchestrator decides scope,
@@ -179,17 +184,22 @@ explicitly requested:
 3. `design.md`: technical choices, alternatives, and risks;
 4. `tasks.md`: task dependencies and explicit verification.
 
-### 4. Implement, verify, and archive
+### 4. Implement, QA, review, verify, and archive
 
 ```text
 $tina-apply <scope>
+$tina-qa <scope>
+$tina-code-review <scope>
 $tina-verify <change-name>
 $openspec-archive-change <change-name>
 ```
 
-`$tina-apply` implements each Change in dependency order and commits it. After
-all Changes are committed, it runs one global QA pass and then one global code
-review over the full run. It only starts after explicit user authorization.
+`$tina-apply` implements each Change in dependency order, commits it, and returns
+control. It only starts after explicit user authorization. `$tina-qa` and
+`$tina-code-review` run the full-scope QA and review separately, each in an
+independent subagent. The main agent routes required fixes to the implementers
+and repeats checks until passed; review fixes rerun QA before re-review.
+`$tina-yolo` automatically chains these stages through verification.
 Archive also requires a separate user request. A single Change can still use
 `$openspec-apply-change` directly.
 
@@ -206,6 +216,8 @@ target-repository/
 │   ├── tina-propose-plan/
 │   ├── tina-propose-run/
 │   ├── tina-apply/
+│   ├── tina-qa/
+│   ├── tina-code-review/
 │   ├── tina-change-visual/
 │   ├── tina-verify/
 │   ├── archify/
