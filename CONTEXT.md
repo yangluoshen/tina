@@ -9,8 +9,12 @@ A versioned collection of planning rules, agent skills, and installation materia
 _Avoid_: Framework, plugin
 
 **Change**:
-One independently valuable intent tracked as a single OpenSpec change and sized for one focused implementation session.
+One independently valuable implementation or acceptance intent tracked as a single OpenSpec change and sized for one focused work session.
 _Avoid_: Epic, project
+
+**QA Change**:
+A Change that designs and records acceptance of the original request's user stories across the complete implementation, independent of how implementation Changes were split.
+_Avoid_: Per-implementation-Change checklist, implementation Change
 
 **Proposal**:
 The OpenSpec artifact that establishes the motivation, scope, capability impact, and domain alignment of a Change.
@@ -32,7 +36,7 @@ model acceptance and progress; completion requires verified implementation.
 _Avoid_: Unreviewed implementation, automatic archive, project default
 
 **Apply Run**:
-The long-running goal that implements approved Changes through implementer subagents, committing each Change before moving on and returning control after implementation.
+The long-running goal that implements approved implementation Changes through implementer subagents, committing each Change before moving on and returning control after implementation.
 _Avoid_: QA, code review, archive, proposal planning
 
 **Change View**:

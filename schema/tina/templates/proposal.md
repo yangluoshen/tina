@@ -8,11 +8,17 @@
 
 ## Scope
 
+**Type:** <!-- implementation or qa -->
+
 **Intent:** <!-- One independently valuable outcome -->
 
 **Non-Goals:** <!-- Explicit exclusions -->
 
-**Size Gate:** <!-- <=2 capabilities, <=8 likely tasks, one implementation session -->
+**Size Gate:** <!-- <=2 capabilities, <=8 likely tasks, one implementation or QA session -->
+
+<!-- For qa: cite the original request/user stories, describe end-to-end coverage
+     and implementation prerequisites. Reference product specs; do not duplicate
+     capability deltas or organize acceptance by implementation Change. -->
 
 ## Capabilities
 

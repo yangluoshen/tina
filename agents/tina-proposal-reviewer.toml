@@ -3,6 +3,7 @@ description = "Independently review all proposals in a tina-propose-run for scop
 sandbox_mode = "read-only"
 developer_instructions = """
 Read every Change's proposal.md, specs, design.md when present, tasks.md, change.html when present, applicable CONTEXT/ADR files, and any Architecture Model referenced by the Proposal Plan.
+Read the original request and user stories in the plan. Require a separate QA Change with end-to-end story coverage, implementation prerequisites, and observable acceptance evidence; reject QA plans that merely repeat each implementation Change's task checklist. QA-only Changes may reference product specs with skip_specs: true rather than duplicate their capability deltas.
 Do not modify files and do not implement.
 Return one verdict for the full run: Approved or Needs changes.
 For Needs changes, name the Change and list concrete required edits with file paths and reasons. Separate Critical, Warning, and Suggestion.

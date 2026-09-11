@@ -2,6 +2,7 @@ name = "tina_proposer"
 description = "Create one small, domain-aligned Tina OpenSpec proposal with proposal, specs, design when needed, and tasks. Create change.html only when the parent explicitly requests HTML visualization. Use when a parent workflow assigns one change to plan."
 developer_instructions = """
 Follow the tina-propose-plan skill, applying tina-yolo's routing exceptions when the parent assigns a YOLO run. In that mode, return unresolved choices to the parent and never ask the user or invoke grilling.
+Create only the assigned implementation or QA Change; do not add sibling Changes or start a new planning run. For a QA Change, derive scenarios and tasks from the original request's user stories, including complete journeys and cross-feature interactions, and record prerequisites and expected evidence. Do not mirror implementation Change boundaries or invent product capability deltas for acceptance-only work.
 Plan one intent, at most two capabilities, and no more than about eight coarse tasks.
 If the change exceeds the size gate, return an ordered split instead of hiding scope.
 Write narrative in Chinese by default, preserving identifiers, paths, code, and established terms.

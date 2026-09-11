@@ -16,6 +16,7 @@ $tina-propose-plan
         └── human confirms the Architecture Model
         ↓
 docs/proposal-plan/<date>-<scenarios>.md
+        └── implementation Changes + a separate story-level QA Change
         ↓
 /goal Execute $tina-propose-run <proposal-plan>.md
         ├── one tina_proposer per Change
@@ -24,13 +25,14 @@ docs/proposal-plan/<date>-<scenarios>.md
 human review
         ↓
 $tina-apply <scope>
-        └── one implementer per Change, then commit that Change
+        └── one implementer per implementation Change, then commit
         ↓ returns control
-$tina-qa <scope>
-        └── one global QA agent; main agent routes fixes to implementers
+$tina-qa <qa-change or plan>
+        └── one QA agent tests original user stories; fresh agents fix issues
         ↓ returns control
-$tina-code-review <scope>
-        └── one global reviewer; fixes rerun QA before re-review
+$tina-code-review <request or plan>
+        └── one reviewer checks the complete diff's code and architecture quality
+              └── fresh agents fix issues; rerun story QA before re-review
         ↓
 $tina-verify
         ↓
@@ -40,7 +42,11 @@ $openspec-archive-change
 Core constraints:
 
 - One Change carries one intent, at most two capabilities, about eight coarse
-  tasks, and fits a single focused implementation session.
+  tasks, and fits a single focused implementation or QA session.
+- Plan QA as a separate Change whose scenarios follow the original request's
+  user stories and interactions across the full implementation. Its tasks
+  record acceptance evidence; a QA-only Change references product specs and
+  uses `skip_specs: true` without duplicating capability deltas.
 - Proposal narrative defaults to Chinese while preserving existing headings,
   identifiers, paths, code, and domain terms.
 - Read the applicable `CONTEXT.md`, `CONTEXT-MAP.md`, and ADRs before planning,
@@ -52,9 +58,9 @@ Core constraints:
   HTML visualization; otherwise skip it without asking. When generated, it is a
   software-diagram projection for human review and the Markdown sources remain
   authoritative.
-- A single Change can still use `$tina-propose-plan` to create full OpenSpec
-  artifacts and then `$openspec-apply-change`. Multi-Change work uses
-  `$tina-propose-run` and `$tina-apply`.
+- Request-level planning includes a QA Change even with one implementation
+  Change. `$tina-propose-run` creates both kinds of artifacts; `$tina-apply`
+  executes implementation Changes and `$tina-qa` executes QA Changes.
 - Normal routing separates implementation, QA, code review, verification, and
   archive. A `$tina-yolo` request authorizes the workflow through verification; archive
   still requires a separate request.
@@ -150,7 +156,9 @@ $tina-propose-plan <change or goal to implement>
 ```
 
 This step runs research, grilling, domain alignment, conditional architecture
-alignment, and the size gate, then confirms an ordered list of Changes. When
+alignment, and the size gate, then confirms implementation Changes and a separate
+QA Change. The plan retains the original request, user stories, acceptance
+criteria, and QA coverage and prerequisites. When
 components, connections, or boundaries affect the split, `$tina-architecture`
 spawns one `tina_architect` to create or update an Architecture Model. Human
 feedback returns to the same architect until the model is confirmed before the
@@ -188,20 +196,26 @@ explicitly requested:
 
 ```text
 $tina-apply <scope>
-$tina-qa <scope>
-$tina-code-review <scope>
+$tina-qa <qa-change or plan>
+$tina-code-review <request or plan>
 $tina-verify <change-name>
 $openspec-archive-change <change-name>
 ```
 
-`$tina-apply` implements each Change in dependency order, commits it, and returns
-control. It only starts after explicit user authorization. `$tina-qa` and
-`$tina-code-review` run the full-scope QA and review separately, each in an
-independent subagent. The main agent routes required fixes to the implementers
-and repeats checks until passed; review fixes rerun QA before re-review.
+`$tina-apply` implements and commits implementation Changes in dependency order,
+then returns control. It starts only after explicit user authorization and leaves
+QA Changes for `$tina-qa`. An independent QA agent tests the original user stories,
+records issues in `docs/qa/issues/`, and updates the QA Change's acceptance tasks.
+The summary remains `docs/qa/apply.md`.
+
+`$tina-code-review` uses an independent reviewer to assess the original request's
+complete diff for code smells, unnecessary complexity, and architectural problems.
+QA and `$tina-verify` check functional completeness. For required QA or review
+issues, the main agent starts fresh bug-fix implementers; issues have no owning
+implementation Change. Review findings also go into `docs/qa/issues/`. Fixes
+retest the original user stories, and review fixes also receive another review.
 `$tina-yolo` automatically chains these stages through verification.
-Archive also requires a separate user request. A single Change can still use
-`$openspec-apply-change` directly.
+Archive also requires a separate user request.
 
 ## Files installed in a target repository
 
@@ -265,7 +279,8 @@ After changing the schema, skills, agents, Target Instructions, or installer:
 
 The test installs the workflow twice in a temporary directory and verifies
 idempotency, conflict protection, schema resolution, dynamic instructions,
-Archify validation, and the `change.html` template.
+QA task tracking without product spec deltas, Archify validation, and the
+`change.html` template.
 
 ## Updating dependencies
 

@@ -1,6 +1,6 @@
 ---
 name: tina-propose-run
-description: Execute a confirmed Tina proposal plan from docs/proposal-plan/<date>-<scenarios>.md, propose all Changes, then run one final global review. Use only after tina-propose-plan has confirmed the split; do not grill or ask for individual confirmation.
+description: Execute a confirmed Tina proposal plan from docs/proposal-plan, propose its implementation and QA Changes, then run one final global proposal review. Use only after tina-propose-plan has confirmed the split; do not grill or ask for individual confirmation.
 ---
 
 # Tina Propose Run
@@ -25,12 +25,17 @@ split, grill the user, or archive.
 5. For each Change in the plan order, derive a stable slug from the Change
    name: lowercase it and replace every character outside `[a-z0-9_]` with `_`.
    Spawn one `tina_proposer` as `<slug>_proposer` and send it that Change plus
-   the confirmed Architecture Model path and assigned stable IDs when present.
+   its type, plan path, original request, user stories, and acceptance criteria,
+   and the confirmed Architecture Model path and assigned stable IDs when present.
+   Include the separate QA Change in this proposal loop; its proposer designs
+   acceptance across the original stories, not per implementation Change.
    Do not spawn a reviewer per Change.
 6. Parallelize different Changes only when they do not declare the same
    capability and do not touch the same files; otherwise process them serially.
 7. After all Changes are proposed, spawn one `tina_proposal_reviewer` for the
-   whole run, e.g. `propose_reviewer`. Send it every Change and its artifacts.
+   whole run, e.g. `propose_reviewer`. Send it the plan, original request, every
+   Change, and its artifacts. Require QA coverage of the original user stories
+   across the full implementation, including interactions between Changes.
    If `Needs changes`, route each required edit to the relevant
    `<slug>_proposer`, then ask the same `propose_reviewer` to re-review. Repeat
    until `Approved`. Do not spawn replacements.

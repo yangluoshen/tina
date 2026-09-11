@@ -16,6 +16,9 @@ the implementation during this workflow.
 3. Report as **Critical** any unchecked task or missing requirement behavior.
 4. For every completed task, run or inspect its stated verification. Map each
    requirement and scenario to observable implementation and test evidence.
+   For a QA Change, use its original user stories, acceptance tasks, QA report,
+   and `docs/qa/issues` resolution evidence, including when `skip_specs: true`.
+   Verify story-level results; do not require a product code delta from QA work.
 5. Report as **Warning** any design, vocabulary, or ADR divergence and any
    scenario without evidence. Use **Suggestion** only for non-blocking issues.
 

@@ -48,6 +48,7 @@ node "$PROJECT/.agents/skills/archify/bin/archify.mjs" validate architecture \
 for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   agent_file="$PROJECT/.codex/agents/$agent.toml"
   test -f "$agent_file"
+  cmp "$WORKFLOW_ROOT/agents/$agent.toml" "$agent_file"
   grep -q '^name = ' "$agent_file"
   grep -q '^description = ' "$agent_file"
   grep -q '^developer_instructions = ' "$agent_file"
@@ -74,6 +75,34 @@ fi
   openspec new change smoke --schema tina >/dev/null
   openspec status --change smoke --json | grep -q '"schemaName": "tina"'
   openspec instructions proposal --change smoke --json | grep -q 'Domain Alignment'
+
+  openspec new change checkout-qa --schema tina >/dev/null
+  printf '\nskip_specs: true\n' >> openspec/changes/checkout-qa/.openspec.yaml
+  cat > openspec/changes/checkout-qa/proposal.md <<'EOF'
+## Why
+Accept the original customer checkout story across cart, payment, and order history.
+## Scope
+**Type:** qa
+**Intent:** Verify a customer can complete a purchase and see the resulting order.
+## Capabilities
+No product behavior delta; this Change records acceptance of the checkout story.
+EOF
+  printf '%s\n' '- [ ] 1.1 Complete checkout from cart to order history; verify the order and record evidence in docs/qa/apply.md.' > openspec/changes/checkout-qa/tasks.md
+  openspec instructions apply --change checkout-qa --json > "$TEST_ROOT/qa-ready.json"
+  sed 's/\[ \]/[x]/' openspec/changes/checkout-qa/tasks.md > "$TEST_ROOT/qa-tasks.md"
+  cp "$TEST_ROOT/qa-tasks.md" openspec/changes/checkout-qa/tasks.md
+  openspec instructions apply --change checkout-qa --json > "$TEST_ROOT/qa-done.json"
+  node - "$TEST_ROOT/qa-ready.json" "$TEST_ROOT/qa-done.json" <<'EOF'
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const [ready, done] = process.argv.slice(2).map(path => JSON.parse(fs.readFileSync(path, 'utf8')));
+assert.equal(ready.state, 'ready');
+assert.equal(ready.progress.remaining, 1);
+assert.equal(ready.contextFiles.specs, undefined);
+assert.ok(ready.contextFiles.proposal.length);
+assert.equal(done.state, 'all_done');
+assert.equal(done.progress.complete, 1);
+EOF
 )
 grep -q 'tina-change-visual' "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 grep -q 'tina-architecture' "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"

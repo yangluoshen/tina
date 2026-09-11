@@ -29,7 +29,8 @@ Alongside the normal Proposal Plan, maintain:
 - `Decisions`: the question, chosen option, evidence or assumption, alternatives
   rejected, trade-offs, and conditions that would justify revisiting it;
 - `Execution`: current stage, ordered Change names and dependencies, artifact and
-  research paths, baseline commit, implementation/fix commits, review verdicts,
+  research paths, Change types and QA story coverage, baseline commit,
+  implementation/fix commits, issue paths, review verdicts,
   verification commands and results, and unresolved blockers.
 
 Record decisions when made, including architecture, UX, scope splits, and
@@ -52,7 +53,9 @@ completion must not complete it.
    Resolve external or unstable facts with cited Research Notes when needed;
    local inspection suffices otherwise. Carry the findings and paths forward.
 2. **`$tina-propose-plan`**: use its ordered-list planning path even for one
-   Change. Write the run record and split work within the normal size gate.
+   implementation Change. Plan a separate QA Change from the original user
+   stories, with prerequisites on the implementation needed for those stories.
+   Write the run record and split work within the normal size gate.
    Use `$domain-modeling` directly as needed, with no grilling. If architecture
    alignment is required, invoke `$tina-architecture`, review the architect's
    model and semantic choices yourself, and return revisions to the same agent
@@ -61,31 +64,36 @@ completion must not complete it.
    yourself. Leave artifact creation to the next stage.
 3. **`$tina-propose-run`**: pass the plan path explicitly and reuse its proposer
    and global proposal-reviewer loop. Proposers create their assigned Change's
-   artifacts using `$tina-propose-plan`'s single-Change path with these overrides;
+   artifacts using `$tina-propose-plan`'s assigned-Change path with these overrides;
    they do not start another YOLO run or rewrite the run plan. Distinguish the
    proposal-stage exit criterion (`Approved` for the full set) from whole-run
    completion. If artifacts expose excess scope or the architecture hash has
    changed, return to planning, reconcile the model and split, then re-review
    the affected proposals. Continue to apply only after global approval.
-4. **`$tina-apply`**: pass the explicit ordered Change scope. Use the existing
+4. **`$tina-apply`**: pass only the ordered implementation Changes. Use the existing
    independent implementers and commit each Change, then continue to QA.
    Record the baseline and preserve unrelated work; stage only files belonging
    to this run. Planning artifacts and run reports belong to this run, but
    unrelated dirty files must never be swept into its commits.
-5. **`$tina-qa`**: pass every Change and commit in the run. Use its independent
-   QA and implementer repair loop. Commit fixes before retesting and record the
-   verdict; continue to code review after full QA passes.
-6. **`$tina-code-review`**: pass the same full scope, commits, and final QA report.
-   Use its independent reviewer and implementer/QA repair loop. Commit fixes
-   before retesting and re-review, and assess the resulting full diff before
-   verification. Continue after `Approved`.
+5. **`$tina-qa`**: pass the QA Change(s), original request, user stories, plan,
+   and implementation/fix commits. Execute acceptance across complete journeys.
+   Use its independent QA and fresh bug-fix agent loop; issues live in
+   `docs/qa/issues` without implementation Change ownership. Commit fixes before
+   retesting and record the verdict; continue after all QA Changes pass.
+6. **`$tina-code-review`**: pass the original request, baseline, complete
+   implementation/fix diff, architecture context, and final QA report. Review
+   code smells and architectural quality, leaving functional completeness to
+   QA and verification. Use its independent reviewer and fresh fix-agent/QA loop.
+   Commit fixes before retesting and re-review, and assess the resulting full
+   diff before verification. Continue after `Approved`.
 7. **`$tina-verify`**: pass each exact Change name from the plan, with no
    interactive selection. Keep verification read-only. Persist its evidence and
-   verdict in the run record as the orchestrator. For missing behavior, unchecked
-   tasks, divergence, or missing scenario evidence, route fixes back to apply
-   (or planning if scope/design must change), commit fixes, rerun `$tina-qa` and
-   `$tina-code-review`, then verify again. Recheck every Change affected by a
-   shared fix.
+   verdict in the run record as the orchestrator. Return incomplete QA tasks or
+   missing story evidence to `$tina-qa`. For missing implementation behavior,
+   unchecked implementation tasks, divergence, or missing scenario evidence,
+   route fixes back to apply (or planning if scope/design must change), commit
+   fixes, rerun `$tina-qa` and `$tina-code-review`, then verify again. Recheck
+   every Change affected by a shared fix.
 
 Use the installed Tina roles and the active profile's model table. Pass the
 YOLO mode, plan path, bounded assignment, relevant decisions, and original scope
@@ -96,8 +104,9 @@ not override a failing verdict with its own confidence.
 
 ## Completion and blockers
 
-Continue without stage handoff pauses until every planned Change is implemented
-and committed, global proposal review is Approved, full-run QA passes, code
+Continue without stage handoff pauses until every implementation Change is
+implemented and committed, every QA Change has passing story evidence and
+completed acceptance tasks, global proposal review is Approved, code
 review is Approved on the final implementation, and every Change's verification
 is Ready to archive with requirement/scenario evidence. Resolve every Critical
 and Warning finding; record Suggestions as optional follow-up. Save the final
