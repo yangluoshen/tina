@@ -116,59 +116,6 @@ target skill, schema, or managed `AGENTS.md` block has been modified, the
 installer refuses to overwrite it and shows the diff. Existing project files are
 never silently replaced.
 
-## Optional Univer Craft skills
-
-Univer Craft builds Univer Apps through Tina. It is a separate extension:
-`univer-craft` depends on Tina, and `univer-craft-yolo` delegates execution to
-`tina-yolo`. Tina's installer, skills, agents, schema, and Target Instructions
-work independently of Univer Craft.
-
-From this bundle's root, install the extension into a new or existing target:
-
-```text
-$univer-craft-init /absolute/path/to/target-repository
-$univer-craft-init-incognito /absolute/path/to/target-repository
-```
-
-These source-bundle skills live in `.agents/skills/`. Both install Tina plus
-`univer-craft` and `univer-craft-yolo`. Incognito mode requires a Git repository:
-it stages the combined installation outside the target, preserves tracked
-files and Git status, and uses local excludes with `AGENTS.override.md`.
-Univer Craft exclusions have their own block, separate from Tina's. Start a
-new Codex session afterward to load the installed instructions and skills.
-
-The normal installation also has a direct shell command:
-
-```sh
-./install-univer-craft.sh /absolute/path/to/target-repository
-```
-
-This checks both extension directories for conflicts, runs the existing Tina
-installer with its normal prerequisites and conflict protection, then copies
-the two optional skills, including the SDK research reference. Identical
-reinstallation is safe. A differing installation requires review before updating;
-the command does not overwrite customizations. Plain `install.sh` installs only
-Tina. Tina sync/remove manage Tina's payload; these optional skill directories
-are maintained separately and require Tina to remain installed.
-
-```text
-$univer-craft 研究现有应用接入 Univer 协同和自有权限系统需要哪些 SDK，并给出下一步指令
-$univer-craft-yolo 在这个新仓库构建支持本地编辑和保存的 Univer Sheets App
-```
-
-Normal mode researches only the needed SDK layers and dispatches the requested
-Tina stage, then gives a concrete next instruction when appropriate. It does not
-automatically run a complete workflow. YOLO delegates the full requested outcome
-through Tina's verification without intermediate handoffs. New applications
-default to pnpm and TypeScript, with application source code in the project root's
-`src/` unless the user explicitly specifies another location. Existing repositories
-retain their conventions.
-
-The [SDK research map](skills/univer-craft/references/univer-sdk.md) covers Web,
-Server, and AI SDK boundaries, official sources, and feature-specific research
-questions. It is dated guidance; check current docs and installed types before
-implementing an integration.
-
 ## Daily use
 
 Use `$tina-yolo <task>` to delegate the complete workflow:
@@ -309,14 +256,12 @@ target-repository/
 ```text
 schema/tina/               Tina OpenSpec schema and templates
 skills/tina-*/             Private orchestration skills maintained here
-skills/univer-craft*/      Optional Univer research and Tina dispatch skills
 vendor/mattpocock-skills/  Pinned, unmodified upstream skill snapshots
 vendor/archify/             Pinned, unmodified Archify Skill package
 vendor/show-me/             Pinned, unmodified HumanLayer skill and license
 templates/AGENTS.md        Target Instructions installed into target repos
 dependencies.env           The single source of dependency pins
 install.sh                 Non-destructive installer
-install-univer-craft.sh     Optional extension installer; calls install.sh
 test.sh                    Installer and schema smoke test
 update-dependencies.sh     The only supported dependency refresh path
 ```

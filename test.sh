@@ -13,43 +13,6 @@ ln -s "$WORKFLOW_ROOT/install.sh" "$TEST_ROOT/bin/tina-init"
   PATH="$TEST_ROOT/bin:$PATH" tina-init . >/dev/null
 )
 test -f "$TEST_ROOT/cli-project/openspec/config.yaml"
-test ! -e "$TEST_ROOT/cli-project/.agents/skills/univer-craft"
-test ! -e "$TEST_ROOT/cli-project/.agents/skills/univer-craft-yolo"
-
-CRAFT_PROJECT="$TEST_ROOT/univer app"
-"$WORKFLOW_ROOT/install-univer-craft.sh" "$CRAFT_PROJECT" >/dev/null
-printf '%s\n' '{"packageManager":"npm@10.0.0"}' > "$CRAFT_PROJECT/package.json"
-cp "$CRAFT_PROJECT/package.json" "$TEST_ROOT/original-package.json"
-"$WORKFLOW_ROOT/install-univer-craft.sh" "$CRAFT_PROJECT" >/dev/null
-cmp "$TEST_ROOT/original-package.json" "$CRAFT_PROJECT/package.json"
-for skill in univer-craft univer-craft-yolo; do
-  diff -qr "$WORKFLOW_ROOT/skills/$skill" "$CRAFT_PROJECT/.agents/skills/$skill"
-done
-
-CRAFT_CONFLICT="$TEST_ROOT/craft-conflict"
-mkdir -p "$CRAFT_CONFLICT/.agents/skills"
-printf '%s\n' 'local skill' > "$TEST_ROOT/local-skill"
-for skill in univer-craft univer-craft-yolo; do
-  mkdir "$CRAFT_CONFLICT/.agents/skills/$skill"
-  cp "$TEST_ROOT/local-skill" "$CRAFT_CONFLICT/.agents/skills/$skill/SKILL.md"
-  if "$WORKFLOW_ROOT/install-univer-craft.sh" "$CRAFT_CONFLICT" >/dev/null 2>&1; then
-    echo "Installer overwrote a conflicting $skill skill" >&2
-    exit 1
-  fi
-  cmp "$TEST_ROOT/local-skill" "$CRAFT_CONFLICT/.agents/skills/$skill/SKILL.md"
-  test ! -e "$CRAFT_CONFLICT/openspec"
-  rm "$CRAFT_CONFLICT/.agents/skills/$skill/SKILL.md"
-  rmdir "$CRAFT_CONFLICT/.agents/skills/$skill"
-done
-test ! -e "$CRAFT_CONFLICT/.agents/skills/univer-craft"
-
-ln -s "$WORKFLOW_ROOT/skills/univer-craft" "$CRAFT_CONFLICT/.agents/skills/univer-craft"
-if "$WORKFLOW_ROOT/install-univer-craft.sh" "$CRAFT_CONFLICT" >/dev/null 2>&1; then
-  echo "Installer accepted a symlinked Univer Craft skill" >&2
-  exit 1
-fi
-test -L "$CRAFT_CONFLICT/.agents/skills/univer-craft"
-test ! -e "$CRAFT_CONFLICT/openspec"
 
 PROJECT="$TEST_ROOT/missing/project"
 "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null
