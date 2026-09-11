@@ -65,7 +65,23 @@ Core constraints:
   archive. A `$tina-yolo` request authorizes the workflow through verification; archive
   still requires a separate request.
 
-## Prerequisites
+## Install with one instruction
+
+Open the target repository in Codex and send:
+
+```text
+请读取 https://raw.githubusercontent.com/yangluoshen/tina/main/INSTALL.md，将 Tina 安装到当前仓库。
+```
+
+Append `使用 incognito 模式，保持 Git 状态不变。` for a local-only installation,
+or replace `当前仓库` with an explicit target path. The agent follows
+[INSTALL.md](INSTALL.md), acquires the source outside the target, and runs the
+existing initializer with the pinned OpenSpec through `npm exec`. Git, Node.js,
+and npm are required; no preinstalled Tina skill or global OpenSpec is needed.
+Start a new Codex session after installation. The URL requires this guide to be
+published; a local checkout's `INSTALL.md` path works before publication.
+
+## Manual installation prerequisites
 
 - Git
 - Node.js 18 or newer and npm
