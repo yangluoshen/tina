@@ -68,8 +68,8 @@ and the separate archive boundary. Outside this run, use normal routing.
 |---|---|---|
 | `tina-implementer` | `deepseek-flash` / `max` | `gpt-6-astra` / `medium` |
 | `tina-qa` | `deepseek-flash` / `max` | `gpt-5.6-luna` / `max` |
-| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `high` |
-| `tina-code-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `high` |
+| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `medium` |
+| `tina-code-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `medium` |
 
 Spawn each role with the pair for the active profile. Do not hardcode these
 models in the agent TOML files.
