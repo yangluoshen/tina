@@ -160,7 +160,9 @@ Normal mode researches only the needed SDK layers and dispatches the requested
 Tina stage, then gives a concrete next instruction when appropriate. It does not
 automatically run a complete workflow. YOLO delegates the full requested outcome
 through Tina's verification without intermediate handoffs. New applications
-default to pnpm and TypeScript; existing repositories retain their conventions.
+default to pnpm and TypeScript, with application source code in the project root's
+`src/` unless the user explicitly specifies another location. Existing repositories
+retain their conventions.
 
 The [SDK research map](skills/univer-craft/references/univer-sdk.md) covers Web,
 Server, and AI SDK boundaries, official sources, and feature-specific research

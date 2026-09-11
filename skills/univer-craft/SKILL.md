@@ -66,10 +66,12 @@ This section also applies when loaded by `$univer-craft-yolo`.
 ## Repository defaults
 
 For a new repository without an established application stack, default to pnpm
-and TypeScript. Choose the smallest framework/runtime justified by the requested
-app and supported SDK example. Use strict TypeScript, a committed pnpm lockfile,
-clear development/build/typecheck commands, and focused checks of the requested
-behavior. Document required environment variables and startup steps; keep
+and TypeScript. Place application source code in `src/` at the project root
+unless the user explicitly specifies another location. Carry this layout into
+Tina planning and implementation. Choose the smallest framework/runtime justified
+by the requested app and supported SDK example. Use strict TypeScript, a committed
+pnpm lockfile, clear development/build/typecheck commands, and focused checks of
+the requested behavior. Document required environment variables and startup steps; keep
 secrets outside source control. Add server processes, workspaces, or deployment
 infrastructure only when the requested behavior requires them. Tina metadata
 alone does not make an otherwise empty repository an existing app.
