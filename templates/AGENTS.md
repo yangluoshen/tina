@@ -66,10 +66,10 @@ and the separate archive boundary. Outside this run, use normal routing.
 
 | role | deepseek profile | openai profile |
 |---|---|---|
-| `tina-implementer` | `deepseek-v4-flash` / `max` | `gpt-6-astra` / `medium` |
-| `tina-qa` | `deepseek-v4-flash-vision-exp` / `max` | `gpt-5.6-luna` / `max` |
-| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-v4-pro` / `high` | `gpt-6-astra` / `high` |
-| `tina-code-reviewer` | `deepseek-v4-pro` / `high` | `gpt-6-astra` / `high` |
+| `tina-implementer` | `deepseek-flash` / `max` | `gpt-6-astra` / `medium` |
+| `tina-qa` | `deepseek-flash` / `max` | `gpt-5.6-luna` / `max` |
+| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `high` |
+| `tina-code-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `high` |
 
 Spawn each role with the pair for the active profile. Do not hardcode these
 models in the agent TOML files.
