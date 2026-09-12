@@ -30,7 +30,7 @@ Alongside the normal Proposal Plan, maintain:
   rejected, trade-offs, and conditions that would justify revisiting it;
 - `Execution`: current stage, ordered Change names and dependencies, artifact and
   research paths, Change types and QA story coverage, baseline commit,
-  implementation/fix commits, issue paths, review verdicts,
+  implementation/fix commits, issue paths with priority and status, review verdicts,
   verification commands and results, and unresolved blockers.
 
 Record decisions when made, including architecture, UX, scope splits, and
@@ -48,6 +48,10 @@ skill was invoked. Only the orchestrator can complete the whole-run goal; stage
 completion must not complete it.
 
 ## Dispatch
+
+After implementation, QA and code review can run in either order. Dispatch each
+with its own inputs and record its own verdict; neither requires the other's
+report or approval. A fix does not automatically trigger the other workflow.
 
 1. **`$tina-research`**: inspect relevant code, specs, CONTEXT files, and ADRs.
    Resolve external or unstable facts with cited Research Notes when needed;
@@ -71,35 +75,39 @@ completion must not complete it.
    changed, return to planning, reconcile the model and split, then re-review
    the affected proposals. Continue to apply only after global approval.
 4. **`$tina-apply`**: pass only the ordered implementation Changes. Use the existing
-   independent implementers and commit each Change, then continue to QA.
+   independent implementers and commit each Change, then dispatch the checks below.
    Record the baseline and preserve unrelated work; stage only files belonging
    to this run. Planning artifacts and run reports belong to this run, but
    unrelated dirty files must never be swept into its commits.
 5. **`$tina-qa`**: pass the QA Change(s), original request, user stories, plan,
    and implementation/fix commits. Execute acceptance across complete journeys.
    Use its independent QA and fresh bug-fix agent loop; issues live in
-   `docs/qa/issues` without implementation Change ownership. Commit fixes before
-   retesting and record the verdict; continue after all QA Changes pass.
+   `docs/qa/issues` without implementation Change ownership. Automatically fix
+   P0 only; defer P1/P2 with reasons and revisit conditions unless the user
+   requests those fixes. Commit fixes before affected-story retests, retain
+   still-valid evidence, and record the verdict for each QA Change.
 6. **`$tina-code-review`**: pass the original request, baseline, complete
-   implementation/fix diff, architecture context, and final QA report. Review
-   code smells and architectural quality, leaving functional completeness to
-   QA and verification. Use its independent reviewer and fresh fix-agent/QA loop.
-   Commit fixes before retesting and re-review, and assess the resulting full
-   diff before verification. Continue after `Approved`.
+   implementation/fix diff, and architecture context. Review code smells and
+   architectural quality. Record findings in `docs/code-review/issues` using
+   the skill's priority/status policy and independent reviewer/P0 repair loop.
+   Inspect fixes and relevant validation evidence, commit them, and re-review
+   affected code in the aggregate diff. Record the verdict; deferred P1/P2 do
+   not trigger another repair or review cycle.
 7. **`$tina-verify`**: pass each exact Change name from the plan, with no
    interactive selection. Keep verification read-only. Persist its evidence and
    verdict in the run record as the orchestrator. Return incomplete QA tasks or
    missing story evidence to `$tina-qa`. For missing implementation behavior,
    unchecked implementation tasks, divergence, or missing scenario evidence,
    route fixes back to apply (or planning if scope/design must change), commit
-   fixes, rerun `$tina-qa` and `$tina-code-review`, then verify again. Recheck
-   every Change affected by a shared fix.
+   fixes, route demonstrably invalidated evidence to the relevant workflow, then
+   verify affected Changes again. Retain still-valid evidence; expand or repeat
+   testing only when a new change fails or evidence demonstrates the need.
 
 Use the installed Tina roles and the active profile's model table. Pass the
 YOLO mode, plan path, bounded assignment, relevant decisions, and original scope
 authorization to every agent. Agents return unresolved choices to the
 orchestrator, who decides and records them without questioning the user.
-Preserve independent review verdicts; the orchestrator must resolve findings,
+Preserve independent review verdicts; the orchestrator must resolve P0 findings,
 not override a failing verdict with its own confidence.
 
 ## Completion and blockers
@@ -108,11 +116,14 @@ Continue without stage handoff pauses until every implementation Change is
 implemented and committed, every QA Change has passing story evidence and
 completed acceptance tasks, global proposal review is Approved, code
 review is Approved on the final implementation, and every Change's verification
-is Ready to archive with requirement/scenario evidence. Resolve every Critical
-and Warning finding; record Suggestions as optional follow-up. Save the final
-run record and commit remaining run documentation before reporting completion.
+is Ready to archive with requirement/scenario evidence. Resolve every QA/review
+P0; retain P1/P2 as deferred unless the user requests their repair. Resolve
+Critical and Warning verification failures in required behavior or evidence;
+do not promote deferred QA/review issues into blockers merely to clear the backlog.
+Save the final run record and commit remaining run documentation before reporting
+completion.
 Report delivered behavior, verification results, decision/ADR paths, and any
-optional follow-up in Chinese by default.
+deferred P1/P2 issue paths, priorities, and impact in Chinese by default.
 
 For a failing check, diagnose and fix the cause and continue. If progress needs
 unavailable credentials, a missing required tool/service, or authority beyond

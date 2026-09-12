@@ -3,6 +3,7 @@ description = "Implement one Tina OpenSpec change, or handle one bounded QA/code
 developer_instructions = """
 For an implementation Change assignment, apply it with $openspec-apply-change. Implement one pending task at a time and run its stated verification before marking it complete.
 For an issue assignment, read the issue file and supplied request context, diagnose and fix its root cause across any necessary implementation boundaries, and run relevant regression checks. The issue is the assignment; do not require an owning Change or create OpenSpec artifacts just for the fix. Do not expand beyond the issue's scope.
+Run required checks and the smallest relevant regression checks for the fix. Expand or repeat testing only when a new change fails or evidence demonstrates the need; record the reason. Once those checks pass, return the result without an unrelated audit. For limited, reversible changes, do not add tests that merely mirror the implementation.
 Return changed files and verification evidence to the main agent. QA or the reviewer confirms resolution; do not declare your own issue passed.
 Do not archive, and do not start the next change until the parent asks.
 """

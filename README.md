@@ -27,12 +27,11 @@ human review
 $tina-apply <scope>
         └── one implementer per implementation Change, then commit
         ↓ returns control
-$tina-qa <qa-change or plan>
-        └── one QA agent tests original user stories; fresh agents fix issues
-        ↓ returns control
-$tina-code-review <request or plan>
-        └── one reviewer checks the complete diff's code and architecture quality
-              └── fresh agents fix issues; rerun story QA before re-review
+independent checks (either order; each returns control)
+        ├── $tina-qa <qa-change or plan>
+        │     └── tests original user stories; fixes P0 and retests affected stories
+        └── $tina-code-review <request or plan>
+              └── reviews the complete diff; fixes P0 and re-reviews affected code
         ↓
 $tina-verify
         ↓
@@ -139,7 +138,7 @@ Use `$tina-yolo <task>` to delegate the complete workflow:
 ```text
 $tina-yolo <task>
   → tina-research → tina-propose-plan → tina-propose-run
-  → tina-apply → tina-qa → tina-code-review → tina-verify
+  → tina-apply → [tina-qa, tina-code-review: independent, either order] → tina-verify
 ```
 
 YOLO skips grilling and intermediate questions. The orchestrator decides scope,
@@ -226,10 +225,26 @@ The summary remains `docs/qa/apply.md`.
 
 `$tina-code-review` uses an independent reviewer to assess the original request's
 complete diff for code smells, unnecessary complexity, and architectural problems.
-QA and `$tina-verify` check functional completeness. For required QA or review
-issues, the main agent starts fresh bug-fix implementers; issues have no owning
-implementation Change. Review findings also go into `docs/qa/issues/`. Fixes
-retest the original user stories, and review fixes also receive another review.
+Review findings go into `docs/code-review/issues/`. QA and code review run
+independently, with their own inputs, repair loops, and verdicts. Either can run
+first; neither requires the other's report or approval. Both workflows record `Priority` and `Status` in each
+issue file. P0 blocks core modules, required user outcomes, or explicit acceptance,
+or presents demonstrated serious security/data-loss risk; the main agent starts
+fresh bug-fix implementers for P0 by default. P1 covers non-blocking degradation or
+maintainability risk; P2 covers minor defects or improvements. Both are deferred
+unless the user requests fixes, with issue links and impact in the final reminder.
+Deferred P1/P2 alone do not block QA, review, or verification.
+
+Statuses are `open`, `in_progress`, `resolved`, `deferred`, or `blocked`.
+The agent responsible for the issue confirms resolution with evidence; deferred
+issues include a reason and revisit condition. Issues have no owning implementation
+Change. QA completes planned acceptance coverage and retests affected stories after
+its fixes. Code review validates fixes with relevant checks and a focused follow-up
+review. A fix does not automatically trigger the other workflow. Both prioritize
+core modules and the user's focus and retain still-valid evidence.
+Expand or repeat testing only when a new change
+fails or evidence demonstrates it is necessary to solve the issue. Once relevant
+checks pass, continue to completion rather than seeking a defect-free system.
 `$tina-yolo` automatically chains these stages through verification.
 Archive also requires a separate user request.
 

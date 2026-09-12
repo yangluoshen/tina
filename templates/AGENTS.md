@@ -15,10 +15,7 @@ OpenSpec is the planning system. The project default schema is `tina`.
   the split; that wrapper assigns drawing and revision to one independent
   `tina_architect`. Do not call `$openspec-propose` directly; the private wrapper
   owns those steps.
-- Plan a separate QA Change alongside implementation Changes. Derive its
-  acceptance scenarios from the original request's user stories, complete
-  journeys, and interactions; do not mirror implementation Change boundaries.
-  Mark each Change's type as `implementation` or `qa` in the plan and proposal.
+- Use `$tina-propose-plan` to plan implementation and QA Changes.
 - After the split is confirmed, start the propose run with
   `/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
   Follow the success criteria and stopping condition in that file.` Propose
@@ -37,14 +34,8 @@ OpenSpec is the planning system. The project default schema is `tina`.
 - Use `$tina-apply <scope>` after explicit authorization to implement and
   commit each implementation Change, then return control. Leave QA Changes
   for `$tina-qa`.
-- Use `$tina-qa <qa-change or plan>` to execute story-level acceptance and
-  record issues in `docs/qa/issues`. Use `$tina-code-review <request or plan>`
-  after QA passes to review the request's complete diff for code smells and
-  architectural quality; QA and verify own functional completeness checks.
-  Each stage uses an independent subagent. The main agent starts fresh,
-  issue-scoped implementers for required QA/review fixes, without assigning
-  issues to original implementation Changes or agents. Repeat checks until
-  passed; review fixes rerun the original story QA before re-review.
+- Use `$tina-qa <qa-change or plan>` and `$tina-code-review <request or plan>`
+  independently after implementation.
 - Use `$tina-verify` before archive.
 - Use `$openspec-archive-change` only when the user explicitly requests archive.
 
@@ -85,9 +76,7 @@ trade-off. Proposals and designs must cite and respect these files.
 ## Change Size
 
 One Change has one intent, at most two capabilities, about eight coarse tasks,
-and fits one focused implementation or QA session. QA Changes without product
-behavior deltas use `skip_specs: true` and reference the product specs; split
-oversized QA by user journeys while retaining full story coverage.
+and fits one focused implementation or QA session.
 When any limit is exceeded, stop
 and propose an ordered set of smaller Changes. Never create all split Changes
 without confirmation and never hide excess scope inside oversized tasks.
