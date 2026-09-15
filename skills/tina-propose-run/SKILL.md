@@ -1,6 +1,6 @@
 ---
 name: tina-propose-run
-description: Execute a confirmed Tina proposal plan from docs/proposal-plan, propose its implementation and QA Changes, then run one final global proposal review. Use only after tina-propose-plan has confirmed the split; do not grill or ask for individual confirmation.
+description: Execute a confirmed Tina proposal plan after tina-prototype has validated it, propose its implementation and QA Changes, then run one final global proposal review. Do not grill or ask for individual confirmation.
 ---
 
 # Tina Propose Run
@@ -11,6 +11,11 @@ split, grill the user, or archive.
 1. Require the user to provide
    `docs/proposal-plan/<date>-<scenarios>.md`. If it is missing, stop and ask for
    the confirmed plan; do not invent one.
+   Read its `Prototype Confirmation` and linked Prototype Note. Require accepted
+   behavior for the current plan with human confirmation (or YOLO model
+   acceptance), or a recorded `not applicable` reason. If missing, pending, or
+   inconsistent with the current plan, return to `$tina-prototype` before
+   creating artifacts or spawning proposers.
 2. When the plan contains `Architecture Alignment`, require its canonical JSON
    path to exist and recompute its SHA-256 with the Node.js standard library. If
    it differs from the recorded `specification_sha256`, stop and return to
@@ -26,6 +31,7 @@ split, grill the user, or archive.
    name: lowercase it and replace every character outside `[a-z0-9_]` with `_`.
    Spawn one `tina_proposer` as `<slug>_proposer` and send it that Change plus
    its type, plan path, original request, user stories, and acceptance criteria,
+   plus the plan's Prototype Note and accepted constraints,
    and the confirmed Architecture Model path and assigned stable IDs when present.
    Include the separate QA Change in this proposal loop; its proposer designs
    acceptance across the original stories, not per implementation Change.

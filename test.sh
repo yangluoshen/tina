@@ -28,6 +28,10 @@ test -f "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-propose-run/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-architecture/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-apply/SKILL.md"
+diff -qr "$WORKFLOW_ROOT/skills/tina-prototype" "$PROJECT/.agents/skills/tina-prototype"
+for file in SKILL.md LOGIC.md UI.md; do
+  cmp "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/prototype/$file" "$PROJECT/.agents/skills/prototype/$file"
+done
 for skill in tina-qa tina-code-review; do
   diff -qr "$WORKFLOW_ROOT/skills/$skill" "$PROJECT/.agents/skills/$skill"
 done
@@ -123,7 +127,16 @@ fi
 cmp "$TEST_ROOT/show-me-local.md" "$PROJECT/.agents/skills/show-me/SKILL.md"
 cp "$WORKFLOW_ROOT/vendor/show-me/SKILL.md" "$PROJECT/.agents/skills/show-me/SKILL.md"
 
-for skill in tina-yolo tina-qa tina-code-review; do
+printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/prototype/UI.md"
+cp "$PROJECT/.agents/skills/prototype/UI.md" "$TEST_ROOT/prototype-local.md"
+if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
+  echo "Installer overwrote a conflicting prototype branch file" >&2
+  exit 1
+fi
+cmp "$TEST_ROOT/prototype-local.md" "$PROJECT/.agents/skills/prototype/UI.md"
+cp "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/prototype/UI.md" "$PROJECT/.agents/skills/prototype/UI.md"
+
+for skill in tina-prototype tina-yolo tina-qa tina-code-review; do
   printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/$skill/SKILL.md"
   cp "$PROJECT/.agents/skills/$skill/SKILL.md" "$TEST_ROOT/$skill-local.md"
   if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then

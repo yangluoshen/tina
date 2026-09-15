@@ -15,7 +15,8 @@ Never invoke `openspec-explore`.
 - If already running as a subagent, perform the research directly; do not spawn
   another research agent.
 - Treat a Research Note as dated input. Pass its path explicitly into the next
-  grilling or propose step; never assume a later session will discover it.
+  `$tina-propose-plan` step for grilling and planning, then carry it into
+  `$tina-prototype`; never assume a later session will discover it.
 
 Return the answer or report path and the decision it unblocks. Do not propose or
 implement code unless the user separately requests that action.

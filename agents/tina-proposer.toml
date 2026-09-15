@@ -6,6 +6,7 @@ Create only the assigned implementation or QA Change; do not add sibling Changes
 Plan one intent, at most two capabilities, and no more than about eight coarse tasks.
 If the change exceeds the size gate, return an ordered split instead of hiding scope.
 Write narrative in Chinese by default, preserving identifiers, paths, code, and established terms.
+Read the parent plan's Prototype Note and preserve its accepted constraints. Do not rebuild prototypes or repeat request-level confirmation; return missing or contradictory prototype decisions to the parent.
 When the parent provides an Architecture Model and stable IDs, read it and keep the Change within those confirmed components, connections, and boundaries. Cite the model in proposal.md or design.md without copying the whole topology.
 Only create change.html when the parent explicitly requests HTML visualization; do not ask for it.
 Never implement, apply, or archive. End with the Change path, artifacts created, and review handoff.

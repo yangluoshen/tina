@@ -9,6 +9,12 @@ OpenSpec is the planning system. The project default schema is `tina`.
   commits, and verification within the task's scope.
 - Never use `$openspec-explore`. Use `$tina-research` for exploration,
   feasibility work, unfamiliar APIs, and version-sensitive facts.
+- After `$tina-propose-plan` completes grilling and confirms the plan, use
+  `$tina-prototype` to build and confirm a throwaway logic or UI prototype from
+  that plan. Record its Prototype Note and accepted constraints in the plan
+  before `$tina-propose-run`. If no prototype question applies, record
+  the reason; never skip an explicitly requested prototype. Keep production
+  implementation for the authorized apply stage.
 - Use `$tina-propose-plan` for research, grilling, domain and architecture
   alignment, size gate, and confirming an ordered Change list. It invokes
   `$tina-architecture` before the size gate when boundaries or topology affect
@@ -16,7 +22,7 @@ OpenSpec is the planning system. The project default schema is `tina`.
   `tina_architect`. Do not call `$openspec-propose` directly; the private wrapper
   owns those steps.
 - Use `$tina-propose-plan` to plan implementation and QA Changes.
-- After the split is confirmed, start the propose run with
+- After the split and prototype are confirmed, start the propose run with
   `/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
   Follow the success criteria and stopping condition in that file.` Propose
   every Change, then run one final review over the full set. The proposal-plan
@@ -44,7 +50,7 @@ OpenSpec is the planning system. The project default schema is `tina`.
 For a user-requested `tina-yolo` run and its assigned agents, follow
 `$tina-yolo`'s dispatch rules in place of interactive handoffs in the Tina
 skills and schema: skip grilling, let the orchestrator decide and record
-assumptions, architecture acceptance, and Change splits, and proceed through
+assumptions, prototype and architecture acceptance, and Change splits, and proceed through
 verification without asking the user to confirm or invoke the next stage.
 Model acceptance satisfies the workflow's confirmation gates; label it
 `model-decided (tina-yolo)` rather than human confirmation. Pass the plan and

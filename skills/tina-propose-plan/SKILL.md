@@ -1,11 +1,18 @@
 ---
 name: tina-propose-plan
-description: Research, grill, align domain and architecture, and plan implementation Changes plus a separate QA Change from the original user stories. Save the confirmed strategy under docs/proposal-plan and provide the next goal prompt. Use for planning and confirmation only.
+description: Research, grill, align domain and architecture, and plan implementation Changes plus a separate QA Change from the original user stories. Save the confirmed strategy under docs/proposal-plan and hand it to tina-prototype. Use for planning and confirmation only.
 ---
 
 # Tina Propose Plan
 
 This workflow authorizes planning only. Never implement, run the propose loop, or apply the Change.
+
+Request-level planning precedes `$tina-prototype`. Settle the user stories,
+acceptance criteria, and constraints through grilling before handing off the plan.
+Record the bounded logic or UI questions the prototype should answer.
+An assigned proposer reads the parent plan's completed prototype record and
+constraints without rebuilding the prototype or repeating grilling. Return
+missing or contradictory decisions to the parent.
 
 At request-level planning, include a separate QA Change alongside the implementation
 Changes, even when implementation needs only one Change. Use the confirmed-plan
@@ -45,7 +52,10 @@ story coverage, rather than creating one QA Change per implementation Change.
    one focused implementation or QA session. If it fails, return an ordered set of
    smaller Changes with dependencies and wait for confirmation. Do not create
    several Changes automatically.
-6. Invoke `$openspec-propose`. The project default must resolve to the
+6. At request level, write the confirmed plan below and hand off to
+   `$tina-prototype`; do not create OpenSpec artifacts yet. Only when creating
+   an assigned Change after prototype confirmation, invoke `$openspec-propose`.
+   The project default must resolve to the
    `tina` schema. Follow its dynamic instructions and preserve Domain
    Model vocabulary, ADR decisions, and confirmed Architecture Model when one
    exists.
@@ -56,8 +66,8 @@ story coverage, rather than creating one QA Change per implementation Change.
 8. Recheck the completed artifacts against the size gate. If they reveal excess
    scope, stop and recommend a split; never hide scope in oversized tasks.
 
-When the user asks to plan a set of changes, stop after confirming the split and
-do not create every Change's artifacts in this step. Write the confirmed plan to
+At request level, including a single implementation Change, stop after confirming
+the split and do not create Change artifacts in this step. Write the confirmed plan to
 `docs/proposal-plan/<date>-<scenarios>.md`, where `<date>` is the creation date
 and `<scenarios>` is a short scenario name. The file must include:
 
@@ -66,19 +76,21 @@ and `<scenarios>` is a short scenario name. The file must include:
 - each Change's type (`implementation` or `qa`) and single intent;
 - the QA Change's story coverage and implementation prerequisites;
 - the confirmed constraints;
+- a `Prototype Confirmation` section initially marked `pending`, with the
+  questions to validate and Research Note paths; `$tina-prototype` later records
+  its note, scope, confirmation source, and accepted behavior or `not applicable`
+  reason. If replanning changes those decisions, mark the section `pending` again;
 - when architecture alignment ran, an `Architecture Alignment` section with the
   canonical JSON path, Archify `specification_sha256`, human confirmation, and
   each Change's component/connection stable IDs;
 - each Change's completion criteria and the overall stopping condition, designed
   from this planning session rather than copied from a fixed template.
 
-End with the proposal-plan path, the next-step prompt below, and no automated
-execution:
+End with the proposal-plan path and the next-step prompt below. Prototype
+confirmation must finish before the propose run begins:
 
 ```text
-/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
-Follow the success criteria and stopping condition in that file.
-Do not grill, ask for individual confirmation, or archive.
+$tina-prototype docs/proposal-plan/<date>-<scenarios>.md
 ```
 
 When creating one assigned Change's artifacts, return them to the parent for

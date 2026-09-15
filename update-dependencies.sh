@@ -49,6 +49,7 @@ RESOLVED_MATT_REF=$(git -C "$MATT_CHECKOUT" rev-parse HEAD)
 STAGED_VENDOR="$UPDATE_ROOT/vendor/mattpocock-skills"
 mkdir -p \
   "$STAGED_VENDOR/skills/research" \
+  "$STAGED_VENDOR/skills/prototype" \
   "$STAGED_VENDOR/skills/grill-with-docs" \
   "$STAGED_VENDOR/skills/grilling" \
   "$STAGED_VENDOR/skills/domain-modeling" \
@@ -56,6 +57,9 @@ mkdir -p \
 
 cp "$MATT_CHECKOUT/LICENSE" "$STAGED_VENDOR/LICENSE"
 cp "$MATT_CHECKOUT/skills/engineering/research/SKILL.md" "$STAGED_VENDOR/skills/research/SKILL.md"
+for file in SKILL.md LOGIC.md UI.md; do
+  cp "$MATT_CHECKOUT/skills/engineering/prototype/$file" "$STAGED_VENDOR/skills/prototype/$file"
+done
 cp "$MATT_CHECKOUT/skills/engineering/grill-with-docs/SKILL.md" "$STAGED_VENDOR/skills/grill-with-docs/SKILL.md"
 cp "$MATT_CHECKOUT/skills/productivity/grilling/SKILL.md" "$STAGED_VENDOR/skills/grilling/SKILL.md"
 cp "$MATT_CHECKOUT/skills/productivity/handoff/SKILL.md" "$STAGED_VENDOR/skills/handoff/SKILL.md"
@@ -63,7 +67,7 @@ cp "$MATT_CHECKOUT/skills/engineering/domain-modeling/SKILL.md" "$STAGED_VENDOR/
 cp "$MATT_CHECKOUT/skills/engineering/domain-modeling/CONTEXT-FORMAT.md" "$STAGED_VENDOR/skills/domain-modeling/CONTEXT-FORMAT.md"
 cp "$MATT_CHECKOUT/skills/engineering/domain-modeling/ADR-FORMAT.md" "$STAGED_VENDOR/skills/domain-modeling/ADR-FORMAT.md"
 
-for skill in research grill-with-docs grilling domain-modeling handoff; do
+for skill in research prototype grill-with-docs grilling domain-modeling handoff; do
   grep -q "^name: $skill$" "$STAGED_VENDOR/skills/$skill/SKILL.md"
 done
 
@@ -115,6 +119,10 @@ printf 'schema: tina\n' > "$OPENSPEC_CHECK/openspec/config.yaml"
 )
 
 cp "$STAGED_VENDOR/LICENSE" "$WORKFLOW_ROOT/vendor/mattpocock-skills/LICENSE"
+mkdir -p "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/prototype"
+for file in SKILL.md LOGIC.md UI.md; do
+  cp "$STAGED_VENDOR/skills/prototype/$file" "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/prototype/$file"
+done
 for skill in research grill-with-docs grilling handoff; do
   cp "$STAGED_VENDOR/skills/$skill/SKILL.md" "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill/SKILL.md"
 done

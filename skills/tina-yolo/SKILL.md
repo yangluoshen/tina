@@ -1,6 +1,6 @@
 ---
 name: tina-yolo
-description: Autonomously carry a task through tina-research, tina-propose-plan, tina-propose-run, tina-apply, tina-qa, tina-code-review, and tina-verify. Use when the user requests Tina YOLO mode or delegates the complete workflow without intermediate questions; skip grilling, decide trade-offs, and keep working until verified completion.
+description: Autonomously carry a task through tina-research, tina-propose-plan, tina-prototype, tina-propose-run, tina-apply, tina-qa, tina-code-review, and tina-verify. Use when the user requests Tina YOLO mode or delegates the complete workflow without intermediate questions; skip grilling, decide trade-offs, and keep working until verified completion.
 ---
 
 # Tina YOLO
@@ -65,8 +65,16 @@ report or approval. A fix does not automatically trigger the other workflow.
    model and semantic choices yourself, and return revisions to the same agent
    until sound. Record model acceptance, JSON path, `specification_sha256`, and
    assigned stable IDs in `Architecture Alignment`. Decide and record the split
-   yourself. Leave artifact creation to the next stage.
-3. **`$tina-propose-run`**: pass the plan path explicitly and reuse its proposer
+   yourself. Hand the plan to prototype; leave artifact creation to propose-run.
+3. **`$tina-prototype`**: use the completed Proposal Plan and Research Notes to build and exercise a bounded
+   logic or UI prototype before creating Change artifacts. Evaluate the result yourself, iterate
+   until the question is answered, and record the verdict as
+   `model-decided (tina-yolo)` in its Prototype Note. Record a concrete
+   `not applicable` reason when there is no prototype question. Carry the note
+   and accepted constraints into the run record. If feedback changes the plan,
+   return to planning, reconcile the affected decisions, then revalidate the
+   prototype before proceeding. Keep production work for apply.
+4. **`$tina-propose-run`**: pass the plan path explicitly and reuse its proposer
    and global proposal-reviewer loop. Proposers create their assigned Change's
    artifacts using `$tina-propose-plan`'s assigned-Change path with these overrides;
    they do not start another YOLO run or rewrite the run plan. Distinguish the
@@ -74,26 +82,26 @@ report or approval. A fix does not automatically trigger the other workflow.
    completion. If artifacts expose excess scope or the architecture hash has
    changed, return to planning, reconcile the model and split, then re-review
    the affected proposals. Continue to apply only after global approval.
-4. **`$tina-apply`**: pass only the ordered implementation Changes. Use the existing
+5. **`$tina-apply`**: pass only the ordered implementation Changes. Use the existing
    independent implementers and commit each Change, then dispatch the checks below.
    Record the baseline and preserve unrelated work; stage only files belonging
    to this run. Planning artifacts and run reports belong to this run, but
    unrelated dirty files must never be swept into its commits.
-5. **`$tina-qa`**: pass the QA Change(s), original request, user stories, plan,
+6. **`$tina-qa`**: pass the QA Change(s), original request, user stories, plan,
    and implementation/fix commits. Execute acceptance across complete journeys.
    Use its independent QA and fresh bug-fix agent loop; issues live in
    `docs/qa/issues` without implementation Change ownership. Automatically fix
    P0 only; defer P1/P2 with reasons and revisit conditions unless the user
    requests those fixes. Commit fixes before affected-story retests, retain
    still-valid evidence, and record the verdict for each QA Change.
-6. **`$tina-code-review`**: pass the original request, baseline, complete
+7. **`$tina-code-review`**: pass the original request, baseline, complete
    implementation/fix diff, and architecture context. Review code smells and
    architectural quality. Record findings in `docs/code-review/issues` using
    the skill's priority/status policy and independent reviewer/P0 repair loop.
    Inspect fixes and relevant validation evidence, commit them, and re-review
    affected code in the aggregate diff. Record the verdict; deferred P1/P2 do
    not trigger another repair or review cycle.
-7. **`$tina-verify`**: pass each exact Change name from the plan, with no
+8. **`$tina-verify`**: pass each exact Change name from the plan, with no
    interactive selection. Keep verification read-only. Persist its evidence and
    verdict in the run record as the orchestrator. Return incomplete QA tasks or
    missing story evidence to `$tina-qa`. For missing implementation behavior,

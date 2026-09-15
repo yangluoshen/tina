@@ -28,8 +28,15 @@ _Avoid_: Implementation, proposal artifacts
 The long-running goal that executes a confirmed Proposal Plan through proposer and proposal-reviewer subagents.
 _Avoid_: Planning, grilling, confirmation
 
+**Prototype Note**:
+A record in `docs/prototypes/` of a bounded logic or UI question, its runnable
+throwaway artifact derived from a grilled Proposal Plan, and the confirmed
+verdict recorded in that plan before the Propose Run;
+records a reason when no prototype question applies.
+_Avoid_: Production implementation, specification, Research Note
+
 **YOLO Run**:
-A user-delegated execution of research, proposal planning, proposal review,
+A user-delegated execution of research, proposal planning, prototype evaluation, proposal review,
 implementation, and verification in which the orchestrator decides and records
 trade-offs without intermediate user questions. Its Proposal Plan records
 model acceptance and progress; completion requires verified implementation.

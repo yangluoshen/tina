@@ -18,6 +18,9 @@ $tina-propose-plan
 docs/proposal-plan/<date>-<scenarios>.md
         └── implementation Changes + a separate story-level QA Change
         ↓
+$tina-prototype <proposal-plan>.md
+        └── confirm logic / UI and update plan; record why if not applicable
+        ↓
 /goal Execute $tina-propose-run <proposal-plan>.md
         ├── one tina_proposer per Change
         └── one global tina_proposal_reviewer after all proposals
@@ -137,12 +140,12 @@ Use `$tina-yolo <task>` to delegate the complete workflow:
 
 ```text
 $tina-yolo <task>
-  → tina-research → tina-propose-plan → tina-propose-run
+  → tina-research → tina-propose-plan → tina-prototype → tina-propose-run
   → tina-apply → [tina-qa, tina-code-review: independent, either order] → tina-verify
 ```
 
 YOLO skips grilling and intermediate questions. The orchestrator decides scope,
-architecture, and UX choices, records assumptions and trade-offs in
+architecture, and prototype choices, records assumptions and trade-offs in
 `docs/proposal-plan/<date>-<scenarios>.md`, and writes qualifying ADRs. It keeps
 the size gate, independent reviews, QA, and local commits, returning verification
 failures to implementation until the task passes. The plan records progress for
@@ -178,13 +181,30 @@ components, connections, or boundaries affect the split, `$tina-architecture`
 spawns one `tina_architect` to create or update an Architecture Model. Human
 feedback returns to the same architect until the model is confirmed before the
 size gate. The step writes the confirmed strategy to
-`docs/proposal-plan/<date>-<scenarios>.md` and ends with the next `/goal`
-prompt. Success criteria and the stopping condition come from this planning
+`docs/proposal-plan/<date>-<scenarios>.md` and hands it to `$tina-prototype`.
+The plan records the questions to validate; no prototype is required before grilling. Success criteria and the stopping condition come from this planning
 session rather than a fixed template.
 
-### 2.1 Run the proposal workflow
+### 3. Confirm a prototype
 
-Copy the next-step prompt from `$tina-propose-plan`:
+```text
+$tina-prototype docs/proposal-plan/<date>-<scenarios>.md
+```
+
+Uses Matt Pocock's pinned [prototype skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)
+to build a runnable logic demo or UI variants from the grilled plan. Review the
+artifact and confirm the state rules, interaction, or chosen variant before
+creating Change artifacts. The wrapper saves
+`docs/prototypes/<date>-<scope>.md` with the verdict and runnable source. It records
+a reason when no prototype question applies and reuses still-valid confirmation.
+The wrapper updates the plan's `Prototype Confirmation` and provides the next
+`/goal` prompt. Feedback that changes requirements or the Change split returns
+to planning, then prototype validation. Production implementation waits until
+apply; YOLO records model acceptance.
+
+### 3.1 Run the proposal workflow
+
+Copy the next-step prompt from `$tina-prototype` after confirmation:
 
 ```text
 /goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
@@ -197,7 +217,7 @@ it spawns one `tina_proposal_reviewer` for the whole run. If the verdict is
 `Needs changes`, the review returns to the relevant proposer; the same global
 reviewer re-reviews until the plan file's stopping condition is met.
 
-### 3. Human review
+### 4. Human review
 
 Review the Markdown sources. Open `change.html` only when HTML visualization was
 explicitly requested:
@@ -207,7 +227,7 @@ explicitly requested:
 3. `design.md`: technical choices, alternatives, and risks;
 4. `tasks.md`: task dependencies and explicit verification.
 
-### 4. Implement, QA, review, verify, and archive
+### 5. Implement, QA, review, verify, and archive
 
 ```text
 $tina-apply <scope>
@@ -256,6 +276,7 @@ target-repository/
 ├── .agents/skills/
 │   ├── openspec-*/
 │   ├── tina-research/
+│   ├── tina-prototype/
 │   ├── tina-yolo/
 │   ├── tina-architecture/
 │   ├── tina-propose-plan/
@@ -267,7 +288,7 @@ target-repository/
 │   ├── tina-verify/
 │   ├── archify/
 │   ├── show-me/
-│   └── pinned upstream skills such as research, grilling, and domain-modeling
+│   └── pinned upstream skills such as research, prototype, grilling, and domain-modeling
 ├── .codex/agents/
 │   ├── tina-architect.toml
 │   ├── tina-proposer.toml

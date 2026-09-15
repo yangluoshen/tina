@@ -82,11 +82,11 @@ copy_file() {
   fi
 }
 
-for skill in tina-research tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
+for skill in tina-research tina-prototype tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
-for skill in research grill-with-docs grilling domain-modeling handoff; do
+for skill in research prototype grill-with-docs grilling domain-modeling handoff; do
   check_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -162,11 +162,11 @@ fi
   openspec init --tools codex
 )
 
-for skill in tina-research tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
+for skill in tina-research tina-prototype tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
-for skill in research grill-with-docs grilling domain-modeling handoff; do
+for skill in research prototype grill-with-docs grilling domain-modeling handoff; do
   copy_directory "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
