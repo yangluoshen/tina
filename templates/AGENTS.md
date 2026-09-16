@@ -11,7 +11,8 @@ OpenSpec is the planning system. The project default schema is `tina`.
   feasibility work, unfamiliar APIs, and version-sensitive facts.
 - After `$tina-propose-plan` completes grilling and confirms the plan, use
   `$tina-prototype` to build and confirm a throwaway logic or UI prototype from
-  that plan. Record its Prototype Note and accepted constraints in the plan
+  that plan through one independent `tina_prototype`. The parent owns
+  confirmation and records its Prototype Note and accepted constraints in the plan
   before `$tina-propose-run`. If no prototype question applies, record
   the reason; never skip an explicitly requested prototype. Keep production
   implementation for the authorized apply stage.
@@ -63,9 +64,10 @@ and the separate archive boundary. Outside this run, use normal routing.
 
 | role | deepseek profile | openai profile |
 |---|---|---|
+| `tina-prototype` | `deepseek-flash` / `max` | `gpt-6-astra` / `medium` |
 | `tina-implementer` | `deepseek-flash` / `max` | `gpt-6-astra` / `medium` |
-| `tina-qa` | `deepseek-flash` / `max` | `gpt-5.6-luna` / `max` |
-| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `medium` |
+| `tina-qa` | `deepseek-flash` / `high` | `gpt-6-astra` / `low` |
+| `tina-architect`, `tina-proposer`, `tina-proposal-reviewer` | `deepseek-flash` / `max` | `gpt-6-astra` / `medium` |
 | `tina-code-reviewer` | `deepseek-flash` / `high` | `gpt-6-astra` / `medium` |
 
 Spawn each role with the pair for the active profile. Do not hardcode these

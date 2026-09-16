@@ -95,7 +95,7 @@ check_directory "$WORKFLOW_ROOT/vendor/show-me" "$TARGET_ROOT/.agents/skills/sho
 
 check_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
-for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+for agent in tina-prototype tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   check_file "$WORKFLOW_ROOT/agents/$agent.toml" "$TARGET_ROOT/.codex/agents/$agent.toml"
 done
 
@@ -175,7 +175,7 @@ copy_directory "$WORKFLOW_ROOT/vendor/show-me" "$TARGET_ROOT/.agents/skills/show
 
 copy_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
-for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+for agent in tina-prototype tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   copy_file "$WORKFLOW_ROOT/agents/$agent.toml" "$TARGET_ROOT/.codex/agents/$agent.toml"
 done
 

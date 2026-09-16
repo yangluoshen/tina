@@ -1,6 +1,6 @@
 ---
 name: tina-prototype
-description: Build and confirm a throwaway logic or UI prototype from the grilled Proposal Plan after tina-propose-plan and before tina-propose-run. Use to validate state models, interactions, or UI direction before creating Change artifacts.
+description: Delegate a throwaway logic or UI prototype to an independent subagent and confirm it from the grilled Proposal Plan, after tina-propose-plan and before tina-propose-run. Use to validate state models, interactions, or UI direction before creating Change artifacts.
 ---
 
 # Tina Prototype
@@ -19,18 +19,21 @@ Do not create OpenSpec Changes or implement production behavior.
    (for example, a documentation-only change), record `not applicable` with the
    concrete reason. Never skip a prototype the user explicitly requested.
    For reuse or `not applicable`, go directly to recording and handoff below.
-3. Load `$prototype` and its `LOGIC.md` or `UI.md` branch. If any required file is
-   missing, report a broken Tina installation. Follow the upstream method with
-   the lifecycle overrides below.
-4. Build the smallest runnable artifact that answers the question. Logic uses
-   a self-contained HTML file; UI uses the existing application conventions in
-   an isolated worktree or scratch copy. Keep prototype changes out of the
-   production working tree, use in-memory state or stub writes, and preserve
-   unrelated work. Open and exercise the relevant scenarios or variant controls
-   before handing over the file or URL and run command.
-5. Show the concrete prototype and request confirmation of the state rules,
-   interaction, or selected UI variant. Iterate on feedback until the user
-   explicitly confirms. Building or running successfully is not confirmation.
+3. Derive a stable lowercase `[a-z0-9_]` scope slug and spawn one
+   `tina_prototype` as `<slug>_prototype`, using the model and reasoning effort
+   for `tina-prototype` in the repository's `Tina Subagent Models` table.
+   Send the plan path, original request, Research Note and context paths,
+   bounded question, logic or UI branch, scenarios, isolated artifact location,
+   any reusable source, and YOLO mode when applicable. Delegate construction
+   and revision to this agent; do not build the prototype in the parent.
+4. Have the agent load `$prototype` and its `LOGIC.md` or `UI.md` branch,
+   follow the lifecycle overrides below, and return runnable source, run
+   instructions, exercised scenarios and results, and unresolved questions.
+   If a required upstream file is missing, report a broken Tina installation.
+5. Show the returned prototype and request confirmation of the state rules,
+   interaction, or selected UI variant. Send focused feedback to the same
+   `<slug>_prototype` for revision and revalidation until the user explicitly
+   confirms. Building or running successfully is not confirmation.
    In a user-requested `$tina-yolo` run, the orchestrator evaluates it and records
    `model-decided (tina-yolo)` instead; never claim human confirmation.
 6. Save `docs/prototypes/<date>-<scope>.md` with the question and scope, Proposal

@@ -66,8 +66,10 @@ report or approval. A fix does not automatically trigger the other workflow.
    until sound. Record model acceptance, JSON path, `specification_sha256`, and
    assigned stable IDs in `Architecture Alignment`. Decide and record the split
    yourself. Hand the plan to prototype; leave artifact creation to propose-run.
-3. **`$tina-prototype`**: use the completed Proposal Plan and Research Notes to build and exercise a bounded
-   logic or UI prototype before creating Change artifacts. Evaluate the result yourself, iterate
+3. **`$tina-prototype`**: pass the completed Proposal Plan and Research Notes to
+   its independent `tina_prototype` to build and exercise a bounded logic or UI
+   prototype before creating Change artifacts. Evaluate the result yourself,
+   send revisions to the same agent, iterate
    until the question is answered, and record the verdict as
    `model-decided (tina-yolo)` in its Prototype Note. Record a concrete
    `not applicable` reason when there is no prototype question. Carry the note

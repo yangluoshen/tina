@@ -191,8 +191,11 @@ session rather than a fixed template.
 $tina-prototype docs/proposal-plan/<date>-<scenarios>.md
 ```
 
-Uses Matt Pocock's pinned [prototype skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)
-to build a runnable logic demo or UI variants from the grilled plan. Review the
+Delegates to one `tina_prototype` subagent, defaulting to `gpt-6-astra` / `medium`
+in both model profiles. The agent uses Matt Pocock's pinned
+[prototype skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)
+to build and exercise a runnable logic demo or UI variants from the grilled plan.
+The parent handles confirmation and sends revisions to the same agent. Review the
 artifact and confirm the state rules, interaction, or chosen variant before
 creating Change artifacts. The wrapper saves
 `docs/prototypes/<date>-<scope>.md` with the verdict and runnable source. It records
@@ -290,6 +293,7 @@ target-repository/
 │   ├── show-me/
 │   └── pinned upstream skills such as research, prototype, grilling, and domain-modeling
 ├── .codex/agents/
+│   ├── tina-prototype.toml
 │   ├── tina-architect.toml
 │   ├── tina-proposer.toml
 │   ├── tina-proposal-reviewer.toml

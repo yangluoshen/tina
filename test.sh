@@ -49,7 +49,7 @@ node "$PROJECT/.agents/skills/archify/bin/archify.mjs" doctor >/dev/null
 node "$PROJECT/.agents/skills/archify/bin/archify.mjs" validate architecture \
   "$PROJECT/.agents/skills/archify/examples/web-app.architecture.json" \
   --quality showcase --json | grep -q '"ok": true'
-for agent in tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
+for agent in tina-prototype tina-architect tina-proposer tina-proposal-reviewer tina-implementer tina-qa tina-code-reviewer; do
   agent_file="$PROJECT/.codex/agents/$agent.toml"
   test -f "$agent_file"
   cmp "$WORKFLOW_ROOT/agents/$agent.toml" "$agent_file"
@@ -149,10 +149,16 @@ done
 
 AGENT_PROJECT="$TEST_ROOT/agent-project"
 "$WORKFLOW_ROOT/install.sh" "$AGENT_PROJECT" >/dev/null
-printf '\n# local edit\n' >> "$AGENT_PROJECT/.codex/agents/tina-qa.toml"
-if "$WORKFLOW_ROOT/install.sh" "$AGENT_PROJECT" >/dev/null 2>&1; then
-  echo "Installer overwrote a conflicting agent" >&2
-  exit 1
-fi
+for agent in tina-prototype tina-qa; do
+  agent_file="$AGENT_PROJECT/.codex/agents/$agent.toml"
+  printf '\n# local edit\n' >> "$agent_file"
+  cp "$agent_file" "$TEST_ROOT/$agent-local.toml"
+  if "$WORKFLOW_ROOT/install.sh" "$AGENT_PROJECT" >/dev/null 2>&1; then
+    echo "Installer overwrote a conflicting $agent agent" >&2
+    exit 1
+  fi
+  cmp "$TEST_ROOT/$agent-local.toml" "$agent_file"
+  cp "$WORKFLOW_ROOT/agents/$agent.toml" "$agent_file"
+done
 
 echo "Smoke test passed"
