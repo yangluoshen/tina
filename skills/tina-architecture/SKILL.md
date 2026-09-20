@@ -5,6 +5,9 @@ description: Create or update a validated system architecture model for human-ag
 
 # Tina Architecture
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 This workflow authorizes architecture planning only. Never create OpenSpec Change
 artifacts, implement code, or treat a rendered diagram as proof that the design is
 correct.

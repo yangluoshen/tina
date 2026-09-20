@@ -11,7 +11,23 @@ while [ -L "$WORKFLOW_ENTRY" ]; do
 done
 WORKFLOW_ROOT=$(CDPATH= cd -- "$(dirname -- "$WORKFLOW_ENTRY")" && pwd)
 . "$WORKFLOW_ROOT/dependencies.env"
+if [ "${1:-}" = --runtime ]; then
+  case ${2:-} in
+    dsh) shift 2; exec node "$WORKFLOW_ROOT/scripts/install-dsh.mjs" "$@" ;;
+    codex) shift 2 ;;
+    *) echo "Usage: $0 [--runtime codex|dsh] [--preset-root <root>] [target]" >&2; exit 1 ;;
+  esac
+fi
+case ${1:-} in
+  -*) echo "Unknown option: $1" >&2; exit 1 ;;
+esac
+[ "$#" -le 1 ] || { echo "Expected one target directory" >&2; exit 1; }
 TARGET=${1:-.}
+
+if [ -e "$TARGET/openspec/.tina-dsh.json" ]; then
+  echo "This target uses DSH Tina Mode. Use --runtime dsh; automatic conversion to Codex is not supported." >&2
+  exit 1
+fi
 
 if [ -e "$TARGET" ] || [ -L "$TARGET" ]; then
   if [ ! -d "$TARGET" ]; then

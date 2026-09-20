@@ -5,6 +5,9 @@ description: Investigate external or unstable facts for planning, or inspect loc
 
 # Tina Research
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 Never invoke `openspec-explore`.
 
 - For local repository facts, inspect the code, specs, CONTEXT files, and ADRs

@@ -5,6 +5,19 @@ description: Remove Tina Workflow from a user-selected target repository without
 
 # Tina Remove
 
+## Runtime selection
+
+Before building a payload, inspect the requested runtime and
+`<target>/openspec/.tina-dsh.json`. This skill's procedures below are for Codex.
+For an explicitly requested DSH installation, use the bundle's
+`docs/dsh-tina-mode.md` and `install.sh --runtime dsh` instead. DSH writes both
+an explicitly selected project and a user preset directory; report both paths.
+For a DSH target, do not run Codex sync, remove, incognito, or conversion steps:
+those DSH operations are not automated yet. Preserve its files and explain the
+supported conflict-preserving install path. Never remove a shared user preset
+when removing or changing a single project's setup.
+
+
 Remove only content installed and managed by this bundle. The request authorizes
 changes only inside the selected target repository; it does not authorize
 deleting project artifacts created while using the workflow.

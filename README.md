@@ -5,6 +5,12 @@ uses OpenSpec to organize domain modeling, proposals, behavior specs,
 conditional design, task breakdown, and verification into an installable,
 reviewable, repeatable process.
 
+DSH Web integration is available as the separate **Tina Mode** preset:
+`./install.sh --runtime dsh /absolute/path/to/project`.
+See [setup and runtime differences](docs/dsh-tina-mode.md) and the
+[validation record](docs/qa/dsh-tina-mode.md) for the verified scope and remaining checks.
+The default installer continues to target Codex.
+
 ## Core flow
 
 ```text

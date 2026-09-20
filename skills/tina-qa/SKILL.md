@@ -5,6 +5,9 @@ description: Execute a QA Change against the original request's user stories thr
 
 # Tina QA
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 Execute the planned QA Change after its implementation prerequisites are ready.
 Accept its name or the Proposal Plan. The original request's user stories define
 acceptance across the whole product flow, independent of implementation Change
