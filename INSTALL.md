@@ -16,6 +16,18 @@ This is an installation entrypoint, not a prerequisite skill. Read the selected
 initialization skill as a file; it does not need to appear in the current
 session's skill catalog. Keep the existing initializer as the implementation.
 
+### DSH runtime selection
+
+When the user requests DSH or Tina Mode, read `docs/dsh-tina-mode.md` from the
+same checkout. Follow the source acquisition and pinned OpenSpec setup below,
+then run `install.sh --runtime dsh [--preset-root <root>] <target>` in that tool
+environment. Report both the project path and the user preset path; selecting
+DSH authorizes this documented two-location installation. Do not run the Codex
+normal/incognito procedures below for DSH. If the target already contains
+`openspec/.tina-dsh.json`, preserve its runtime and recorded preset path on a
+generic rerun. DSH sync, remove, incognito, and automatic conversion are not
+implemented; never route those operations through the Codex payload procedure.
+
 ### Resolve the target before changing directories
 
 Use the path the user named. When the user says "current repository", resolve

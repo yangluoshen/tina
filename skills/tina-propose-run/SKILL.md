@@ -5,6 +5,9 @@ description: Execute a confirmed Tina proposal plan after tina-prototype has val
 
 # Tina Propose Run
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 This workflow executes an already confirmed proposal plan. Never renegotiate the
 split, grill the user, or archive.
 

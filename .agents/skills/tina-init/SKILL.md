@@ -5,6 +5,19 @@ description: Initialize Tina Workflow from this bundle in an empty or existing t
 
 # Tina Init
 
+## Runtime selection
+
+Before building a payload, inspect the requested runtime and
+`<target>/openspec/.tina-dsh.json`. This skill's procedures below are for Codex.
+For an explicitly requested DSH installation, use the bundle's
+`docs/dsh-tina-mode.md` and `install.sh --runtime dsh` instead. DSH writes both
+an explicitly selected project and a user preset directory; report both paths.
+For a DSH target, do not run Codex sync, remove, incognito, or conversion steps:
+those DSH operations are not automated yet. Preserve its files and explain the
+supported conflict-preserving install path. Never remove a shared user preset
+when removing or changing a single project's setup.
+
+
 Use this repository's `install.sh`; do not reproduce its copy or merge logic.
 The user's request authorizes changes only inside the selected target repository.
 

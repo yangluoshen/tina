@@ -5,6 +5,9 @@ description: Verify an implemented OpenSpec change against its tasks, behavioral
 
 # Tina Verify
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 Verification is read-only except for running safe checks. Never archive or alter
 the implementation during this workflow.
 

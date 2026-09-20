@@ -5,6 +5,9 @@ description: Autonomously carry a task through tina-research, tina-propose-plan,
 
 # Tina YOLO
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 Own the requested outcome through verified completion. Requesting this mode
 authorizes research, planning, implementation, local Change commits, and
 verification for that task. Apply the YOLO routing exceptions in the Target

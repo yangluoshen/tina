@@ -5,6 +5,9 @@ description: Review the original request's aggregate implementation diff for cod
 
 # Tina Code Review
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 Review all code changes produced by the original request. Use
 the request or Proposal Plan to resolve the full implementation scope and its
 baseline. Review code smells, unnecessary complexity, duplication, coupling,

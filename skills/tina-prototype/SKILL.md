@@ -5,6 +5,9 @@ description: Delegate a throwaway logic or UI prototype to an independent subage
 
 # Tina Prototype
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 This stage authorizes throwaway prototype code and its confirmation record.
 Do not create OpenSpec Changes or implement production behavior.
 

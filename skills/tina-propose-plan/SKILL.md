@@ -5,6 +5,9 @@ description: Research, grill, align domain and architecture, and plan implementa
 
 # Tina Propose Plan
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 This workflow authorizes planning only. Never implement, run the propose loop, or apply the Change.
 
 Request-level planning precedes `$tina-prototype`. Settle the user stories,

@@ -6,6 +6,9 @@ license: MIT
 
 # Tina Change Visual
 
+In DSH Tina Mode, first load `tina-dsh-runtime` for tool, model, and resource-path
+adaptation; keep this stage's workflow rules. In Codex, use the conventions below.
+
 Create `change.html` beside `proposal.md`. This is a non-normative review
 projection for humans; `proposal.md` and `design.md` remain authoritative.
 

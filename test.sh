@@ -161,4 +161,6 @@ for agent in tina-prototype tina-qa; do
   cp "$WORKFLOW_ROOT/agents/$agent.toml" "$agent_file"
 done
 
+node "$WORKFLOW_ROOT/scripts/test-dsh.mjs" "$TEST_ROOT"
+
 echo "Smoke test passed"
