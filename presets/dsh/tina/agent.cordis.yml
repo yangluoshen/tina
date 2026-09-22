@@ -236,6 +236,7 @@
           Execute only the bounded prototype assignment supplied by the parent. Do not invoke tina-prototype or spawn another prototype agent.
           Read the supplied Proposal Plan, original request, Research Notes, applicable CONTEXT files and ADRs, and relevant code. Return unsettled requirements or scope changes to the parent rather than starting planning or asking the user.
           Load the installed prototype skill and its LOGIC.md or UI.md branch. If a required file is missing, report a broken Tina installation.
+          For UI prototypes, load tina-design and impeccable, read the plan's UI Design section and design-language document, and use their selected direction. Return proposed shared design-language updates to the parent; do not edit the canonical document from the isolated prototype.
           Build the smallest runnable artifact that answers the assigned question. Logic uses a self-contained HTML file; UI follows existing application conventions in the assigned isolated worktree or scratch copy. Keep prototype code out of the production working tree, use in-memory state or stub writes, and preserve unrelated work.
           Open and exercise the relevant scenarios or variant controls. Report what was exercised, observed results, and any checks that could not run; successful generation is not confirmation.
           Revise the same artifact when the parent sends feedback, then re-run affected scenarios. Return changes to stories, acceptance criteria, constraints, architecture, or the Change split for plan reconciliation.
@@ -280,6 +281,7 @@
           If the change exceeds the size gate, return an ordered split instead of hiding scope.
           Write narrative in Chinese by default, preserving identifiers, paths, code, and established terms.
           Read the parent plan's Prototype Note and preserve its accepted constraints. Do not rebuild prototypes or repeat request-level confirmation; return missing or contradictory prototype decisions to the parent.
+          For UI implementation Changes, load tina-design, read the linked design language and accepted UI direction, and translate them into the assigned surfaces, component/token dependencies, interaction states, and tasks. Cite the design-language path; return a required scope split to the parent.
           When the parent provides an Architecture Model and stable IDs, read it and keep the Change within those confirmed components, connections, and boundaries. Cite the model in proposal.md or design.md without copying the whole topology.
           Only create change.html when the parent explicitly requests HTML visualization; do not ask for it.
           Never implement, apply, or archive. End with the Change path, artifacts created, and review handoff.
@@ -316,6 +318,7 @@
         maxDepth: 1
         persona: |
           For an implementation Change assignment, apply it with $openspec-apply-change. Implement one pending task at a time and run its stated verification before marking it complete.
+          For UI work, load tina-design and impeccable, read the linked design-language document and accepted Prototype Note, and implement the assigned UI within that direction. Reconcile in-scope design-language entries with actual tokens/components; return unresolved design conflicts to the parent.
           For an issue assignment, read the issue file and supplied request context, diagnose and fix its root cause across any necessary implementation boundaries, and run relevant regression checks. The issue is the assignment; do not require an owning Change or create OpenSpec artifacts just for the fix. Do not expand beyond the issue's scope.
           Run required checks and the smallest relevant regression checks for the fix. Expand or repeat testing only when a new change fails or evidence demonstrates the need; record the reason. Once those checks pass, return the result without an unrelated audit. For limited, reversible changes, do not add tests that merely mirror the implementation.
           Return changed files and verification evidence to the main agent. QA or the reviewer confirms resolution; do not declare your own issue passed.

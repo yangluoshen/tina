@@ -8,6 +8,7 @@ MATT_REF=${1:-$MATTPOCOCK_SKILLS_REF}
 NEXT_OPENSPEC_VERSION=${2:-$OPENSPEC_VERSION}
 NEXT_ARCHIFY_REF=${3:-$ARCHIFY_REF}
 NEXT_SHOW_ME_REF=${4:-$SHOW_ME_REF}
+NEXT_IMPECCABLE_REF=${5:-$IMPECCABLE_REF}
 
 case "$MATT_REF" in
   ''|-*) echo "Invalid Matt Pocock skills ref: $MATT_REF" >&2; exit 1 ;;
@@ -19,6 +20,10 @@ esac
 
 case "$NEXT_SHOW_ME_REF" in
   ''|-*) echo "Invalid show-me ref: $NEXT_SHOW_ME_REF" >&2; exit 1 ;;
+esac
+
+case "$NEXT_IMPECCABLE_REF" in
+  ''|-*) echo "Invalid Impeccable ref: $NEXT_IMPECCABLE_REF" >&2; exit 1 ;;
 esac
 
 for command in git node npm npx unzip; do
@@ -105,6 +110,23 @@ cp -R "$SHOW_ME_CHECKOUT/plugins/show-me/skills/show-me" "$STAGED_SHOW_ME"
 cp "$SHOW_ME_CHECKOUT/LICENSE" "$STAGED_SHOW_ME/LICENSE"
 grep -q '^name: show-me$' "$STAGED_SHOW_ME/SKILL.md"
 
+IMPECCABLE_CHECKOUT="$UPDATE_ROOT/impeccable"
+git init -q "$IMPECCABLE_CHECKOUT"
+git -C "$IMPECCABLE_CHECKOUT" remote add origin "$IMPECCABLE_REPOSITORY"
+git -C "$IMPECCABLE_CHECKOUT" fetch -q --depth 1 origin "$NEXT_IMPECCABLE_REF"
+git -C "$IMPECCABLE_CHECKOUT" checkout -q --detach FETCH_HEAD
+RESOLVED_IMPECCABLE_REF=$(git -C "$IMPECCABLE_CHECKOUT" rev-parse HEAD)
+
+STAGED_IMPECCABLE="$UPDATE_ROOT/vendor/impeccable"
+cp -R "$IMPECCABLE_CHECKOUT/.agents/skills/impeccable" "$STAGED_IMPECCABLE"
+cp "$IMPECCABLE_CHECKOUT/LICENSE" "$IMPECCABLE_CHECKOUT/NOTICE.md" "$STAGED_IMPECCABLE/"
+grep -q '^name: impeccable$' "$STAGED_IMPECCABLE/SKILL.md"
+for file in reference/shape.md reference/new-work.md reference/craft-floor.md reference/document.md scripts/VERSION; do
+  test -s "$STAGED_IMPECCABLE/$file"
+done
+test -x "$STAGED_IMPECCABLE/scripts/impeccable"
+sh -n "$STAGED_IMPECCABLE/scripts/impeccable"
+
 OPENSPEC_CHECK="$UPDATE_ROOT/openspec-check"
 mkdir -p "$OPENSPEC_CHECK/openspec/schemas"
 cp -R "$WORKFLOW_ROOT/schema/tina" "$OPENSPEC_CHECK/openspec/schemas/tina"
@@ -136,6 +158,9 @@ cp -R "$STAGED_ARCHIFY" "$WORKFLOW_ROOT/vendor/archify"
 rm -rf "$WORKFLOW_ROOT/vendor/show-me"
 cp -R "$STAGED_SHOW_ME" "$WORKFLOW_ROOT/vendor/show-me"
 
+rm -rf "$WORKFLOW_ROOT/vendor/impeccable"
+cp -R "$STAGED_IMPECCABLE" "$WORKFLOW_ROOT/vendor/impeccable"
+
 PINS_TMP=$(mktemp "${TMPDIR:-/tmp}/tina-dependencies.XXXXXX")
 trap 'rm -rf "$UPDATE_ROOT"; rm -f "$PINS_TMP"' EXIT HUP INT TERM
 printf '%s\n' \
@@ -145,6 +170,8 @@ printf '%s\n' \
   "ARCHIFY_REF=$RESOLVED_ARCHIFY_REF" \
   "SHOW_ME_REPOSITORY=$SHOW_ME_REPOSITORY" \
   "SHOW_ME_REF=$RESOLVED_SHOW_ME_REF" \
+  "IMPECCABLE_REPOSITORY=$IMPECCABLE_REPOSITORY" \
+  "IMPECCABLE_REF=$RESOLVED_IMPECCABLE_REF" \
   "OPENSPEC_PACKAGE=$OPENSPEC_PACKAGE" \
   "OPENSPEC_VERSION=$NEXT_OPENSPEC_VERSION" > "$PINS_TMP"
 mv "$PINS_TMP" "$WORKFLOW_ROOT/dependencies.env"
@@ -153,4 +180,5 @@ echo "Dependencies updated:"
 echo "  mattpocock-skills $RESOLVED_MATT_REF"
 echo "  archify $RESOLVED_ARCHIFY_REF"
 echo "  show-me $RESOLVED_SHOW_ME_REF"
+echo "  impeccable $RESOLVED_IMPECCABLE_REF"
 echo "  OpenSpec $NEXT_OPENSPEC_VERSION (validated; global installation unchanged)"

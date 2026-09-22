@@ -98,7 +98,7 @@ copy_file() {
   fi
 }
 
-for skill in tina-research tina-prototype tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
+for skill in tina-research tina-design tina-prototype tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
   check_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -108,6 +108,7 @@ done
 
 check_directory "$WORKFLOW_ROOT/vendor/archify" "$TARGET_ROOT/.agents/skills/archify"
 check_directory "$WORKFLOW_ROOT/vendor/show-me" "$TARGET_ROOT/.agents/skills/show-me"
+check_directory "$WORKFLOW_ROOT/vendor/impeccable" "$TARGET_ROOT/.agents/skills/impeccable"
 
 check_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 
@@ -178,7 +179,7 @@ fi
   openspec init --tools codex
 )
 
-for skill in tina-research tina-prototype tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
+for skill in tina-research tina-design tina-prototype tina-architecture tina-propose-plan tina-propose-run tina-change-visual tina-verify tina-apply tina-qa tina-code-review tina-yolo; do
   copy_directory "$WORKFLOW_ROOT/skills/$skill" "$TARGET_ROOT/.agents/skills/$skill"
 done
 
@@ -188,6 +189,7 @@ done
 
 copy_directory "$WORKFLOW_ROOT/vendor/archify" "$TARGET_ROOT/.agents/skills/archify"
 copy_directory "$WORKFLOW_ROOT/vendor/show-me" "$TARGET_ROOT/.agents/skills/show-me"
+copy_directory "$WORKFLOW_ROOT/vendor/impeccable" "$TARGET_ROOT/.agents/skills/impeccable"
 
 copy_directory "$WORKFLOW_ROOT/schema/tina" "$TARGET_ROOT/openspec/schemas/tina"
 

@@ -7,12 +7,14 @@ TEST_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/tina-workflow.XXXXXX")
 trap 'rm -rf "$TEST_ROOT"' EXIT HUP INT TERM
 
 mkdir "$TEST_ROOT/bin" "$TEST_ROOT/cli-project"
+printf 'Existing product design language\n' > "$TEST_ROOT/cli-project/DESIGN.md"
 ln -s "$WORKFLOW_ROOT/install.sh" "$TEST_ROOT/bin/tina-init"
 (
   cd "$TEST_ROOT/cli-project"
   PATH="$TEST_ROOT/bin:$PATH" tina-init . >/dev/null
 )
 test -f "$TEST_ROOT/cli-project/openspec/config.yaml"
+test "$(cat "$TEST_ROOT/cli-project/DESIGN.md")" = 'Existing product design language'
 
 PROJECT="$TEST_ROOT/missing/project"
 "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null
@@ -27,6 +29,10 @@ grep -q '^schema: tina$' "$PROJECT/openspec/config.yaml"
 test -f "$PROJECT/.agents/skills/tina-propose-plan/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-propose-run/SKILL.md"
 test -f "$PROJECT/.agents/skills/tina-architecture/SKILL.md"
+diff -qr "$WORKFLOW_ROOT/skills/tina-design" "$PROJECT/.agents/skills/tina-design"
+test ! -e "$PROJECT/DESIGN.md"
+test ! -e "$PROJECT/PRODUCT.md"
+test ! -e "$PROJECT/.impeccable"
 test -f "$PROJECT/.agents/skills/tina-apply/SKILL.md"
 diff -qr "$WORKFLOW_ROOT/skills/tina-prototype" "$PROJECT/.agents/skills/tina-prototype"
 for file in SKILL.md LOGIC.md UI.md; do
@@ -45,6 +51,10 @@ test -f "$PROJECT/.agents/skills/archify/THIRD_PARTY_NOTICES.md"
 grep -q '^name: show-me$' "$PROJECT/.agents/skills/show-me/SKILL.md"
 test -f "$PROJECT/.agents/skills/show-me/LICENSE"
 diff -qr "$WORKFLOW_ROOT/vendor/show-me" "$PROJECT/.agents/skills/show-me"
+diff -qr "$WORKFLOW_ROOT/vendor/impeccable" "$PROJECT/.agents/skills/impeccable"
+test -f "$PROJECT/.agents/skills/impeccable/LICENSE"
+test -f "$PROJECT/.agents/skills/impeccable/NOTICE.md"
+test -x "$PROJECT/.agents/skills/impeccable/scripts/impeccable"
 node "$PROJECT/.agents/skills/archify/bin/archify.mjs" doctor >/dev/null
 node "$PROJECT/.agents/skills/archify/bin/archify.mjs" validate architecture \
   "$PROJECT/.agents/skills/archify/examples/web-app.architecture.json" \
@@ -60,6 +70,7 @@ done
 test -n "$MATTPOCOCK_SKILLS_REF"
 test -n "$ARCHIFY_REF"
 test -n "$SHOW_ME_REF"
+test -n "$IMPECCABLE_REF"
 test -n "$OPENSPEC_VERSION"
 grep -q 'tina_architect' "$PROJECT/.agents/skills/tina-architecture/SKILL.md"
 
@@ -136,7 +147,16 @@ fi
 cmp "$TEST_ROOT/prototype-local.md" "$PROJECT/.agents/skills/prototype/UI.md"
 cp "$WORKFLOW_ROOT/vendor/mattpocock-skills/skills/prototype/UI.md" "$PROJECT/.agents/skills/prototype/UI.md"
 
-for skill in tina-prototype tina-yolo tina-qa tina-code-review; do
+printf '\nlocal design guidance\n' >> "$PROJECT/.agents/skills/impeccable/reference/craft-floor.md"
+cp "$PROJECT/.agents/skills/impeccable/reference/craft-floor.md" "$TEST_ROOT/impeccable-local.md"
+if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then
+  echo "Installer overwrote a conflicting Impeccable resource" >&2
+  exit 1
+fi
+cmp "$TEST_ROOT/impeccable-local.md" "$PROJECT/.agents/skills/impeccable/reference/craft-floor.md"
+cp "$WORKFLOW_ROOT/vendor/impeccable/reference/craft-floor.md" "$PROJECT/.agents/skills/impeccable/reference/craft-floor.md"
+
+for skill in tina-design tina-prototype tina-yolo tina-qa tina-code-review; do
   printf '\nlocal edit\n' >> "$PROJECT/.agents/skills/$skill/SKILL.md"
   cp "$PROJECT/.agents/skills/$skill/SKILL.md" "$TEST_ROOT/$skill-local.md"
   if "$WORKFLOW_ROOT/install.sh" "$PROJECT" >/dev/null 2>&1; then

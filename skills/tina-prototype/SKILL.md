@@ -17,6 +17,9 @@ Do not create OpenSpec Changes or implement production behavior.
    Read the plan, original request, linked Research Notes, applicable CONTEXT
    files and ADRs, and relevant code. Derive the bounded prototype question from
    the plan's stories and acceptance criteria, then choose logic or UI.
+   For UI work, load `$tina-design` and read the plan's `UI Design` section and
+   design-language document. Return missing or contradictory style decisions to
+   planning; in YOLO the parent resolves and records them without questions.
 2. Reuse a confirmed prototype only when its question, scope, and decisions still
    apply. If there is no logic, state, interaction, or UI question to validate
    (for example, a documentation-only change), record `not applicable` with the
@@ -27,18 +30,24 @@ Do not create OpenSpec Changes or implement production behavior.
    for `tina-prototype` in the repository's `Tina Subagent Models` table.
    Send the plan path, original request, Research Note and context paths,
    bounded question, logic or UI branch, scenarios, isolated artifact location,
-   any reusable source, and YOLO mode when applicable. Delegate construction
+   any reusable source, the UI direction and design-language path when present,
+   and YOLO mode when applicable. Delegate construction
    and revision to this agent; do not build the prototype in the parent.
 4. Have the agent load `$prototype` and its `LOGIC.md` or `UI.md` branch,
    follow the lifecycle overrides below, and return runnable source, run
    instructions, exercised scenarios and results, and unresolved questions.
    If a required upstream file is missing, report a broken Tina installation.
+   For UI, have it load `$tina-design` and `$impeccable` as well, preserve the
+   selected direction, and return proposed reusable design-language updates.
 5. Show the returned prototype and request confirmation of the state rules,
    interaction, or selected UI variant. Send focused feedback to the same
    `<slug>_prototype` for revision and revalidation until the user explicitly
    confirms. Building or running successfully is not confirmation.
    In a user-requested `$tina-yolo` run, the orchestrator evaluates it and records
    `model-decided (tina-yolo)` instead; never claim human confirmation.
+   For UI, confirmation includes visual style and material interaction details.
+   After acceptance, merge shared decisions into the design-language document
+   through `$tina-design` and link it from the note and plan's `UI Design` section.
 6. Save `docs/prototypes/<date>-<scope>.md` with the question and scope, Proposal
    Plan and Research Note paths, branch type, reproducible artifact path (or branch and commit),
    run instructions, scenarios exercised, verdict and rationale, unresolved
@@ -47,7 +56,7 @@ Do not create OpenSpec Changes or implement production behavior.
 7. Update the plan's `Prototype Confirmation` with the note path, scope, accepted
    behavior, and confirmation source/date, or the `not applicable` reason.
    If prototype feedback changes stories, acceptance criteria, constraints,
-   architecture, or the Change split, mark the section `pending` and return to
+   architecture, UI direction, or the Change split, mark the section `pending` and return to
    `$tina-propose-plan` to reconcile and confirm the plan. Then revalidate the
    prototype against that plan before handing off to `$tina-propose-run`.
 

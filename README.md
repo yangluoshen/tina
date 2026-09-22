@@ -129,7 +129,7 @@ tina-init /absolute/path/to/target-repository
 The installer:
 
 - runs `openspec init --tools codex`;
-- installs the private `tina-*` skills plus pinned Matt Pocock, Archify, and show-me
+- installs the private `tina-*` skills plus pinned Matt Pocock, Archify, show-me, and Impeccable
   skills;
 - installs the project-level `tina` schema and sets it as the default;
 - appends the Target Instructions as a managed block in the target `AGENTS.md`;
@@ -191,6 +191,14 @@ size gate. The step writes the confirmed strategy to
 The plan records the questions to validate; no prototype is required before grilling. Success criteria and the stopping condition come from this planning
 session rather than a fixed template.
 
+For UI work, `$tina-design` uses [Impeccable](https://github.com/pbakaus/impeccable)
+to confirm style and material details: visual character, hierarchy, typography,
+color direction, key states/interactions, and responsive constraints. The plan's
+`UI Design` section records the selected direction and design-language path.
+YOLO makes and records these decisions with a world-class UI designer's judgment
+without asking style questions. Existing visual identity is preserved unless
+redesign is part of the request.
+
 ### 3. Confirm a prototype
 
 ```text
@@ -211,6 +219,13 @@ The wrapper updates the plan's `Prototype Confirmation` and provides the next
 to planning, then prototype validation. Production implementation waits until
 apply; YOLO records model acceptance.
 
+UI prototypes also use Impeccable through `$tina-design`. After style and
+interaction alignment, the parent merges accepted shared decisions into `DESIGN.md`
+or the existing design-system document, with links to the plan and Prototype Note.
+Planned or prototype-derived choices are labeled; implementation later reconciles
+them with real tokens/components. Qualifying trade-offs use the existing ADR rules.
+This visual-language document is separate from conditional OpenSpec `design.md`.
+
 ### 3.1 Run the proposal workflow
 
 Copy the next-step prompt from `$tina-prototype` after confirmation:
@@ -225,6 +240,11 @@ The goal spawns one `tina_proposer` per Change. After all Changes are proposed,
 it spawns one `tina_proposal_reviewer` for the whole run. If the verdict is
 `Needs changes`, the review returns to the relevant proposer; the same global
 reviewer re-reviews until the plan file's stopping condition is met.
+For UI work, proposers translate the accepted design into implementation Changes
+within the confirmed split, including shared component/token dependencies where
+needed. Implementers use the same design language and Impeccable guidance through
+`$tina-design`. Impeccable-specific audits, detectors, and visual QA/polish loops
+run only when explicitly requested; normal task checks and prototype alignment remain.
 
 ### 4. Human review
 
@@ -285,6 +305,7 @@ target-repository/
 ├── .agents/skills/
 │   ├── openspec-*/
 │   ├── tina-research/
+│   ├── tina-design/
 │   ├── tina-prototype/
 │   ├── tina-yolo/
 │   ├── tina-architecture/
@@ -297,6 +318,7 @@ target-repository/
 │   ├── tina-verify/
 │   ├── archify/
 │   ├── show-me/
+│   ├── impeccable/
 │   └── pinned upstream skills such as research, prototype, grilling, and domain-modeling
 ├── .codex/agents/
 │   ├── tina-prototype.toml
@@ -321,6 +343,7 @@ skills/tina-*/             Private orchestration skills maintained here
 vendor/mattpocock-skills/  Pinned, unmodified upstream skill snapshots
 vendor/archify/             Pinned, unmodified Archify Skill package
 vendor/show-me/             Pinned, unmodified HumanLayer skill and license
+vendor/impeccable/          Pinned, unmodified Impeccable skill and resources
 templates/AGENTS.md        Target Instructions installed into target repos
 dependencies.env           The single source of dependency pins
 install.sh                 Non-destructive installer
@@ -350,15 +373,21 @@ Refresh pinned upstream snapshots and dependency pins only through the update
 script:
 
 ```sh
-./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref] [show-me-ref]
+./update-dependencies.sh <matt-ref> <openspec-version> [archify-ref] [show-me-ref] [impeccable-ref]
 ```
 
 Use the latest upstream releases only when intentionally testing them:
 
 ```sh
-./update-dependencies.sh main latest main main
+./update-dependencies.sh main latest main main main
 ```
 
 Run `./test.sh` afterward and review the full dependency diff before committing.
 The script validates OpenSpec in an isolated `npx` run and never modifies a
 global OpenSpec installation.
+
+Impeccable is copied from the pinned upstream `.agents/skills/impeccable` package
+with its LICENSE and NOTICE. Installation does not run its launcher or install
+hooks/live tooling. Its optional launcher can download an engine on first use;
+if unavailable, use the skill's direct-context fallback. Tina's compatibility
+rules live in `$tina-design`; vendored files remain unchanged.

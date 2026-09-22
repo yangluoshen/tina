@@ -23,6 +23,10 @@ OpenSpec is the planning system. The project default schema is `tina`.
   `tina_architect`. Do not call `$openspec-propose` directly; the private wrapper
   owns those steps.
 - Use `$tina-propose-plan` to plan implementation and QA Changes.
+- For UI work, use `$tina-design` to apply Impeccable during planning, prototype
+  creation, and production implementation. Confirm style and material details
+  during planning, validate them with the prototype, and carry the accepted
+  design language into the UI implementation Changes.
 - After the split and prototype are confirmed, start the propose run with
   `/goal Execute $tina-propose-run docs/proposal-plan/<date>-<scenarios>.md.
   Follow the success criteria and stopping condition in that file.` Propose
@@ -51,7 +55,7 @@ OpenSpec is the planning system. The project default schema is `tina`.
 For a user-requested `tina-yolo` run and its assigned agents, follow
 `$tina-yolo`'s dispatch rules in place of interactive handoffs in the Tina
 skills and schema: skip grilling, let the orchestrator decide and record
-assumptions, prototype and architecture acceptance, and Change splits, and proceed through
+assumptions, UI direction, prototype and architecture acceptance, and Change splits, and proceed through
 verification without asking the user to confirm or invoke the next stage.
 Model acceptance satisfies the workflow's confirmation gates; label it
 `model-decided (tina-yolo)` rather than human confirmation. Pass the plan and
@@ -81,6 +85,15 @@ glossaries. Update a term immediately when it is settled; create an ADR only
 when a decision is hard to reverse, surprising without context, and a real
 trade-off. Proposals and designs must cite and respect these files.
 
+## Design Language
+
+For UI work, read and maintain `DESIGN.md` or the existing design-system document
+through `$tina-design`. Keep confirmed shared visual choices there, link the plan
+and accepted Prototype Note, and reconcile planned choices with implemented tokens
+and components. Preserve the current identity unless redesign is in scope. In
+YOLO, choose and record UI direction without asking. This project-level document
+is distinct from a Change's conditional technical `design.md`.
+
 ## Change Size
 
 One Change has one intent, at most two capabilities, about eight coarse tasks,
@@ -92,5 +105,5 @@ without confirmation and never hide excess scope inside oversized tasks.
 ## Ownership
 
 Directories named `openspec-*` are managed by OpenSpec. Vendored Matt Pocock,
-Archify, and HumanLayer show-me skills are unchanged snapshots. Put personal
+Archify, HumanLayer show-me, and Impeccable skills are unchanged snapshots. Put personal
 behavior only in `tina-*` skills and the `tina` schema.

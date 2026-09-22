@@ -69,6 +69,9 @@ report or approval. A fix does not automatically trigger the other workflow.
    until sound. Record model acceptance, JSON path, `specification_sha256`, and
    assigned stable IDs in `Architecture Alignment`. Decide and record the split
    yourself. Hand the plan to prototype; leave artifact creation to propose-run.
+   For UI work, use `$tina-design` with Impeccable, choose style and details with
+   a world-class UI designer's judgment, and record `UI Design` and the linked
+   design language without asking the user.
 3. **`$tina-prototype`**: pass the completed Proposal Plan and Research Notes to
    its independent `tina_prototype` to build and exercise a bounded logic or UI
    prototype before creating Change artifacts. Evaluate the result yourself,
@@ -76,7 +79,9 @@ report or approval. A fix does not automatically trigger the other workflow.
    until the question is answered, and record the verdict as
    `model-decided (tina-yolo)` in its Prototype Note. Record a concrete
    `not applicable` reason when there is no prototype question. Carry the note
-   and accepted constraints into the run record. If feedback changes the plan,
+   and accepted constraints into the run record. For UI, evaluate style and
+   interaction against the selected direction and persist accepted shared choices
+   through `$tina-design`. If feedback changes the plan,
    return to planning, reconcile the affected decisions, then revalidate the
    prototype before proceeding. Keep production work for apply.
 4. **`$tina-propose-run`**: pass the plan path explicitly and reuse its proposer

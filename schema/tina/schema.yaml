@@ -14,6 +14,9 @@ artifacts:
       - Read the applicable CONTEXT-MAP.md or CONTEXT.md files and related ADRs.
       - Use their canonical vocabulary and respect their decisions.
       - Inspect existing OpenSpec specs before declaring capabilities.
+      - For UI implementation, use tina-design and cite the confirmed plan's
+        design-language document and accepted Prototype Note. Preserve their
+        visual direction and interaction constraints.
       - If an external or version-sensitive fact is unresolved, stop and use
         the tina-research skill before continuing.
 
@@ -80,6 +83,8 @@ artifacts:
       Create design.md only for a cross-module change, new architectural pattern
       or dependency, significant data-model change, migration, or material
       security/performance ambiguity. Otherwise skip it and say why.
+      Project-level DESIGN.md records visual language separately; UI work alone
+      does not require this technical artifact. Cite that document when relevant.
 
       Explain context, goals and non-goals, decisions with alternatives, risks
       and mitigations, migration when applicable, and only genuinely deferrable
@@ -99,6 +104,9 @@ artifacts:
     instruction: |
       Create a dependency-ordered implementation checklist from proposal, specs,
       and design when present.
+      For UI implementation, cite the accepted design language and Prototype
+      Note; cover the assigned surfaces, reused tokens/components, interaction
+      states, and responsive behavior within the confirmed scope.
 
       For a QA Change, create an acceptance checklist organized by the original
       user stories, not implementation Changes. State environment/data needs,
@@ -124,7 +132,9 @@ apply:
     tasks after implementation prerequisites are ready; do not assign it as
     product implementation work.
     For implementation Changes, read all context files plus applicable CONTEXT
-    and ADR files. Implement one pending task at a time, run its stated
+    and ADR files. For UI work, load tina-design and the linked design language
+    and Prototype Note, and reconcile in-scope design documentation with the
+    implemented UI. Implement one pending task at a time, run its stated
     verification, then mark it complete.
     Pause on ambiguity, scope growth, or conflict with the Domain Model. Do not
     archive automatically; verification and archive are separate user actions.

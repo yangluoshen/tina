@@ -19,6 +19,11 @@ split, grill the user, or archive.
    acceptance), or a recorded `not applicable` reason. If missing, pending, or
    inconsistent with the current plan, return to `$tina-prototype` before
    creating artifacts or spawning proposers.
+   For UI work, load `$tina-design` and read the plan's `UI Design` section,
+   linked design language, and accepted UI prototype decisions. If missing or
+   contradictory, return to planning/prototype alignment; in YOLO the parent
+   resolves them without questions. Propose the necessary UI implementation
+   work within the confirmed split, returning scope changes to planning.
 2. When the plan contains `Architecture Alignment`, require its canonical JSON
    path to exist and recompute its SHA-256 with the Node.js standard library. If
    it differs from the recorded `specification_sha256`, stop and return to
@@ -35,6 +40,8 @@ split, grill the user, or archive.
    Spawn one `tina_proposer` as `<slug>_proposer` and send it that Change plus
    its type, plan path, original request, user stories, and acceptance criteria,
    plus the plan's Prototype Note and accepted constraints,
+   and, for UI implementation, the selected direction, design-language path,
+   affected surfaces, and shared component/token dependencies,
    and the confirmed Architecture Model path and assigned stable IDs when present.
    Include the separate QA Change in this proposal loop; its proposer designs
    acceptance across the original stories, not per implementation Change.

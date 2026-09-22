@@ -24,6 +24,9 @@ explicit authorizing request. Do not archive.
       character outside `[a-z0-9_]` with `_`. Use this agent only for this
       Change: `<slug>_implementer`.
    b. Spawn `tina_implementer` as `<slug>_implementer` and send it the Change.
+      For UI work, include the plan's `UI Design` section, design-language path,
+      and accepted Prototype Note; require `$tina-design` for implementation
+      and any in-scope design-language updates.
    c. Verify the worktree contains only this Change's expected files, then
       `git add` and commit with `tina(change): <change-name>`.
 4. Write unresolved concerns and leftover questions to

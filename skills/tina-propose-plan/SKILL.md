@@ -35,7 +35,10 @@ gate to QA work; if a split is needed, split by user journeys, retaining overall
 story coverage, rather than creating one QA Change per implementation Change.
 
 1. Read applicable `CONTEXT-MAP.md` or `CONTEXT.md`, related ADRs, current
-   OpenSpec specs, and the relevant code.
+   OpenSpec specs, and the relevant code. For UI work, load `$tina-design`:
+   confirm style and material UI details at request level before the size gate,
+   then record the selected direction and design-language path. In YOLO, decide
+   and record these without questions. Assigned proposers reuse those decisions.
 2. If an external or unstable fact is unresolved, invoke
    `$tina-research` first and read its resulting Research Note.
 3. Invoke `$grill-with-docs` when behavior is new, terminology or boundaries are
@@ -79,6 +82,9 @@ and `<scenarios>` is a short scenario name. The file must include:
 - each Change's type (`implementation` or `qa`) and single intent;
 - the QA Change's story coverage and implementation prerequisites;
 - the confirmed constraints;
+- for UI work, a `UI Design` section from `$tina-design`, including the selected
+  direction, design-language path, confirmation source/date, prototype questions,
+  and each implementation Change's affected surfaces or shared design-system work;
 - a `Prototype Confirmation` section initially marked `pending`, with the
   questions to validate and Research Note paths; `$tina-prototype` later records
   its note, scope, confirmation source, and accepted behavior or `not applicable`

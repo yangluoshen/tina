@@ -136,8 +136,8 @@ try {
   const policy = readFileSync(join(bundle, 'templates/AGENTS.md'), 'utf8')
     .replace(/## Tina Subagent Models\n[\s\S]*?(?=## Domain Model)/, '');
   writeFileSync(join(desiredPreset, 'skills/tina-dsh-runtime/target-instructions.md'), policy);
-  for (const name of ['MATTPOCOCK', 'ARCHIFY', 'SHOW_ME']) {
-    const path = { MATTPOCOCK: 'vendor/mattpocock-skills/LICENSE', ARCHIFY: 'vendor/archify/LICENSE', SHOW_ME: 'vendor/show-me/LICENSE' }[name];
+  for (const name of ['MATTPOCOCK', 'ARCHIFY', 'SHOW_ME', 'IMPECCABLE']) {
+    const path = { MATTPOCOCK: 'vendor/mattpocock-skills/LICENSE', ARCHIFY: 'vendor/archify/LICENSE', SHOW_ME: 'vendor/show-me/LICENSE', IMPECCABLE: 'vendor/impeccable/LICENSE' }[name];
     cpSync(join(bundle, path), join(desiredPreset, `LICENSE.${name}`));
   }
 
